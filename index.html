@@ -318,7 +318,6 @@
     </div>
 
     <script>
-        // --- IMPORTANT: Paste your Apps Script Web App URL here ---
         const webAppUrl = '/.netlify/functions/submit-form';
 
         const packageContainer = document.getElementById('packageContainer');
@@ -347,11 +346,13 @@
         function validateForm() {
             let isValid = true;
             if (!selectedPackage) { isValid = false; }
+            
             if (isValid) {
                 for (const fieldId of basicRequiredFields) {
                     if (!document.getElementById(fieldId).value.trim()) { isValid = false; break; }
                 }
             }
+
             if (isValid && (selectedPackage === "Monthly" || selectedPackage === "Yearly")) {
                 for (const fieldId of paymentRequiredFields) {
                     if (!document.getElementById(fieldId).value.trim()) { isValid = false; break; }
@@ -363,11 +364,15 @@
         packageContainer.addEventListener('click', (e) => {
             const card = e.target.closest('.package-card');
             if (!card) return;
+
             document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
+
             selectedPackage = card.dataset.package;
             selectedPrice = card.dataset.price;
+            
             detailsSection.style.display = 'block';
+
             if (selectedPackage === 'Free Trial') {
                 paymentDetails.style.display = 'none';
             } else {
@@ -392,10 +397,6 @@
             document.getElementById(fieldId).addEventListener('input', validateForm);
         });
 
-        const webAppUrl = '/.netlify/functions/submit-form';
-
-        // ... (বাকি সব কোড একই থাকবে) ...
-
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             submitButton.disabled = true;
@@ -418,7 +419,9 @@
                     SenderInfo: document.getElementById('senderInfo').value,
                 };
             }
-
+            
+            // We ignore the screenshot for this serverless function logic
+            
             fetch(webAppUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -433,6 +436,8 @@
             .then(data => {
                 form.style.display = 'none';
                 successMessage.style.display = 'block';
+                // Optional: You can check data from Netlify function if needed
+                console.log('Response from function:', data);
             })
             .catch(error => {
                 console.error("Error submitting form: ", error);
