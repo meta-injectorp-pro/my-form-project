@@ -1,43 +1,88 @@
-exports.handler = async (event) => {
-  // আপনার Google Apps Script এর Web App URL টি এখানে পেস্ট করুন
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxk37CBFijTT9ATxYnaegOj2vGtECz8hfJuEbGpWiLfp8HB6SbY9RyHgAkYzL6xWc0ugg/exec';
+const admin = require('firebase-admin');
 
-  // লগ: ফাংশনটি চালু হয়েছে এবং ডেটা পেয়েছে
-  console.log("Function invoked. Received data:", event.body);
+// Firebase Service Account Key যা Netlify-এর Environment Variable থেকে আসবে
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
+// Firebase অ্যাপটি চালু করা হচ্ছে
+try {
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+  }
+} catch (e) {
+  console.error('Firebase admin initialization error', e.stack);
+}
+
+const db = admin.firestore();
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
 
   try {
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: event.body, // সরাসরি প্রাপ্ত ডেটা ফরওয়ার্ড করা হচ্ছে
-    });
+    const data = JSON.parse(event.body);
 
-    // গুগল থেকে কী উত্তর এলো তা টেক্সট হিসেবে পড়া হচ্ছে
-    const responseText = await response.text();
-    
-    // লগ: গুগল থেকে প্রাপ্ত উত্তর
-    console.log("Received response from Google Apps Script. Status:", response.status);
-    console.log("Response body from Google:", responseText);
+    // ধাপ ১: একটি খালি লাইসেন্স খুঁজে বের করা
+    const snapshot = await db.collection('License Database')
+                             .where('Email', '==', '')
+                             .limit(1)
+                             .get();
 
-    if (!response.ok) {
-      // যদি গুগল কোনো এরর স্ট্যাটাস পাঠায় (যেমন 404, 500)
-      throw new Error(`Google Script returned an error: ${response.status}`);
+    if (snapshot.empty) {
+      console.error("No available licenses found.");
+      return { statusCode: 500, body: JSON.stringify({ error: "No available licenses." }) };
     }
 
-    // সফল হলে ব্রাউজারে সফল উত্তর পাঠানো হচ্ছে
+    const licenseDoc = snapshot.docs[0];
+    const licenseKeyToUpdate = licenseDoc.id;
+
+    // ধাপ ২: লাইসেন্সটি নতুন ডেটা দিয়ে আপডেট করা
+    const licenseUpdateData = {
+      "Email": data.Email,
+      "Customer Name": data.FullName,
+      "Phone Number": data.Phone,
+      "Package": data.Package,
+      "Status": "Pending"
+    };
+    await db.collection('License Database').doc(licenseKeyToUpdate).update(licenseUpdateData);
+
+    // ধাপ ৩: 'Purchase Form' কালেকশনে ডেটা যোগ করা
+    if (data.Package !== 'Free Trial') {
+      const purchaseData = {
+        "Your Full Name": data.FullName,
+        "Email": data.Email,
+        "Phone Number": data.Phone,
+        "Select Your Package": data.Package,
+        "Payment Method": data.PaymentMethod || "",
+        "Amount Sent (BDT)": data.AmountSent || "",
+        "Sender's Number or TrxID  ": data.SenderInfo || "",
+        "Status": "Pending",
+        "Timestamp": new Date()
+      };
+      await db.collection('Purchase Form').add(purchaseData);
+
+      // ধাপ ৪: 'Sales Logs' কালেকশনে ডেটা যোগ করা
+      const salesData = {
+        "Timestamp": new Date(),
+        "License Key": licenseKeyToUpdate,
+        "Package": data.Package,
+        "Final Price": data.Price
+      };
+      await db.collection('Sales Logs').add(salesData);
+    }
+    
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Success' }),
+      body: JSON.stringify({ status: "success", message: "Data successfully saved to Firebase!" })
     };
 
   } catch (error) {
-    // কোনো ভুল হলে সেটি লগ করা হচ্ছে
-    console.error("Error during fetch to Google Apps Script:", error);
-    
-    // ব্রাউজারে এরর মেসেজ পাঠানো হচ্ছে
+    console.error("Error processing form:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      body: JSON.stringify({ error: "An internal server error occurred." })
     };
   }
 };
