@@ -398,55 +398,39 @@
         });
 
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
-            errorMessage.style.display = 'none';
+    e.preventDefault();
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+    errorMessage.style.display = 'none';
 
-            let formData = {
-                Package: selectedPackage,
-                Price: selectedPrice,
-                FullName: document.getElementById('fullName').value,
-                Email: document.getElementById('email').value,
-                Phone: document.getElementById('phone').value,
-            };
+    // FormData ব্যবহার করে ফর্মের সব ডেটা (ফাইল সহ) সংগ্রহ করা হচ্ছে
+    const formData = new FormData(form);
+    formData.append('Package', selectedPackage);
+    formData.append('Price', selectedPrice);
 
-            if (selectedPackage !== 'Free Trial') {
-                formData = {
-                    ...formData,
-                    PaymentMethod: document.getElementById('paymentMethod').value,
-                    AmountSent: document.getElementById('amountSent').value,
-                    SenderInfo: document.getElementById('senderInfo').value,
-                };
-            }
-            
-            // We ignore the screenshot for this serverless function logic
-            
-            fetch(webAppUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                form.style.display = 'none';
-                successMessage.style.display = 'block';
-                // Optional: You can check data from Netlify function if needed
-                console.log('Response from function:', data);
-            })
-            .catch(error => {
-                console.error("Error submitting form: ", error);
-                errorMessage.textContent = 'Submission failed. Please try again.';
-                errorMessage.style.display = 'block';
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit';
-            });
-        });
+    fetch(webAppUrl, {
+        method: 'POST',
+        body: formData // সরাসরি FormData পাঠানো হচ্ছে, JSON নয়
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        form.style.display = 'none';
+        successMessage.style.display = 'block';
+    })
+    .catch(error => {
+        console.error("Error submitting form: ", error);
+        errorMessage.textContent = 'Submission failed. Please try again.';
+        errorMessage.style.display = 'block';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit';
+    });
+});
     </script>
 </body>
 </html>
