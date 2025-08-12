@@ -37,25 +37,21 @@ exports.handler = async (event) => {
     const data = fields;
     let screenshotLink = '';
 
-    // --- ব্যবহারকারী যাচাই করার জন্য সংশোধিত এবং উন্নত লজিক ---
     const userSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
 
     let licenseKeyToUpdate;
     let isUpgrade = false;
 
     if (!userSnapshot.empty) {
-      // যদি ব্যবহারকারী আগে থেকেই থাকে
       const existingUserDoc = userSnapshot.docs[0];
       const existingUserData = existingUserDoc.data();
 
       if (existingUserData.Package !== 'Free Trial') {
-        // ব্যবহারকারী যদি আগে থেকেই প্রিমিয়াম প্যাকেজে থাকে (Monthly/Yearly)
         return {
           statusCode: 400,
           body: JSON.stringify({ status: "error_already_premium", message: "You already have an active premium package." })
         };
       } else {
-        // ব্যবহারকারী যদি Free Trial থেকে আপগ্রেড করে
         if (data.Package === 'Free Trial') {
             return {
                 statusCode: 400,
@@ -63,20 +59,17 @@ exports.handler = async (event) => {
             };
         }
         licenseKeyToUpdate = existingUserDoc.id;
-        isUpgrade = true; // এটি একটি আপগ্রেড
+        isUpgrade = true;
       }
     } else {
-      // যদি ব্যবহারকারী সম্পূর্ণ নতুন হয়
       const availableLicenseSnapshot = await db.collection('License Database').where('Email', 'in', ["", null]).limit(1).get();
       if (availableLicenseSnapshot.empty) {
         throw new Error("No available licenses.");
       }
       licenseKeyToUpdate = availableLicenseSnapshot.docs[0].id;
-      isUpgrade = false; // এটি একটি নতুন রেজিস্ট্রেশন
+      isUpgrade = false;
     }
     
-    // --- ফাইল আপলোড লজিক সংশোধন ---
-    // শুধু তখনই আপলোড হবে যদি কোনো ফাইল সিলেক্ট করা হয়
     if (fileBuffer && fileOriginalName) {
         const dbx = new Dropbox({ accessToken: DROPBOX_ACCESS_TOKEN, fetch: fetch });
         const filePath = `/${data.Email}-${Date.now()}-${fileOriginalName}`;
@@ -85,31 +78,42 @@ exports.handler = async (event) => {
         screenshotLink = sharedLink.result.url.replace('dl=0', 'raw=1');
     }
 
-    // --- Firebase-এ ডেটা সেভ করার বাকি অংশ ---
     const licenseUpdateData = {
-        "Email": data.Email, "Customer Name": data.FullName, "Phone Number": data.Phone,
-        "Package": data.Package, "Status": "Pending"
+        "Email": data.Email,
+        "Customer Name": data.FullName,
+        "Phone Number": data.Phone,
+        "Package": data.Package,
+        "Duration": data.Duration || "", // <-- নতুন Duration ফিল্ড যোগ করা হয়েছে
+        "Status": "Pending"
     };
     await db.collection('License Database').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
     if (data.Package !== 'Free Trial') {
       const purchaseData = {
-          "Your Full Name": data.FullName, "Email": data.Email, "Phone Number": data.Phone,
-          "Select Your Package": data.Package, "Payment Method": data.PaymentMethod || "",
-          "Amount Sent (BDT)": data.AmountSent || "", "Sender's Number or TrxID  ": data.SenderInfo || "",
-          "Status": "Pending", "Timestamp": new Date(),
+          "Your Full Name": data.FullName,
+          "Email": data.Email,
+          "Phone Number": data.Phone,
+          "Select Your Package": data.Package,
+          "Package Duration": data.Duration || "", // <-- নতুন Duration ফিল্ড যোগ করা হয়েছে
+          "Payment Method": data.PaymentMethod || "",
+          "Amount Sent (BDT)": data.AmountSent || "",
+          "Sender's Number or TrxID  ": data.SenderInfo || "",
+          "Status": "Pending",
+          "Timestamp": new Date(),
           "Upload Payment Screenshot  ": screenshotLink 
       };
       await db.collection('Purchase Form').add(purchaseData);
       
       const salesData = {
-          "Timestamp": new Date(), "License Key": licenseKeyToUpdate,
-          "Package": data.Package, "Final Price": data.Price
+          "Timestamp": new Date(),
+          "License Key": licenseKeyToUpdate,
+          "Package": data.Package,
+          "Duration": data.Duration || "", // <-- নতুন Duration ফিল্ড যোগ করা হয়েছে
+          "Final Price": data.Price
       };
       await db.collection('Sales Logs').add(salesData);
     }
     
-    // আপগ্রেড এবং নতুন রেজিস্ট্রেশনের জন্য আলাদা স্ট্যাটাস পাঠানো হচ্ছে
     return { 
         statusCode: 200, 
         body: JSON.stringify({ status: isUpgrade ? "success_upgrade" : "success_new" }) 
