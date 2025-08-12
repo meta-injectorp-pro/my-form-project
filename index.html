@@ -433,10 +433,8 @@
         const submitButton = document.getElementById('submitButton');
         const form = document.getElementById('purchaseForm');
         const successMessage = document.getElementById('successMessage');
-        const upgradeMessage = document.getElementById('upgradeMessage'); // আগের ধাপ থেকে যোগ করা
+        const upgradeMessage = document.getElementById('upgradeMessage');
         const errorMessage = document.getElementById('errorMessage');
-
-        // নতুন যোগ করা হয়েছে
         const durationGroup = document.getElementById('durationGroup');
         const packageDurationSelect = document.getElementById('packageDuration');
 
@@ -450,22 +448,44 @@
         };
         
         const basicRequiredFields = ['fullName', 'email', 'phone'];
-        // packageDuration এখন প্রয়োজনীয় ফিল্ড
         const paymentRequiredFields = ['packageDuration', 'paymentMethod', 'amountSent', 'senderInfo'];
+
+        // নতুন ফাংশন: প্যাকেজ অনুযায়ী ডিউরেশন অপশন পরিবর্তন করার জন্য
+        function updateDurationOptions(packageType) {
+            packageDurationSelect.innerHTML = ''; // পুরনো অপশন মুছে ফেলা হচ্ছে
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = "";
+            defaultOption.textContent = "-- Select duration --";
+            packageDurationSelect.appendChild(defaultOption);
+
+            if (packageType === 'Monthly') {
+                for (let i = 1; i <= 6; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i === 1 ? '1 Month' : `${i} Months`;
+                    packageDurationSelect.appendChild(option);
+                }
+            } else if (packageType === 'Yearly') {
+                for (let i = 1; i <= 3; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i === 1 ? '1 Year' : `${i} Years`;
+                    packageDurationSelect.appendChild(option);
+                }
+            }
+        }
 
         function validateForm() {
             let isValid = true;
             if (!selectedPackage) { isValid = false; }
-            
             if (isValid) {
                 for (const fieldId of basicRequiredFields) {
                     if (!document.getElementById(fieldId).value.trim()) { isValid = false; break; }
                 }
             }
-
             if (isValid && (selectedPackage === "Monthly" || selectedPackage === "Yearly")) {
                 for (const fieldId of paymentRequiredFields) {
-                    // packageDuration একটি সিলেক্ট মেন্যু, তাই এর ভ্যালু চেক করতে হবে
                     if (!document.getElementById(fieldId).value) { isValid = false; break; }
                 }
             }
@@ -484,19 +504,17 @@
             
             detailsSection.style.display = 'block';
 
-            // নতুন লজিক: প্যাকেজ অনুযায়ী Duration দেখানো বা লুকানো
             if (selectedPackage === 'Free Trial') {
                 durationGroup.style.display = 'none';
                 paymentDetails.style.display = 'none';
-                packageDurationSelect.value = ''; // রিসেট করা হচ্ছে
             } else {
                 durationGroup.style.display = 'block';
-                paymentDetails.style.display = 'none'; // ডিউরেশন সিলেক্ট করার আগে পেমেন্ট ডিটেইলস লুকানো থাকবে
+                paymentDetails.style.display = 'none';
+                updateDurationOptions(selectedPackage); // ডিউরেশন অপশন আপডেট করা হচ্ছে
             }
             validateForm();
         });
 
-        // নতুন Event Listener: ডিউরেশন সিলেক্ট করলে পেমেন্ট অপশন দেখাবে
         packageDurationSelect.addEventListener('change', () => {
             const duration = parseInt(packageDurationSelect.value);
             if (duration > 0) {
@@ -509,6 +527,19 @@
             validateForm();
         });
 
+        // ঠিক করা হয়েছে: পেমেন্ট নম্বর দেখানোর জন্য Event Listener আবার যোগ করা হয়েছে
+        paymentMethodSelect.addEventListener('change', () => {
+            const method = paymentMethodSelect.value;
+            if (method && paymentNumbers[method]) {
+                paymentNumberDiv.textContent = paymentNumbers[method];
+                paymentNumberDiv.style.display = 'block';
+            } else {
+                paymentNumberDiv.style.display = 'none';
+            }
+            validateForm();
+        });
+
+        // ইনপুট ভ্যালিডেশনের জন্য সব ইনপুট এবং সিলেক্ট ফিল্ডে লিসেনার যোগ করা
         [...document.querySelectorAll('input, select')].forEach(field => {
             field.addEventListener('input', validateForm);
         });
@@ -522,13 +553,18 @@
             const formData = new FormData(form);
             formData.append('Package', selectedPackage);
             
-            // মোট মূল্যটি FormData-তে যোগ করা হচ্ছে
             const duration = parseInt(packageDurationSelect.value);
             if(duration > 0) {
                 const totalPrice = selectedPrice * duration;
-                formData.set('Price', totalPrice); // Price-কে override করা হচ্ছে
+                formData.set('Price', totalPrice);
             } else {
                 formData.append('Price', selectedPrice);
+            }
+            
+            // ডিউরেশনের টেক্সট যোগ করা হচ্ছে (যেমন: 3 Months)
+            const selectedOptionText = packageDurationSelect.options[packageDurationSelect.selectedIndex].text;
+            if (duration > 0) {
+                 formData.set('Duration', selectedOptionText);
             }
 
             fetch(webAppUrl, {
