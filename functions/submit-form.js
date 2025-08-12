@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const Busboy = require('busboy');
-const { Dropbox } = require('dropbox-sdk-js');
+const { Dropbox } = require('dropbox');
 const fetch = require('isomorphic-fetch');
 
 const BUCKET_NAME = 'your-project-id.appspot.com'; // এটি এখন আর ব্যবহার হচ্ছে না, তবে রেখে দিতে পারেন
