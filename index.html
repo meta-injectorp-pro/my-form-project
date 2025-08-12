@@ -397,6 +397,7 @@
             </div>
         </form>
         <div id="successMessage" class="message success-message">
+            <div id="upgradeMessage" class="message success-message" style="background-color: #e7f3ff; color: #004085; border-color: #b8daff;"><h3>Congratulations!</h3><p>Your package has been upgraded successfully. We will contact you shortly with confirmation.</p></div>
             <h3>Thank You!</h3>
             <p>Your information has been submitted successfully. We will contact you shortly.</p>
         </div>
@@ -492,39 +493,48 @@
         });
 
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
-            errorMessage.style.display = 'none';
+    e.preventDefault();
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+    errorMessage.style.display = 'none';
 
-            // FormData ব্যবহার করে ফর্মের সব ডেটা (ফাইল সহ) সংগ্রহ করা হচ্ছে
-            const formData = new FormData(form);
-            formData.append('Package', selectedPackage);
-            formData.append('Price', selectedPrice);
+    const formData = new FormData(form);
+    formData.append('Package', selectedPackage);
+    formData.append('Price', selectedPrice);
 
-            fetch(webAppUrl, {
-                method: 'POST',
-                body: formData // সরাসরি FormData পাঠানো হচ্ছে, JSON নয়
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
-                form.style.display = 'none';
-                successMessage.style.display = 'block';
-            })
-            .catch(error => {
-                console.error("Error submitting form: ", error);
-                errorMessage.textContent = 'Submission failed. Please try again.';
-                errorMessage.style.display = 'block';
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit';
-            });
-        });
+    fetch(webAppUrl, {
+        method: 'POST',
+        body: formData
+    })
+    .then(async response => {
+        // রেসপন্সটি JSON হিসেবে পড়ার চেষ্টা করা হচ্ছে
+        const data = await response.json();
+        if (!response.ok) {
+            // যদি সার্ভার থেকে এরর আসে, তাহলে সেই এরর মেসেজটি ব্যবহার করা হবে
+            throw data;
+        }
+        return data;
+    })
+    .then(data => {
+        form.style.display = 'none';
+        
+        if (data.status === 'success_upgrade') {
+            // আপগ্রেড সফল হলে
+            document.getElementById('upgradeMessage').style.display = 'block';
+        } else {
+            // নতুন রেজিস্ট্রেশন সফল হলে
+            successMessage.style.display = 'block';
+        }
+    })
+    .catch(errorData => {
+        // সার্ভার থেকে আসা বিভিন্ন এরর মেসেজ দেখানো হচ্ছে
+        console.error("Error submitting form: ", errorData);
+        errorMessage.textContent = errorData.message || 'Submission failed. Please try again.';
+        errorMessage.style.display = 'block';
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit';
+    });
+});
     </script>
 </body>
 
