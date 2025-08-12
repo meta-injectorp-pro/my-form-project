@@ -37,8 +37,11 @@ exports.handler = async (event) => {
     const data = fields;
     let screenshotLink = '';
 
-    // --- নতুন যুক্ত করা মূল লজিক ---
+    // --- ব্যবহারকারী যাচাই করার জন্য সংশোধিত এবং উন্নত লজিক ---
     const userSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
+
+    let licenseKeyToUpdate;
+    let isUpgrade = false;
 
     if (!userSnapshot.empty) {
       // যদি ব্যবহারকারী আগে থেকেই থাকে
@@ -46,28 +49,35 @@ exports.handler = async (event) => {
       const existingUserData = existingUserDoc.data();
 
       if (existingUserData.Package !== 'Free Trial') {
-        // ব্যবহারকারী যদি আগে থেকেই প্রিমিয়াম প্যাকেজে থাকে
+        // ব্যবহারকারী যদি আগে থেকেই প্রিমিয়াম প্যাকেজে থাকে (Monthly/Yearly)
         return {
-          statusCode: 400, // Bad Request
-          body: JSON.stringify({ status: "error_already_premium", message: "You already have an active premium package. Please contact support for any issues." })
-        };
-      }
-      
-      // ব্যবহারকারী যদি Free Trial থেকে আপগ্রেড করে
-      if (existingUserData.Package === 'Free Trial' && data.Package !== 'Free Trial') {
-        const licenseKeyToUpdate = existingUserDoc.id;
-        // ... (বাকি কোড নিচে একই থাকবে) ...
-      } else {
-        // ব্যবহারকারী যদি Free Trial থাকা অবস্থায় আবার Free Trial নিতে চায়
-         return {
           statusCode: 400,
-          body: JSON.stringify({ status: "error_already_freetrial", message: "You have already used your free trial." })
+          body: JSON.stringify({ status: "error_already_premium", message: "You already have an active premium package." })
         };
+      } else {
+        // ব্যবহারকারী যদি Free Trial থেকে আপগ্রেড করে
+        if (data.Package === 'Free Trial') {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ status: "error_already_freetrial", message: "You have already used your free trial." })
+            };
+        }
+        licenseKeyToUpdate = existingUserDoc.id;
+        isUpgrade = true; // এটি একটি আপগ্রেড
       }
+    } else {
+      // যদি ব্যবহারকারী সম্পূর্ণ নতুন হয়
+      const availableLicenseSnapshot = await db.collection('License Database').where('Email', 'in', ["", null]).limit(1).get();
+      if (availableLicenseSnapshot.empty) {
+        throw new Error("No available licenses.");
+      }
+      licenseKeyToUpdate = availableLicenseSnapshot.docs[0].id;
+      isUpgrade = false; // এটি একটি নতুন রেজিস্ট্রেশন
     }
-    // --- নতুন লজিক শেষ ---
     
-    if (fileBuffer) {
+    // --- ফাইল আপলোড লজিক সংশোধন ---
+    // শুধু তখনই আপলোড হবে যদি কোনো ফাইল সিলেক্ট করা হয়
+    if (fileBuffer && fileOriginalName) {
         const dbx = new Dropbox({ accessToken: DROPBOX_ACCESS_TOKEN, fetch: fetch });
         const filePath = `/${data.Email}-${Date.now()}-${fileOriginalName}`;
         const uploadedFile = await dbx.filesUpload({ path: filePath, contents: fileBuffer });
@@ -75,19 +85,7 @@ exports.handler = async (event) => {
         screenshotLink = sharedLink.result.url.replace('dl=0', 'raw=1');
     }
 
-    let licenseKeyToUpdate;
-    let isUpgrade = false; // আপগ্রেড কিনা তা ট্র্যাক করার জন্য
-    const userCheckSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
-    
-    if (!userCheckSnapshot.empty && userCheckSnapshot.docs[0].data().Package === 'Free Trial') {
-        licenseKeyToUpdate = userCheckSnapshot.docs[0].id;
-        isUpgrade = true; // এটি একটি আপগ্রেড
-    } else {
-        const availableLicenseSnapshot = await db.collection('License Database').where('Email', 'in', ["", null]).limit(1).get();
-        if (availableLicenseSnapshot.empty) throw new Error("No available licenses.");
-        licenseKeyToUpdate = availableLicenseSnapshot.docs[0].id;
-    }
-
+    // --- Firebase-এ ডেটা সেভ করার বাকি অংশ ---
     const licenseUpdateData = {
         "Email": data.Email, "Customer Name": data.FullName, "Phone Number": data.Phone,
         "Package": data.Package, "Status": "Pending"
@@ -100,7 +98,7 @@ exports.handler = async (event) => {
           "Select Your Package": data.Package, "Payment Method": data.PaymentMethod || "",
           "Amount Sent (BDT)": data.AmountSent || "", "Sender's Number or TrxID  ": data.SenderInfo || "",
           "Status": "Pending", "Timestamp": new Date(),
-          "Upload Payment Screenshot  ": screenshotLink
+          "Upload Payment Screenshot  ": screenshotLink 
       };
       await db.collection('Purchase Form').add(purchaseData);
       
@@ -111,12 +109,11 @@ exports.handler = async (event) => {
       await db.collection('Sales Logs').add(salesData);
     }
     
-    // আপগ্রেড হলে একটি বিশেষ মেসেজ পাঠানো হচ্ছে
-    if (isUpgrade) {
-        return { statusCode: 200, body: JSON.stringify({ status: "success_upgrade" }) };
-    } else {
-        return { statusCode: 200, body: JSON.stringify({ status: "success_new" }) };
-    }
+    // আপগ্রেড এবং নতুন রেজিস্ট্রেশনের জন্য আলাদা স্ট্যাটাস পাঠানো হচ্ছে
+    return { 
+        statusCode: 200, 
+        body: JSON.stringify({ status: isUpgrade ? "success_upgrade" : "success_new" }) 
+    };
 
   } catch (error) {
     console.error("Error:", error);
