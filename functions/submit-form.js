@@ -3,11 +3,7 @@ const Busboy = require('busboy');
 const { Dropbox } = require('dropbox');
 const fetch = require('isomorphic-fetch');
 
-const BUCKET_NAME = 'your-project-id.appspot.com'; // এটি এখন আর ব্যবহার হচ্ছে না, তবে রেখে দিতে পারেন
-
-// Netlify Environment Variable থেকে টোকেন নেওয়া হচ্ছে
 const DROPBOX_ACCESS_TOKEN = process.env.DROPBOX_ACCESS_TOKEN;
-
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
 try {
@@ -18,7 +14,6 @@ try {
 
 const db = admin.firestore();
 
-// Helper function to parse multipart form data (অপরিবর্তিত)
 function parseMultipartForm(event) {
     return new Promise((resolve) => {
         const fields = {};
@@ -42,23 +37,51 @@ exports.handler = async (event) => {
     const data = fields;
     let screenshotLink = '';
 
-    // ধাপ ১: যদি কোনো ফাইল থাকে, তবে সেটি Dropbox-এ আপলোড করা
+    // --- নতুন যুক্ত করা মূল লজিক ---
+    const userSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
+
+    if (!userSnapshot.empty) {
+      // যদি ব্যবহারকারী আগে থেকেই থাকে
+      const existingUserDoc = userSnapshot.docs[0];
+      const existingUserData = existingUserDoc.data();
+
+      if (existingUserData.Package !== 'Free Trial') {
+        // ব্যবহারকারী যদি আগে থেকেই প্রিমিয়াম প্যাকেজে থাকে
+        return {
+          statusCode: 400, // Bad Request
+          body: JSON.stringify({ status: "error_already_premium", message: "You already have an active premium package. Please contact support for any issues." })
+        };
+      }
+      
+      // ব্যবহারকারী যদি Free Trial থেকে আপগ্রেড করে
+      if (existingUserData.Package === 'Free Trial' && data.Package !== 'Free Trial') {
+        const licenseKeyToUpdate = existingUserDoc.id;
+        // ... (বাকি কোড নিচে একই থাকবে) ...
+      } else {
+        // ব্যবহারকারী যদি Free Trial থাকা অবস্থায় আবার Free Trial নিতে চায়
+         return {
+          statusCode: 400,
+          body: JSON.stringify({ status: "error_already_freetrial", message: "You have already used your free trial." })
+        };
+      }
+    }
+    // --- নতুন লজিক শেষ ---
+    
     if (fileBuffer) {
         const dbx = new Dropbox({ accessToken: DROPBOX_ACCESS_TOKEN, fetch: fetch });
         const filePath = `/${data.Email}-${Date.now()}-${fileOriginalName}`;
-        
         const uploadedFile = await dbx.filesUpload({ path: filePath, contents: fileBuffer });
-        
         const sharedLink = await dbx.sharingCreateSharedLinkWithSettings({ path: uploadedFile.result.path_display });
-        
-        screenshotLink = sharedLink.result.url.replace('dl=0', 'raw=1'); // সরাসরি দেখার জন্য লিঙ্ক তৈরি
+        screenshotLink = sharedLink.result.url.replace('dl=0', 'raw=1');
     }
 
-    // ধাপ ২: Firebase-এ ডেটা আপডেট এবং যোগ করা (অপরিবর্তিত)
     let licenseKeyToUpdate;
-    const userSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
-    if (!userSnapshot.empty && userSnapshot.docs[0].data().Package === 'Free Trial') {
-        licenseKeyToUpdate = userSnapshot.docs[0].id;
+    let isUpgrade = false; // আপগ্রেড কিনা তা ট্র্যাক করার জন্য
+    const userCheckSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
+    
+    if (!userCheckSnapshot.empty && userCheckSnapshot.docs[0].data().Package === 'Free Trial') {
+        licenseKeyToUpdate = userCheckSnapshot.docs[0].id;
+        isUpgrade = true; // এটি একটি আপগ্রেড
     } else {
         const availableLicenseSnapshot = await db.collection('License Database').where('Email', 'in', ["", null]).limit(1).get();
         if (availableLicenseSnapshot.empty) throw new Error("No available licenses.");
@@ -77,7 +100,7 @@ exports.handler = async (event) => {
           "Select Your Package": data.Package, "Payment Method": data.PaymentMethod || "",
           "Amount Sent (BDT)": data.AmountSent || "", "Sender's Number or TrxID  ": data.SenderInfo || "",
           "Status": "Pending", "Timestamp": new Date(),
-          "Upload Payment Screenshot  ": screenshotLink // Dropbox থেকে পাওয়া লিঙ্ক
+          "Upload Payment Screenshot  ": screenshotLink
       };
       await db.collection('Purchase Form').add(purchaseData);
       
@@ -88,10 +111,15 @@ exports.handler = async (event) => {
       await db.collection('Sales Logs').add(salesData);
     }
     
-    return { statusCode: 200, body: JSON.stringify({ status: "success" }) };
+    // আপগ্রেড হলে একটি বিশেষ মেসেজ পাঠানো হচ্ছে
+    if (isUpgrade) {
+        return { statusCode: 200, body: JSON.stringify({ status: "success_upgrade" }) };
+    } else {
+        return { statusCode: 200, body: JSON.stringify({ status: "success_new" }) };
+    }
 
   } catch (error) {
     console.error("Error:", error);
-    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
+    return { statusCode: 500, body: JSON.stringify({ error: error.message, status: "error_internal" }) };
   }
 };
