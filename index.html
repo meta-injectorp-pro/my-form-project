@@ -353,15 +353,15 @@
             <div class="form-section" id="detailsSection">
                 <div class="input-group">
                     <label for="fullName">Your Full Name</label>
-                    <input type="text" id="fullName" required>
+                    <input type="text" id="fullName" name="FullName" required>
                 </div>
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" required>
+                    <input type="email" id="email" name="Email" required>
                 </div>
                 <div class="input-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" required>
+                    <input type="tel" id="phone" name="Phone" required>
                 </div>
 
                 <div id="paymentDetails" style="display: none;">
@@ -371,7 +371,7 @@
                     </div>
                     <div class="input-group">
                         <label for="paymentMethod">Payment Method</label>
-                        <select id="paymentMethod">
+                        <select id="paymentMethod" name="PaymentMethod">
                             <option value="">-- Choose a method --</option>
                             <option value="bKash">bKash</option>
                             <option value="Nagad">Nagad</option>
@@ -381,15 +381,15 @@
                     </div>
                     <div class="input-group">
                         <label for="amountSent">Amount You Sent (BDT)</label>
-                        <input type="number" id="amountSent">
+                        <input type="number" id="amountSent" name="AmountSent">
                     </div>
                     <div class="input-group">
                         <label for="senderInfo">Sender's Number or TrxID</label>
-                        <input type="text" id="senderInfo">
+                        <input type="text" id="senderInfo" name="SenderInfo">
                     </div>
                     <div class="input-group">
                         <label for="screenshot">Upload Payment Screenshot (Optional)</label>
-                        <input type="file" id="screenshot">
+                        <input type="file" id="screenshot" name="screenshot">
                     </div>
                 </div>
 
