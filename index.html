@@ -363,7 +363,17 @@
                     <label for="phone">Phone Number</label>
                     <input type="tel" id="phone" name="Phone" required>
                 </div>
-
+                <div class="input-group" id="durationGroup" style="display: none;">
+                    <label for="packageDuration">Package Duration</label>
+                    <select id="packageDuration" name="Duration">
+                        <option value="">-- Select duration --</option>
+                        <option value="1">1 Month</option>
+                        <option value="2">2 Months</option>
+                        <option value="3">3 Months</option>
+                        <option value="6">6 Months</option>
+                        <option value="12">12 Months (1 Year)</option>
+                    </select>
+                </div>
                 <div id="paymentDetails" style="display: none;">
                     <div class="input-group">
                         <label>Amount to be Paid</label>
@@ -416,7 +426,12 @@
         const submitButton = document.getElementById('submitButton');
         const form = document.getElementById('purchaseForm');
         const successMessage = document.getElementById('successMessage');
+        const upgradeMessage = document.getElementById('upgradeMessage'); // আগের ধাপ থেকে যোগ করা
         const errorMessage = document.getElementById('errorMessage');
+
+        // নতুন যোগ করা হয়েছে
+        const durationGroup = document.getElementById('durationGroup');
+        const packageDurationSelect = document.getElementById('packageDuration');
 
         let selectedPackage = null;
         let selectedPrice = 0;
@@ -426,31 +441,25 @@
             "Nagad": "Nagad Personal: 01729816172",
             "Rocket": "Rocket Personal: 01729816172"
         };
-
+        
         const basicRequiredFields = ['fullName', 'email', 'phone'];
-        const paymentRequiredFields = ['paymentMethod', 'amountSent', 'senderInfo'];
+        // packageDuration এখন প্রয়োজনীয় ফিল্ড
+        const paymentRequiredFields = ['packageDuration', 'paymentMethod', 'amountSent', 'senderInfo'];
 
         function validateForm() {
             let isValid = true;
-            if (!selectedPackage) {
-                isValid = false;
-            }
-
+            if (!selectedPackage) { isValid = false; }
+            
             if (isValid) {
                 for (const fieldId of basicRequiredFields) {
-                    if (!document.getElementById(fieldId).value.trim()) {
-                        isValid = false;
-                        break;
-                    }
+                    if (!document.getElementById(fieldId).value.trim()) { isValid = false; break; }
                 }
             }
 
             if (isValid && (selectedPackage === "Monthly" || selectedPackage === "Yearly")) {
                 for (const fieldId of paymentRequiredFields) {
-                    if (!document.getElementById(fieldId).value.trim()) {
-                        isValid = false;
-                        break;
-                    }
+                    // packageDuration একটি সিলেক্ট মেন্যু, তাই এর ভ্যালু চেক করতে হবে
+                    if (!document.getElementById(fieldId).value) { isValid = false; break; }
                 }
             }
             submitButton.disabled = !isValid;
@@ -465,76 +474,84 @@
 
             selectedPackage = card.dataset.package;
             selectedPrice = card.dataset.price;
-
+            
             detailsSection.style.display = 'block';
 
+            // নতুন লজিক: প্যাকেজ অনুযায়ী Duration দেখানো বা লুকানো
             if (selectedPackage === 'Free Trial') {
+                durationGroup.style.display = 'none';
                 paymentDetails.style.display = 'none';
+                packageDurationSelect.value = ''; // রিসেট করা হচ্ছে
             } else {
+                durationGroup.style.display = 'block';
+                paymentDetails.style.display = 'none'; // ডিউরেশন সিলেক্ট করার আগে পেমেন্ট ডিটেইলস লুকানো থাকবে
+            }
+            validateForm();
+        });
+
+        // নতুন Event Listener: ডিউরেশন সিলেক্ট করলে পেমেন্ট অপশন দেখাবে
+        packageDurationSelect.addEventListener('change', () => {
+            const duration = parseInt(packageDurationSelect.value);
+            if (duration > 0) {
+                const totalPrice = selectedPrice * duration;
+                amountToBePaidDiv.textContent = `Please Pay: ${totalPrice} BDT`;
                 paymentDetails.style.display = 'block';
-                amountToBePaidDiv.textContent = `Please Pay: ${selectedPrice} BDT`;
-            }
-            validateForm();
-        });
-
-        paymentMethodSelect.addEventListener('change', () => {
-            const method = paymentMethodSelect.value;
-            if (method && paymentNumbers[method]) {
-                paymentNumberDiv.textContent = paymentNumbers[method];
-                paymentNumberDiv.style.display = 'block';
             } else {
-                paymentNumberDiv.style.display = 'none';
+                paymentDetails.style.display = 'none';
             }
             validateForm();
         });
 
-        [...basicRequiredFields, ...paymentRequiredFields].forEach(fieldId => {
-            document.getElementById(fieldId).addEventListener('input', validateForm);
+        [...document.querySelectorAll('input, select')].forEach(field => {
+            field.addEventListener('input', validateForm);
         });
 
         form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    submitButton.disabled = true;
-    submitButton.textContent = 'Submitting...';
-    errorMessage.style.display = 'none';
+            e.preventDefault();
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
+            errorMessage.style.display = 'none';
 
-    const formData = new FormData(form);
-    formData.append('Package', selectedPackage);
-    formData.append('Price', selectedPrice);
+            const formData = new FormData(form);
+            formData.append('Package', selectedPackage);
+            
+            // মোট মূল্যটি FormData-তে যোগ করা হচ্ছে
+            const duration = parseInt(packageDurationSelect.value);
+            if(duration > 0) {
+                const totalPrice = selectedPrice * duration;
+                formData.set('Price', totalPrice); // Price-কে override করা হচ্ছে
+            } else {
+                formData.append('Price', selectedPrice);
+            }
 
-    fetch(webAppUrl, {
-        method: 'POST',
-        body: formData
-    })
-    .then(async response => {
-        // রেসপন্সটি JSON হিসেবে পড়ার চেষ্টা করা হচ্ছে
-        const data = await response.json();
-        if (!response.ok) {
-            // যদি সার্ভার থেকে এরর আসে, তাহলে সেই এরর মেসেজটি ব্যবহার করা হবে
-            throw data;
-        }
-        return data;
-    })
-    .then(data => {
-        form.style.display = 'none';
-        
-        if (data.status === 'success_upgrade') {
-            // আপগ্রেড সফল হলে
-            document.getElementById('upgradeMessage').style.display = 'block';
-        } else {
-            // নতুন রেজিস্ট্রেশন সফল হলে
-            successMessage.style.display = 'block';
-        }
-    })
-    .catch(errorData => {
-        // সার্ভার থেকে আসা বিভিন্ন এরর মেসেজ দেখানো হচ্ছে
-        console.error("Error submitting form: ", errorData);
-        errorMessage.textContent = errorData.message || 'Submission failed. Please try again.';
-        errorMessage.style.display = 'block';
-        submitButton.disabled = false;
-        submitButton.textContent = 'Submit';
-    });
-});
+            fetch(webAppUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) { throw data; }
+                return data;
+            })
+            .then(data => {
+                form.style.display = 'none';
+                durationGroup.style.display = 'none';
+                paymentDetails.style.display = 'none';
+
+                if (data.status === 'success_upgrade') {
+                    upgradeMessage.style.display = 'block';
+                } else {
+                    successMessage.style.display = 'block';
+                }
+            })
+            .catch(errorData => {
+                console.error("Error submitting form: ", errorData);
+                errorMessage.textContent = errorData.message || 'Submission failed. Please try again.';
+                errorMessage.style.display = 'block';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit';
+            });
+        });
     </script>
 </body>
 
