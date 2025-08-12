@@ -2,7 +2,7 @@
   "dependencies": {
     "firebase-admin": "^12.0.0",
     "busboy": "^1.6.0",
-    "dropbox-sdk-js": "^10.34.0",
+    "dropbox": "^10.34.0",
     "isomorphic-fetch": "^3.0.0"
   }
 }
