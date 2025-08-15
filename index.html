@@ -561,10 +561,8 @@
                 formData.append('Price', selectedPrice);
             }
             
-            // ডিউরেশনের টেক্সট যোগ করা হচ্ছে (যেমন: 3 Months)
-            const selectedOptionText = packageDurationSelect.options[packageDurationSelect.selectedIndex].text;
             if (duration > 0) {
-                 formData.set('Duration', selectedOptionText);
+                 formData.set('Duration', duration);
             }
 
             fetch(webAppUrl, {
