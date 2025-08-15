@@ -38,7 +38,7 @@ exports.handler = async (event) => {
     let screenshotLink = '';
 
     // --- ব্যবহারকারী যাচাই করার জন্য একক এবং সংশোধিত লজিক ---
-    const userSnapshot = await db.collection('License Database').where('Email', '==', data.Email).limit(1).get();
+    const userSnapshot = await db.collection('licenseDatabase').where('Email', '==', data.Email).limit(1).get();
     let licenseKeyToUpdate;
     let isUpgrade = false;
 
@@ -70,7 +70,7 @@ exports.handler = async (event) => {
 
     } else {
       // যদি ব্যবহারকারী সম্পূর্ণ নতুন হয়
-      const availableLicenseSnapshot = await db.collection('License Database').where('Email', 'in', ["", null]).limit(1).get();
+      const availableLicenseSnapshot = await db.collection('licenseDatabase').where('Email', 'in', ["", null]).limit(1).get();
       if (availableLicenseSnapshot.empty) {
         throw new Error("No available licenses.");
       }
@@ -97,7 +97,7 @@ exports.handler = async (event) => {
         "Duration": data.Duration || "",
         "Status": "Pending"
     };
-    await db.collection('License Database').doc(licenseKeyToUpdate).update(licenseUpdateData);
+    await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
     if (data.Package !== 'Free Trial') {
       const purchaseData = {
@@ -107,14 +107,14 @@ exports.handler = async (event) => {
           "Sender's Number or TrxID  ": data.SenderInfo || "", "Status": "Pending", "Timestamp": new Date(),
           "Upload Payment Screenshot  ": screenshotLink 
       };
-      await db.collection('Purchase Form').add(purchaseData);
+      await db.collection('purchaseForm').add(purchaseData);
       
       const salesData = {
           "Timestamp": new Date(), "License Key": licenseKeyToUpdate,
           "Package": data.Package, "Duration": data.Duration || "",
           "Final Price": data.Price
       };
-      await db.collection('Sales Logs').add(salesData);
+      await db.collection('salesLogs').add(salesData);
     }
     
     return { 
