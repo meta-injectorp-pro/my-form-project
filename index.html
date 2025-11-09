@@ -4,28 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meta Injector Software Purchase Form</title>
+    <title>Meta Injector ᴾʳᵒ Purchase Form</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
         :root {
-            --primary-color: #007bff;
+            --primary-color: #8A4DFF;
             --secondary-color: #28a745;
-            --background-color: #f4f7f9;
-            --card-bg-color: #ffffff;
-            --text-color: #343a40;
-            --light-text-color: #6c757d;
-            --border-color: #e9ecef;
-            --yearly-highlight: #ffc107;
-            /* New background colors for cards */
-            --free-card-bg: #e9f7ef;
-            --monthly-card-bg: #e7f3ff;
-            --yearly-card-bg: #fff8e1;
+            --background-color-rgb: 15, 10, 30;
+            --card-bg-color-rgb: 26, 17, 41;
+            --text-color: #e0e0e0;
+            --light-text-color: #9a9a9a;
+            --border-color: #3A2D5E;
+            --error-color: #dc3545;            
+
+            --grad-blue: linear-gradient(135deg, #00c6ff, #0072ff);
+            --grad-purple: linear-gradient(135deg, #a044ff, #6a3093);
+            --grad-orange: linear-gradient(135deg, #ffc500, #f79d00);
+
+            --progress-active-color: var(--primary-color);
+            --progress-inactive-color: var(--border-color);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
+            background-color: #0F0A1E;
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%231a1129" fill-opacity="0.7"%3E%3Cpath d="M12 0h12v60H12V0zm24 0h12v60H36V0zM0 12h60v12H0V12zm0 36h60v12H0V48z"/%3E%3C/g%3E%3C/svg%3E');
+            background-size: 60px 60px;
+            background-position: center center;
+            background-attachment: fixed;
+            
             color: var(--text-color);
             display: flex;
             justify-content: center;
@@ -36,264 +44,263 @@
         }
 
         .form-container {
-            background-color: var(--card-bg-color);
+            background-color: rgba(var(--card-bg-color-rgb), 0.85);
+            backdrop-filter: blur(10px);
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             max-width: 900px;
             width: 100%;
+            overflow: hidden; 
+            border: 1px solid var(--border-color);
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+        .form-header { text-align: center; margin-bottom: 20px; }
+        .form-header img { max-width: 70px; margin-bottom: 15px; }
+        .form-header h2 { color: var(--text-color); margin: 0; font-size: 28px; font-weight: 700; }
+        .welcome-text { text-align: center; margin-bottom: 30px; }
+        .welcome-text p { font-size: 16px; color: var(--light-text-color); line-height: 1.6; max-width: 700px; margin: 0 auto; }
 
-        .form-header img {
-            max-width: 70px;
-            margin-bottom: 15px;
-        }
+        .progress-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; position: relative; }
+        .progress-step { width: 33.33%; text-align: center; position: relative; z-index: 1; transition: all 0.4s ease; }
+        .progress-step .step-circle { width: 30px; height: 30px; border-radius: 50%; background-color: rgba(var(--card-bg-color-rgb), 1); border: 3px solid var(--progress-inactive-color); display: inline-block; line-height: 24px; font-weight: 600; color: var(--light-text-color); transition: all 0.4s ease; }
+        .progress-step .step-title { font-size: 14px; font-weight: 500; margin-top: 10px; color: var(--light-text-color); transition: all 0.4s ease; }
+        .progress-step.active .step-circle { border-color: var(--progress-active-color); background-color: var(--progress-active-color); color: #fff; }
+        .progress-step.active .step-title { color: var(--text-color); }
+        .progress-bar::before { content: ''; position: absolute; top: 15px; left: 0; width: 100%; height: 3px; background-color: var(--progress-inactive-color); z-index: 0; }
+        .progress-bar-line { position: absolute; top: 15px; left: 0; width: 0%; height: 3px; background-color: var(--progress-active-color); z-index: 0; transition: width 0.4s ease; }
 
-        .form-header h2 {
-            color: var(--text-color);
-            margin: 0;
-            font-size: 28px;
-            font-weight: 700;
+        .form-step {
+            display: none;
+            animation: slideIn 0.5s ease-in-out forwards;
         }
-
-        .welcome-text {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .welcome-text p {
-            font-size: 16px;
-            color: var(--light-text-color);
-            line-height: 1.6;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
+        .form-step.active {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        input,
-        select {
+
+        .input-group { margin-bottom: 25px; position: relative; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        input, select {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid var(--border-color);
+            background-color: rgba(var(--background-color-rgb), 0.7);
+            color: var(--text-color);
             border-radius: 8px;
             box-sizing: border-box;
             font-size: 16px;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-
-        input:focus,
-        select:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(138, 77, 255, 0.25);
         }
 
+        input.invalid, select.invalid {
+            border-color: var(--error-color);
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+        }
+        .warning-message {
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        .warning-message.visible { display: block; }
+
+        input.highlighted-input {
+            background-color: rgba(var(--background-color-rgb), 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            font-size: 16px;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+
         .package-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .package-card {
-            border: 2px solid var(--border-color);
+            width: 180px;
+            flex-shrink: 0;
+            border: 2px solid transparent; 
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px 15px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            color: #ffffff; 
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* Applying unique background colors */
-        .package-card[data-package="Free Trial"] {
-            background-color: var(--free-card-bg);
-        }
-
-        .package-card[data-package="Monthly"] {
-            background-color: var(--monthly-card-bg);
-        }
-
-        .package-card[data-package="Yearly"] {
-            background-color: var(--yearly-card-bg);
-        }
+        .package-card[data-package="Free Trial"] { background: var(--grad-blue); }
+        .package-card[data-package="Basic"] { background: var(--grad-purple); }
+        .package-card[data-package="Premium"] { background: var(--grad-orange); }
 
         .package-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         .package-card.selected {
-            border-color: var(--primary-color);
-            box-shadow: 0 12px 25px rgba(0, 123, 255, 0.2);
+            border-color: #fff; 
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); 
         }
+        .package-card h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #fff; }
+        .package-card .price { font-size: 28px; font-weight: 800; margin-bottom: 5px; color: #fff; }
+        .package-card .price del { font-size: 14px; color: #eee; opacity: 0.8; margin-left: 5px; font-weight: 400; }
+        .package-card .duration { font-size: 13px; color: #eee; opacity: 0.9; margin-bottom: 15px; }
 
-        .package-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-color);
-        }
+        .package-card[data-package="Free Trial"] h3 { color: #ccf2ff; }
+        .package-card[data-package="Basic"] h3 { color: #f2e6ff; }
+        .package-card[data-package="Premium"] h3 { color: #fff2cc; }
 
-        .package-card .price {
-            font-size: 32px;
+        .ribbon {
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background-color: #ffcc00;
+            color: #333;
+            transform: rotate(45deg);
+            padding: 5px 30px;
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 5px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.3);
+            z-index: 2;
         }
 
-        .package-card .price del {
-            font-size: 16px;
-            color: var(--light-text-color);
-            margin-left: 8px;
-            font-weight: 400;
+        .package-features {
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease-out;
+            overflow: hidden;
+            margin-top: 25px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
         }
-
-        .package-card .duration {
-            font-size: 14px;
-            color: var(--light-text-color);
-            margin-bottom: 20px;
+        .package-features.visible {
+            opacity: 1;
+            max-height: 500px; 
+            transform: translateY(0);
         }
-
-        .package-card ul {
+        .package-features ul {
             list-style: none;
             padding: 0;
-            margin: 0 0 20px 0;
+            margin: 0;
             text-align: left;
-            font-size: 14px;
-            flex-grow: 1;
+            font-size: 15px;
         }
-
-        .package-card ul li {
-            margin-bottom: 10px;
+        .package-features ul li {
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
         }
-
-        .package-card ul li::before {
+        .package-features ul li::before {
             content: '✔';
             color: var(--secondary-color);
-            margin-right: 10px;
+            margin-right: 12px;
             font-weight: bold;
         }
 
-        .yearly-badge {
-            position: absolute;
-            top: 15px;
-            right: -40px;
-            background-color: var(--yearly-highlight);
-            color: var(--text-color);
-            padding: 5px 40px;
-            font-weight: 600;
-            font-size: 12px;
-            transform: rotate(45deg);
+        .package-features ul li.description {
+            font-style: italic;
+            color: var(--light-text-color);
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .package-features ul li.description::before {
+            content: 'ⓘ';
+            color: var(--primary-color);
         }
 
-        .form-section {
-            display: none;
-            border-top: 1px solid var(--border-color);
-            margin-top: 25px;
+        #paymentDetailsSection, #paymentInfoGroup {
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease-out;
+            overflow: hidden;
+        }
+        #paymentDetailsSection.visible, #paymentInfoGroup.visible {
+            opacity: 1;
+            max-height: 1000px;
+            transform: translateY(0);
+        }
+        #paymentDetailsSection.visible {
+            border-top: 1px dashed var(--border-color);
             padding-top: 25px;
+            margin-top: 25px;
+        }
+        #paymentInfoGroup.visible {
+             margin-top: 25px;
         }
 
-        .info-display {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 500;
-            text-align: center;
-            font-size: 16px;
-            color: var(--text-color);
-            margin-bottom: 25px;
-        }
+        .payment-number { background-color: #3b341f; padding: 10px; border-radius: 6px; font-weight: 500; text-align: center; font-size: 16px; color: #ffeb99; margin-top: 10px; border: 1px solid #5a512c; display: none; }
 
-        .payment-number {
-            background-color: #fff3cd;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: 500;
-            text-align: center;
-            font-size: 16px;
-            color: #856404;
-            margin-top: 10px;
-            border: 1px solid #ffeeba;
-            display: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
+        .btn-nav-group { display: flex; justify-content: space-between; margin-top: 30px; }
+        button { 
+            width: 100%; padding: 15px; 
+            background-color: var(--primary-color); 
+            color: white; border: none; border-radius: 8px; 
+            font-size: 18px; font-weight: bold; cursor: pointer; 
             transition: all 0.3s;
         }
-
-        button:hover {
-            background-color: #0056b3;
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        .btn-nav-group button { width: 48%; }
+        button.back:not(:disabled) { 
+            background-color: #6c757d;
+            color: #fff; 
+        }
+        button.back:not(:disabled):hover {
+            background-color: #5a6268;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
         }
 
-        button:disabled {
-            background-color: #a0c7e8;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+        button:hover:not(:disabled) { background-color: #A06FFF; box-shadow: 0 5px 15px rgba(138, 77, 255, 0.3); transform: translateY(-2px); }
+        button:disabled { background-color: #3A2D5E; color: #777; cursor: not-allowed; box-shadow: none; transform: none; }
+        button.back:disabled { background-color: #1a2230; color: #444; }
 
-        .message {
-            text-align: center;
-            padding: 20px;
-            border-radius: 6px;
-            margin-top: 20px;
-            display: none;
-        }
 
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
+        .message { text-align: center; padding: 20px; border-radius: 6px; margin-top: 20px; display: none; }
+        .success-message { background-color: #1a4a2a; color: #a0e0b0; border: 1px solid #2a6a3a; }
+        .error-message { background-color: #4a1a2a; color: #f0a0b0; border: 1px solid #6a2a3a; }
+        .upgrade-message { background-color: #1c2f4a; color: #b8daff; border-color: #2c4f7a; }
 
-        .error-message {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        /* Responsive Design for Mobile */
         @media (max-width: 768px) {
-            .package-container {
-                grid-template-columns: 1fr;
+            .package-container { 
+                flex-direction: column;
+                align-items: center;
             }
-
-            .form-container {
-                padding: 20px;
-            }
-
-            .form-header h2 {
-                font-size: 22px;
-            }
+            .package-card { width: 80%; max-width: 300px; }
+            .form-container { padding: 20px; }
+            .form-header h2 { font-size: 22px; }
+            .progress-step .step-title { font-size: 12px; }
+            .btn-nav-group button { width: 48%; font-size: 16px; }
+        }
+        @media (max-width: 480px) {
+            .btn-nav-group { flex-direction: column; gap: 15px; }
+            .btn-nav-group button { width: 100%; }
         }
     </style>
 </head>
@@ -303,85 +310,93 @@
     <div class="form-container">
         <div class="form-header">
             <img src="https://i.postimg.cc/JhMFkr1t/logo.png" alt="Software Logo">
-            <h2>Meta Injector Purchase Form</h2>
+            <h2>Meta Injector ᴾʳᵒ Purchase Form</h2>
         </div>
 
         <div class="welcome-text">
-            <p>Welcome! Automate your metadata workflow with the power of AI. Choose a package below to get started and save hours of manual work.</p>
+            <p>Welcome! Automate your metadata workflow. Choose a package below to get started.</p>
         </div>
 
-        <form id="purchaseForm" enctype="multipart/form-data">
-            <label style="font-size: 16px; margin-bottom: 15px; text-align: center;">Select Your Package</label>
-            <div class="package-container" id="packageContainer">
-                <div class="package-card" data-package="Free Trial" data-price="0">
-                    <h3>Free Trial</h3>
-                    <div class="price">৳0</div>
-                    <div class="duration">3 Days Access</div>
-                    <ul>
-                        <li>Experience our all core features</li>
-                        <li>Daily 50 Files Process</li>
-                        <li>Generate Metadata with AI</li>
-                        <li>Standard AI Generation</li>
-                        <li>CSV Import/Export</li>
-                    </ul>
+        <div class="progress-bar">
+            <div class="progress-bar-line"></div>
+            <div class="progress-step active" data-step="0">
+                <div class="step-circle">1</div>
+                <div class="step-title">Package</div>
+            </div>
+            <div class="progress-step" data-step="1">
+                <div class="step-circle">2</div>
+                <div class="step-title">Details</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="step-circle">3</div>
+                <div class="step-title">Payment</div>
+            </div>
+        </div>
+
+        <form id="purchaseForm">
+            
+            <div class="form-step active" id="step1">
+                <label style="font-size: 16px; margin-bottom: 15px; text-align: center; display: block;">Choose Your Plan</label>
+                <div class="package-container" id="packageContainer">
+                    <div class="package-card" data-package="Free Trial" data-price="0">
+                        <h3>Free Trial</h3>
+                        <div class="price">৳0</div>
+                        <div class="duration">3 Days Access</div>
+                    </div>
+                    <div class="package-card" data-package="Basic" data-price="129" data-regular-price="199">
+                        <h3>Basic</h3>
+                        <div class="price">৳129 <del>৳199</del></div>
+                        <div class="duration">Per Month</div>
+                    </div>
+                    <div class="package-card" data-package="Premium" data-price="999" data-regular-price="1499">
+                        <div class="ribbon"><span>Best Value</span></div>
+                        <h3>Premium</h3>
+                        <div class="price">৳999 <del>৳1499</del></div>
+                        <div class="duration">Per Year</div>
+                    </div>
                 </div>
-                <div class="package-card" data-package="Monthly" data-price="129" data-regular-price="199">
-                    <h3>Basic Package</h3>
-                    <div class="price">৳129 <del>৳199</del></div>
-                    <div class="duration">Per Month</div>
-                    <ul>
-                        <li>Unlimited File Processing</li>
-                        <li>Unlimited Metadata Generate</li>
-                        <li>Advanced AI Generation</li>
-                        <li>CSV Import/Export</li>
-                        <li>Email Support</li>
-                    </ul>
-                </div>
-                <div class="package-card" data-package="Yearly" data-price="999" data-regular-price="1499">
-                    <div class="yearly-badge">Best Value</div>
-                    <h3>Advance Package</h3>
-                    <div class="price">৳999 <del>৳1499</del></div>
-                    <div class="duration">Per Year (Save 33%)</div>
-                    <ul>
-                        <li>Unlimited File Processing</li>
-                        <li>Unlimited Metadata Generate</li>
-                        <li>Advanced AI Generation</li>
-                        <li>CSV Import/Export</li>
-                        <li><strong>Priority Support</strong></li>
-                    </ul>
+
+                <div class="package-features" id="packageFeatures">
+                    </div>
+
+                <div class="btn-nav-group">
+                    <button type="button" class="btn back" disabled>Back</button>
+                    <button type="button" class="btn next" id="nextBtnStep1" disabled>Next</button>
                 </div>
             </div>
 
-            <div class="form-section" id="detailsSection">
+            <div class="form-step" id="step2">
                 <div class="input-group">
                     <label for="fullName">Your Full Name</label>
-                    <input type="text" id="fullName" name="FullName" required>
+                    <input type="text" id="fullName" name="FullName">
+                    <div class="warning-message" id="fullNameWarning">Please enter your full name (at least two words, no numbers).</div>
                 </div>
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="Email" required>
+                    <input type="email" id="email" name="Email">
+                    <div class="warning-message" id="emailWarning">A valid email address is required.</div>
                 </div>
                 <div class="input-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="Phone" required>
+                    <input type="tel" id="phone" name="Phone">
+                    <div class="warning-message" id="phoneWarning">Please enter a valid 11-digit phone number.</div>
                 </div>
-                <div class="input-group" id="durationGroup" style="display: none;">
+                <div class="btn-nav-group">
+                    <button type="button" class="btn back" id="backBtnStep2">Back</button>
+                    <button type="button" class="btn next" id="nextBtnStep2" disabled>Next / Submit</button>
+                </div>
+            </div>
+
+            <div class="form-step" id="step3">
+                <div class="input-group" id="durationGroup">
                     <label for="packageDuration">Package Duration</label>
                     <select id="packageDuration" name="Duration">
-                        <option value="">-- Select duration --</option>
-                        <option value="1">1 Month</option>
-                        <option value="2">2 Months</option>
-                        <option value="3">3 Months</option>
-                        <option value="6">6 Months</option>
-                        <option value="12">12 Months (1 Year)</option>
-                    </select>
+                        </select>
+                    <div class="warning-message" id="durationWarning">Please select a package duration.</div>
                 </div>
-                <div id="paymentDetails" style="display: none;">
-                    <div class="input-group">
-                        <label>Amount to be Paid</label>
-                        <div class="info-display" id="amountToBePaid"></div>
-                    </div>
-                    <div class="input-group">
+
+                <div id="paymentDetailsSection">
+                    <div class="input-group" id="paymentMethodGroup">
                         <label for="paymentMethod">Payment Method</label>
                         <select id="paymentMethod" name="PaymentMethod">
                             <option value="">-- Choose a method --</option>
@@ -389,86 +404,153 @@
                             <option value="Nagad">Nagad</option>
                             <option value="Rocket">Rocket</option>
                         </select>
+                        <div class="warning-message" id="paymentMethodWarning">Please select a payment method.</div>
                         <div class="payment-number" id="paymentNumber"></div>
                     </div>
-                    <div class="input-group">
-                        <label for="amountSent">Amount You Sent (BDT)</label>
-                        <input type="number" id="amountSent" name="AmountSent">
-                    </div>
-                    <div class="input-group">
-                        <label for="senderInfo">Sender's Number or TrxID</label>
-                        <input type="text" id="senderInfo" name="SenderInfo">
-                    </div>
-                    <div class="input-group">
-                        <label for="screenshot">Upload Payment Screenshot (Optional)</label>
-                        <input type="file" id="screenshot" name="screenshot">
+                
+                    <div id="paymentInfoGroup">
+                        <div class="input-group">
+                            <label for="amountSent">Amount to be Paid (BDT)</label>
+                            <input type="number" id="amountSent" name="AmountSent" readonly class="highlighted-input"> 
+                        </div>
+                        <div class="input-group">
+                            <label for="senderInfo">Sender's Number or TrxID</label>
+                            <input type="tel" id="senderInfo" name="SenderInfo">
+                            <div class="warning-message" id="senderInfoWarning">Sender's Number/TrxID is required (numbers only).</div>
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit" id="submitButton" disabled>Submit</button>
+                <div class="btn-nav-group">
+                    <button type="button" class="btn back" id="backBtnStep3">Back</button>
+                    <button type="submit" id="submitButton" disabled>Submit Payment</button>
+                </div>
             </div>
-        ...
         </form>
+        
         <div id="successMessage" class="message success-message"><h3>Thank You For Chosing Our Product!</h3><p>Your information has been submitted successfully. You will receive Software and License Key to your registered email shortly.</p></div>
-        
-        <div id="upgradeMessage" class="message success-message" style="background-color: #e7f3ff; color: #004085; border-color: #b8daff;"><h3>Congratulations!</h3><p>Your package has been upgraded successfully. It take some times to upgradation process.</p></div>
-        
+        <div id="upgradeMessage" class="message success-message upgrade-message"><h3>Congratulations!</h3><p>Your package has been upgraded successfully. It take some times to upgradation process.</p></div>
         <div id="errorMessage" class="message error-message"></div>
     </div>
 
     <script>
-    ...
-    // The rest of the script tag
-    </script>
-</body>
-</html>
-
-    <script>
         const webAppUrl = '/.netlify/functions/submit-form';
 
+        const form = document.getElementById('purchaseForm');
+        const formContainer = document.querySelector('.form-container');
+
+        const formSteps = document.querySelectorAll('.form-step');
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const progressBarLine = document.querySelector('.progress-bar-line');
+        let currentStep = 0;
+
         const packageContainer = document.getElementById('packageContainer');
-        const detailsSection = document.getElementById('detailsSection');
-        const paymentDetails = document.getElementById('paymentDetails');
-        const amountToBePaidDiv = document.getElementById('amountToBePaid');
+        const nextBtnStep1 = document.getElementById('nextBtnStep1');
+        const packageFeaturesDiv = document.getElementById('packageFeatures');
+
+        const fullNameInput = document.getElementById('fullName');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const nextBtnStep2 = document.getElementById('nextBtnStep2');
+        const backBtnStep2 = document.getElementById('backBtnStep2');
+
+        const durationGroup = document.getElementById('durationGroup');
+        const packageDurationSelect = document.getElementById('packageDuration');
+        const paymentDetailsSection = document.getElementById('paymentDetailsSection');
+        const paymentMethodGroup = document.getElementById('paymentMethodGroup');
         const paymentMethodSelect = document.getElementById('paymentMethod');
         const paymentNumberDiv = document.getElementById('paymentNumber');
+        const paymentInfoGroup = document.getElementById('paymentInfoGroup');
+        const amountSentInput = document.getElementById('amountSent');
+        const senderInfoInput = document.getElementById('senderInfo');
         const submitButton = document.getElementById('submitButton');
-        const form = document.getElementById('purchaseForm');
+        const backBtnStep3 = document.getElementById('backBtnStep3');
+
         const successMessage = document.getElementById('successMessage');
         const upgradeMessage = document.getElementById('upgradeMessage');
         const errorMessage = document.getElementById('errorMessage');
-        const durationGroup = document.getElementById('durationGroup');
-        const packageDurationSelect = document.getElementById('packageDuration');
 
         let selectedPackage = null;
         let selectedPrice = 0;
+        let calculatedTotalPrice = 0;
+
+        const basicFeatures = [
+            "<strong>Unlimited Files:</strong> Process as many files as you need.",
+            "<strong>Unlimited Metadata:</strong> Generate metadata without limits.",
+            "<strong>Advanced AI Generation:</strong> Access our more powerful AI model.",
+            "<strong>CSV Import/Export:</strong> Full data management capabilities.",
+            "<strong>Email Support:</strong> Get help via email when you need it."
+        ];
+
+        const packageFeatures = {
+            "Free Trial": [
+                "<strong>3-Day Access:</strong> Experience all core features.",
+                "<strong>Daily 50 Files:</strong> Process up to 50 files per day.",
+                "<strong>Standard AI Generation:</strong> Generate metadata with our standard AI.",
+                "<strong>CSV Import/Export:</strong> Easily manage your data.",
+                "<li class='description'>Perfect for testing our workflow.</li>"
+            ],
+            "Basic": [
+                ...basicFeatures,
+                "<li class='description'>Ideal for individuals and small creators.</li>"
+            ],
+            "Premium": [
+                ...basicFeatures,
+                "<strong><span style='color: var(--primary-color);'>Priority Support:</span></strong> Get faster responses.",
+                "<strong><span style='color: var(--secondary-color); font-weight: 500;'>Save ৳549 (vs. Basic)</span></strong>",
+                "<li class='description'>The complete solution for professionals and teams.</li>"
+            ]
+        };
 
         const paymentNumbers = {
-            "bKash": "bKash Personal: 01729816172",
-            "Nagad": "Nagad Personal: 01729816172",
-            "Rocket": "Rocket Personal: 01729816172"
+            "bKash": "01729816172 (Personal)",
+            "Nagad": "01729816172 (Personal)",
+            "Rocket": "01729816172 (Personal)"
         };
-        
-        const basicRequiredFields = ['fullName', 'email', 'phone'];
-        const paymentRequiredFields = ['packageDuration', 'paymentMethod', 'amountSent', 'senderInfo'];
 
-        // নতুন ফাংশন: প্যাকেজ অনুযায়ী ডিউরেশন অপশন পরিবর্তন করার জন্য
+        const validationFields = {
+            fullName: { element: fullNameInput, warning: document.getElementById('fullNameWarning'), pattern: /^[a-zA-Z\s\.-]{2,}(\s+[a-zA-Z\s\.-]+)+$/ },
+            email: { element: emailInput, warning: document.getElementById('emailWarning'), pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+            phone: { element: phoneInput, warning: document.getElementById('phoneWarning'), pattern: /^[0-9]{11}$/ },
+            packageDuration: { element: packageDurationSelect, warning: document.getElementById('durationWarning'), pattern: /[1-9]+/ },
+            paymentMethod: { element: paymentMethodSelect, warning: document.getElementById('paymentMethodWarning'), pattern: /.+/ },
+            senderInfo: { element: senderInfoInput, warning: document.getElementById('senderInfoWarning'), pattern: /^[0-9]+$/ }
+        };
+
+        function showStep(stepIndex) {
+            formSteps.forEach((step, index) => {
+                step.classList.toggle('active', index === stepIndex);
+            });
+            
+            progressSteps.forEach((step, index) => {
+                step.classList.toggle('active', index <= stepIndex);
+            });
+
+            const activeSteps = document.querySelectorAll('.progress-step.active').length;
+            const totalSteps = document.querySelectorAll('.progress-step').length;
+            const totalVisibleSteps = (selectedPackage === 'Free Trial') ? 2 : totalSteps;
+            const progressPercentage = ((activeSteps - 1) / (totalVisibleSteps - 1)) * 100;
+            
+            progressBarLine.style.width = `${progressPercentage}%`;
+            
+            currentStep = stepIndex;
+        }
+
         function updateDurationOptions(packageType) {
-            packageDurationSelect.innerHTML = ''; // পুরনো অপশন মুছে ফেলা হচ্ছে
-
+            packageDurationSelect.innerHTML = ''; 
             const defaultOption = document.createElement('option');
             defaultOption.value = "";
             defaultOption.textContent = "-- Select duration --";
             packageDurationSelect.appendChild(defaultOption);
 
-            if (packageType === 'Monthly') {
+            if (packageType === 'Basic') {
                 for (let i = 1; i <= 6; i++) {
                     const option = document.createElement('option');
                     option.value = i;
                     option.textContent = i === 1 ? '1 Month' : `${i} Months`;
                     packageDurationSelect.appendChild(option);
                 }
-            } else if (packageType === 'Yearly') {
+            } else if (packageType === 'Premium') {
                 for (let i = 1; i <= 3; i++) {
                     const option = document.createElement('option');
                     option.value = i;
@@ -477,79 +559,185 @@
                 }
             }
         }
+        
+        function validateField(fieldId) {
+            const field = validationFields[fieldId];
+            if (!field) return true; 
+            
+            const value = field.element.value.trim();
+            const isValid = field.pattern.test(value);
 
-        function validateForm() {
-            let isValid = true;
-            if (!selectedPackage) { isValid = false; }
-            if (isValid) {
-                for (const fieldId of basicRequiredFields) {
-                    if (!document.getElementById(fieldId).value.trim()) { isValid = false; break; }
-                }
-            }
-            if (isValid && (selectedPackage === "Monthly" || selectedPackage === "Yearly")) {
-                for (const fieldId of paymentRequiredFields) {
-                    if (!document.getElementById(fieldId).value) { isValid = false; break; }
-                }
-            }
-            submitButton.disabled = !isValid;
+            field.element.classList.toggle('invalid', !isValid && value.length > 0); 
+            field.warning.classList.toggle('visible', !isValid && value.length > 0);
+            return isValid;
         }
 
+        function forceValidateField(fieldId) {
+            const field = validationFields[fieldId];
+            if (!field) return true;
+            
+            const value = field.element.value.trim();
+            const isValid = field.pattern.test(value);
+
+            field.element.classList.toggle('invalid', !isValid);
+            field.warning.classList.toggle('visible', !isValid);
+            return isValid;
+        }
+
+
+        function validateStep1() {
+            nextBtnStep1.disabled = (selectedPackage === null);
+        }
+        
+        function validateStep2() {
+            const isFullNameValid = validationFields.fullName.pattern.test(fullNameInput.value.trim());
+            const isEmailValid = validationFields.email.pattern.test(emailInput.value.trim());
+            const isPhoneValid = validationFields.phone.pattern.test(phoneInput.value.trim());
+            nextBtnStep2.disabled = !(isFullNameValid && isEmailValid && isPhoneValid);
+        }
+
+        function validateStep3() {
+            const isDurationValid = validationFields.packageDuration.pattern.test(packageDurationSelect.value);
+            const isPaymentMethodValid = validationFields.paymentMethod.pattern.test(paymentMethodSelect.value);
+            const isSenderInfoValid = validationFields.senderInfo.pattern.test(senderInfoInput.value.trim());
+
+            submitButton.disabled = !(isDurationValid && isPaymentMethodValid && isSenderInfoValid);
+        }
+
+
+        // --- Step 1 Logic (আপডেট করা হয়েছে) ---
         packageContainer.addEventListener('click', (e) => {
             const card = e.target.closest('.package-card');
             if (!card) return;
-
             document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
-
+            
             selectedPackage = card.dataset.package;
             selectedPrice = card.dataset.price;
             
-            detailsSection.style.display = 'block';
-
-            if (selectedPackage === 'Free Trial') {
-                durationGroup.style.display = 'none';
-                paymentDetails.style.display = 'none';
-            } else {
-                durationGroup.style.display = 'block';
-                paymentDetails.style.display = 'none';
-                updateDurationOptions(selectedPackage); // ডিউরেশন অপশন আপডেট করা হচ্ছে
+            const features = packageFeatures[selectedPackage];
+            let featureHTML = '<ul>';
+            for (const feature of features) {
+                if (feature.startsWith('<li')) {
+                    featureHTML += feature;
+                } else {
+                    featureHTML += `<li>${feature}</li>`;
+                }
             }
-            validateForm();
+            featureHTML += '</ul>';
+            packageFeaturesDiv.innerHTML = featureHTML;
+            packageFeaturesDiv.classList.add('visible'); 
+
+            validateStep1();
         });
+
+        nextBtnStep1.addEventListener('click', () => {
+            if (selectedPackage) {
+                if (selectedPackage === 'Free Trial') {
+                    progressSteps[2].style.display = 'none';
+                    nextBtnStep2.textContent = 'Submit';
+                } else {
+                    progressSteps[2].style.display = 'block';
+                    nextBtnStep2.textContent = 'Next';
+                    updateDurationOptions(selectedPackage);
+                }
+                showStep(1);
+            }
+        });
+
+        fullNameInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[0-9]/g, '');
+            validateField('fullName');
+            validateStep2();
+        });
+
+        emailInput.addEventListener('input', () => { validateField('email'); validateStep2(); });
+
+        phoneInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            if (e.target.value.length > 11) {
+                e.target.value = e.target.value.slice(0, 11);
+            }
+            validateField('phone');
+            validateStep2();
+        });
+
+        backBtnStep2.addEventListener('click', () => {
+            showStep(0);
+            packageFeaturesDiv.classList.remove('visible');
+            document.querySelectorAll('.package-card').forEach(c => c.classList.remove('selected'));
+            selectedPackage = null;
+            validateStep1();
+            progressSteps[2].style.display = 'block';
+        });
+
+        nextBtnStep2.addEventListener('click', () => {
+            const isFullNameValid = forceValidateField('fullName');
+            const isEmailValid = forceValidateField('email');
+            const isPhoneValid = forceValidateField('phone');
+            
+            if (isFullNameValid && isEmailValid && isPhoneValid) {
+                if (selectedPackage === 'Free Trial') {
+                    handleFormSubmit();
+                } else {
+                    durationGroup.classList.add('visible');
+                    paymentDetailsSection.classList.remove('visible');
+                    paymentInfoGroup.classList.remove('visible');
+                    packageDurationSelect.value = "";
+                    validateStep3();
+                    showStep(2);
+                }
+            }
+        });
+
+        senderInfoInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            validateField('senderInfo');
+            validateStep3();
+        });
+        
+        backBtnStep3.addEventListener('click', () => showStep(1));
 
         packageDurationSelect.addEventListener('change', () => {
             const duration = parseInt(packageDurationSelect.value);
             if (duration > 0) {
-                const totalPrice = selectedPrice * duration;
-                amountToBePaidDiv.textContent = `Please Pay: ${totalPrice} BDT`;
-                paymentDetails.style.display = 'block';
+                calculatedTotalPrice = selectedPrice * duration;
+                paymentDetailsSection.classList.add('visible');
+                paymentMethodSelect.value = "";
+                paymentInfoGroup.classList.remove('visible');
+                paymentNumberDiv.style.display = 'none';
             } else {
-                paymentDetails.style.display = 'none';
+                paymentDetailsSection.classList.remove('visible');
+                paymentInfoGroup.classList.remove('visible');
             }
-            validateForm();
+            forceValidateField('packageDuration');
+            validateStep3();
         });
 
-        // ঠিক করা হয়েছে: পেমেন্ট নম্বর দেখানোর জন্য Event Listener আবার যোগ করা হয়েছে
         paymentMethodSelect.addEventListener('change', () => {
             const method = paymentMethodSelect.value;
             if (method && paymentNumbers[method]) {
                 paymentNumberDiv.textContent = paymentNumbers[method];
                 paymentNumberDiv.style.display = 'block';
+                amountSentInput.value = calculatedTotalPrice;
+                paymentInfoGroup.classList.add('visible');
             } else {
                 paymentNumberDiv.style.display = 'none';
+                paymentInfoGroup.classList.remove('visible');
             }
-            validateForm();
-        });
-
-        // ইনপুট ভ্যালিডেশনের জন্য সব ইনপুট এবং সিলেক্ট ফিল্ডে লিসেনার যোগ করা
-        [...document.querySelectorAll('input, select')].forEach(field => {
-            field.addEventListener('input', validateForm);
+            forceValidateField('paymentMethod');
+            validateStep3();
         });
 
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
+            e.preventDefault(); 
+            handleFormSubmit();
+        });
+
+        function handleFormSubmit() {
+            const btn = (selectedPackage === 'Free Trial') ? nextBtnStep2 : submitButton;
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
             errorMessage.style.display = 'none';
 
             const formData = new FormData(form);
@@ -557,14 +745,13 @@
             
             const duration = parseInt(packageDurationSelect.value);
             if(duration > 0) {
-                const totalPrice = selectedPrice * duration;
-                formData.set('Price', totalPrice);
+                formData.set('Price', calculatedTotalPrice);
+                formData.set('Duration', duration); 
             } else {
                 formData.append('Price', selectedPrice);
-            }
-            
-            if (duration > 0) {
-                 formData.set('Duration', duration);
+                if (selectedPackage === 'Free Trial') {
+                     formData.append('Duration', '3 Days');
+                }
             }
 
             fetch(webAppUrl, {
@@ -578,8 +765,10 @@
             })
             .then(data => {
                 form.style.display = 'none';
-                durationGroup.style.display = 'none';
-                paymentDetails.style.display = 'none';
+                document.querySelector('.progress-bar').style.display = 'none';
+                document.querySelector('.welcome-text').style.display = 'none';
+                document.querySelector('.form-header').style.display = 'none';
+                formContainer.style.textAlign = 'center';
 
                 if (data.status === 'success_upgrade') {
                     upgradeMessage.style.display = 'block';
@@ -591,10 +780,14 @@
                 console.error("Error submitting form: ", errorData);
                 errorMessage.textContent = errorData.message || 'Submission failed. Please try again.';
                 errorMessage.style.display = 'block';
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit';
+                btn.disabled = false;
+                btn.textContent = (selectedPackage === 'Free Trial') ? 'Submit' : 'Submit Payment';
             });
-        });
+        }
+
+        showStep(0);
+        validateStep1();
+        
     </script>
 </body>
 
