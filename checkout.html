@@ -1,1 +1,352 @@
 
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Meta Injector Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #0F0A1E; color: #e0e0e0; }
+        .custom-input {
+            width: 100%; padding: 14px 16px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px; color: white; transition: all 0.3s;
+        }
+        .custom-input:focus {
+            outline: none; border-color: #8A4DFF;
+            box-shadow: 0 0 0 3px rgba(138, 77, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+        .warning-message { color: #ff4d4d; font-size: 13px; margin-top: 6px; display: none; font-weight: 500; }
+        .visible { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+
+<body class="antialiased overflow-x-hidden">
+
+    <nav class="fixed w-full z-40 top-0 start-0 border-b border-white/10 bg-[#0F0A1E]/80 backdrop-blur-md">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="index.html" class="flex items-center space-x-3 rtl:space-x-reverse">
+                <img src="https://i.postimg.cc/JhMFkr1t/logo.png" class="h-8" alt="Logo">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Meta Injector Pro</span>
+            </a>
+            <a href="index.html" class="text-gray-400 hover:text-white transition">Back to Home</a>
+        </div>
+    </nav>
+
+    <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex items-center">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-10">
+            
+            <div class="lg:col-span-2 fade-in" style="animation-delay: 0.1s;">
+                <div class="bg-[#150d24] border border-white/10 rounded-2xl p-8 sticky top-32">
+                    <h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4">Order Summary</h3>
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-400">Package</span>
+                        <span id="pkgName" class="text-purple-400 font-bold text-lg">Loading...</span>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-400">Credits</span>
+                        <span id="pkgCredits" class="text-white font-medium">--</span>
+                    </div>
+
+                    <div class="flex justify-between items-center mb-4 bg-white/5 p-3 rounded-lg border border-white/10">
+                        <span class="text-gray-300">Validity</span>
+                        <span id="pkgDurationDisplay" class="text-yellow-400 font-bold">--</span>
+                    </div>
+
+                    <div class="border-t border-dashed border-white/20 pt-4 mt-4" id="priceRow">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-white">Total To Pay</span>
+                            <span id="totalPrice" class="text-2xl font-extrabold text-green-400">৳0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 fade-in" style="animation-delay: 0.2s;">
+                <div class="bg-[#150d24] border border-white/10 rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-white mb-2">Customer Details</h2>
+                    <p class="text-gray-400 text-sm mb-8">Enter your details to proceed.</p>
+
+                    <form id="checkoutForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
+                                <input type="text" id="fullName" name="FullName" class="custom-input" placeholder="First Last">
+                                <div class="warning-message" id="warnName">Please enter full name (letters only).</div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                                <input type="tel" id="phone" name="Phone" class="custom-input" placeholder="017XXXXXXXX" maxlength="11">
+                                <div class="warning-message" id="warnPhone">Please enter valid numeric phone number.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+                            <input type="email" id="email" name="Email" class="custom-input" placeholder="you@example.com">
+                            <div class="warning-message" id="warnEmail">Please enter a valid email address.</div>
+                        </div>
+
+                        <div id="paymentSection">
+                            <div class="mb-8">
+                                <h3 class="text-lg font-bold text-white mb-4 border-b border-white/10 pb-2">Payment Info</h3>
+                                
+                                <label class="block text-sm font-medium text-gray-400 mb-2">Select Payment Method</label>
+                                <div class="grid grid-cols-3 gap-4 mb-4">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="payment_method" value="bKash" class="peer sr-only">
+                                        <div class="p-3 border border-white/20 rounded-lg text-center peer-checked:border-pink-500 peer-checked:bg-pink-500/10 hover:bg-white/5 transition">
+                                            <span class="font-bold text-pink-500">bKash</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="payment_method" value="Nagad" class="peer sr-only">
+                                        <div class="p-3 border border-white/20 rounded-lg text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 hover:bg-white/5 transition">
+                                            <span class="font-bold text-orange-500">Nagad</span>
+                                        </div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="payment_method" value="Rocket" class="peer sr-only">
+                                        <div class="p-3 border border-white/20 rounded-lg text-center peer-checked:border-purple-500 peer-checked:bg-purple-500/10 hover:bg-white/5 transition">
+                                            <span class="font-bold text-purple-500">Rocket</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div id="paymentInstruction" class="hidden p-5 bg-gradient-to-r from-gray-900 to-gray-800 border border-white/10 rounded-xl mb-6 text-center shadow-inner">
+                                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Send Money To (Personal)</p>
+                                    <p class="font-mono text-2xl font-bold text-white tracking-wider" id="payNumber">017XXXXXXXX</p>
+                                </div>
+
+                                <div id="trxGroup" class="hidden">
+                                    <label class="block text-sm font-medium text-gray-400 mb-2">Transaction ID</label>
+                                    <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase" placeholder="8HGD73...">
+                                    <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl text-lg shadow-lg shadow-purple-500/30 transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Confirm Purchase
+                        </button>
+                        
+                        <div id="statusMsg" class="mt-4 hidden p-4 rounded-lg text-center border"></div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // CONFIG
+        const packageDetails = {
+            "Free Trial":   { label: "3 Days",   days: "3" },
+            "Starter":      { label: "1 Month",  days: "30" },
+            "Beginner":     { label: "1 Month",  days: "30" },
+            "Professional": { label: "2 Months", days: "60" },
+            "Ultimate":     { label: "3 Months", days: "90" },
+            "Corporate":    { label: "6 Months", days: "180" },
+            "Enterprise":   { label: "1 Year",   days: "365" }
+        };
+
+        const paymentNumbers = {
+            "bKash": "01729816172",
+            "Nagad": "01729816172",
+            "Rocket": "01729816172"
+        };
+
+        // Parse URL
+        const params = new URLSearchParams(window.location.search);
+        const pkgName = params.get('package') || 'Unknown Package';
+        const pkgPrice = parseInt(params.get('price')) || 0;
+        const pkgCredits = params.get('credits') || '0';
+
+        // DOM Elements
+        const elPkgName = document.getElementById('pkgName');
+        const elPkgCredits = document.getElementById('pkgCredits');
+        const elPkgDurationDisplay = document.getElementById('pkgDurationDisplay');
+        const elTotalPrice = document.getElementById('totalPrice');
+        const elPriceRow = document.getElementById('priceRow');
+        const paymentSection = document.getElementById('paymentSection');
+        const elPayInstruction = document.getElementById('paymentInstruction');
+        const elPayNumber = document.getElementById('payNumber');
+        const elTrxGroup = document.getElementById('trxGroup');
+        const form = document.getElementById('checkoutForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMsg = document.getElementById('statusMsg');
+
+        // Inputs & Warnings
+        const inputs = {
+            name: document.getElementById('fullName'),
+            phone: document.getElementById('phone'),
+            email: document.getElementById('email'),
+            trx: document.getElementById('senderInfo')
+        };
+        const warns = {
+            name: document.getElementById('warnName'),
+            phone: document.getElementById('warnPhone'),
+            email: document.getElementById('warnEmail'),
+            trx: document.getElementById('warnTrx')
+        };
+
+        // Initial View Setup
+        elPkgName.innerText = pkgName;
+        elPkgCredits.innerText = pkgCredits;
+        elTotalPrice.innerText = '৳' + pkgPrice;
+
+        let durationDays = "30"; 
+        if (packageDetails[pkgName]) {
+            elPkgDurationDisplay.innerText = packageDetails[pkgName].label;
+            durationDays = packageDetails[pkgName].days;
+        } else {
+            elPkgDurationDisplay.innerText = "1 Month";
+        }
+
+        const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
+
+        if (isFreeTrial) {
+            paymentSection.style.display = 'none';
+            elPriceRow.style.display = 'none';
+            submitBtn.innerText = "Activate Free Trial";
+        }
+
+        // Payment Method Handling
+        document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const method = e.target.value;
+                if(paymentNumbers[method]) {
+                    elPayNumber.innerText = paymentNumbers[method];
+                    elPayInstruction.classList.remove('hidden');
+                    elTrxGroup.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Input Sanitization
+        inputs.phone.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            warns.phone.classList.remove('visible');
+            this.classList.remove('border-red-500');
+        });
+        inputs.name.addEventListener('input', function() {
+            if (/[0-9]/.test(this.value)) this.value = this.value.replace(/[0-9]/g, '');
+            warns.name.classList.remove('visible');
+            this.classList.remove('border-red-500');
+        });
+        inputs.email.addEventListener('input', () => {
+             warns.email.classList.remove('visible');
+             inputs.email.classList.remove('border-red-500');
+        });
+
+        // Submit Logic
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            // 1. Validate Name
+            const nameVal = inputs.name.value.trim();
+            const nameHasSpace = nameVal.indexOf(' ') > 0;
+            if (nameVal === "" || !nameHasSpace) {
+                warns.name.classList.add('visible');
+                inputs.name.classList.add('border-red-500');
+                isValid = false;
+            }
+
+            // 2. Validate Phone
+            const phoneVal = inputs.phone.value.trim();
+            if (phoneVal.length < 11) {
+                warns.phone.classList.add('visible');
+                inputs.phone.classList.add('border-red-500');
+                isValid = false;
+            }
+
+            // 3. Validate Email
+            const emailVal = inputs.email.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailVal)) {
+                warns.email.classList.add('visible');
+                inputs.email.classList.add('border-red-500');
+                isValid = false;
+            }
+
+            // 4. Validate Payment (If not free trial)
+            let selectedMethodVal = "Free Trial";
+            let trxVal = "N/A";
+
+            if (!isFreeTrial) {
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
+                if(!selectedMethod) {
+                    alert("Please select a payment method.");
+                    return;
+                }
+                selectedMethodVal = selectedMethod.value;
+                trxVal = inputs.trx.value.trim();
+                if (trxVal.length < 4) {
+                    warns.trx.classList.add('visible');
+                    inputs.trx.classList.add('border-red-500');
+                    isValid = false;
+                }
+            }
+
+            if(!isValid) return;
+
+            // Send Data
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Processing...";
+            statusMsg.classList.add('hidden'); // hide previous msgs
+            
+            const formData = new FormData();
+            formData.append('FullName', nameVal);
+            formData.append('Email', emailVal);
+            formData.append('Phone', phoneVal);
+            formData.append('Package', pkgName);
+            formData.append('Duration', durationDays);
+            formData.append('Price', pkgPrice);
+            formData.append('PaymentMethod', selectedMethodVal);
+            formData.append('SenderInfo', trxVal);
+            formData.append('AmountSent', pkgPrice); 
+
+            try {
+                const response = await fetch('/.netlify/functions/submit-form', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                statusMsg.classList.remove('hidden');
+                
+                if(response.ok) {
+                    // Success
+                    form.reset();
+                    document.querySelector('.lg\\:col-span-2').style.display = 'none';
+                    form.style.display = 'none'; // hide form
+
+                    statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-green-900/50 border-green-500 text-green-200";
+                    statusMsg.innerHTML = `<h3 class="text-xl font-bold">Success!</h3><p>${data.message}</p>`;
+                } else {
+                    // Error (Already used, Downgrade attempt etc.)
+                    throw new Error(data.message || 'Submission failed');
+                }
+
+            } catch (error) {
+                console.error(error);
+                statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
+                statusMsg.innerHTML = `<h3 class="text-lg font-bold">Request Failed</h3><p>${error.message}</p>`;
+                
+                submitBtn.disabled = false;
+                submitBtn.innerText = isFreeTrial ? "Activate Free Trial" : "Confirm Purchase";
+            }
+        });
+    </script>
+</body>
+</html>
