@@ -16,6 +16,37 @@
  */
 
 <style>
+
+/* Hero Glow Effect - Size Increased */
+.hero-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%; /* আগে ছিল 900px, এখন 100% দেওয়া হলো যাতে পুরো জায়গা নেয় */
+    margin: 0 auto;
+    border-radius: 1.5rem;
+    z-index: 10;
+}
+
+/* অ্যানিমেটেড গ্লো (বড় ইমেজের সাথে মানানসই) */
+.hero-container::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
+    background-size: 400%;
+    border-radius: 1.5rem;
+    filter: blur(30px); /* ব্লার একটু বাড়ানো হলো */
+    opacity: 0.3;
+    animation: glowing 30s linear infinite;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+
     /* Cursor Blinking Animation */
     .cursor {
         display: inline-block;
