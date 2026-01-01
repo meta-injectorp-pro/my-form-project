@@ -2,13 +2,16 @@ const admin = require('firebase-admin');
 const Busboy = require('busboy');
 const nodemailer = require('nodemailer');
 
-// Firebase Config
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-
+// Firebase Config (Updated for Netlify 4KB Limit)
 try {
   if (!admin.apps.length) {
     admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        // Private Key-এর নিউলাইন (\n) সমস্যা সমাধান করা হলো
+        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      })
     });
   }
 } catch (e) {

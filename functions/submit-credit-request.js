@@ -1,11 +1,17 @@
 const admin = require('firebase-admin');
 
-// ফায়ারবেস ইনিশিয়ালাইজেশন
+// Firebase Config (Updated for Netlify 4KB Limit)
 if (!admin.apps.length) {
     admin.initializeApp({
-        credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY))
+        credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            // Private Key-এর নিউলাইন (\n) সমস্যা সমাধান করা হলো
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        })
     });
 }
+
 const db = admin.firestore();
 
 exports.handler = async (event) => {
