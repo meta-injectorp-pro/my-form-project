@@ -32,7 +32,7 @@ exports.handler = async (event) => {
     const { fields } = await parseMultipartForm(event);
     const data = fields;
 
-    // ১. ডাটাবেসে এই ইমেইল দিয়ে ইউজার খুঁজি
+    // 1. Find User by Email
     const userSnapshot = await db.collection('licenseDatabase')
                                  .where('Email', '==', data.Email)
                                  .limit(1)
@@ -48,11 +48,12 @@ exports.handler = async (event) => {
         userData = userDoc.data();
         licenseKeyToUpdate = userDoc.id;
     } else {
-        // নতুন ইউজার হলে একটা খালি লাইসেন্স কি খুঁজে বের করি
+        // Find an empty license key for new user
         const freeLicenseSnapshot = await db.collection('licenseDatabase')
-                                            .where('Email', '==', null)
+                                            .where('Email', 'in', ["", null])
                                             .limit(1)
                                             .get();
+                                            
         if (freeLicenseSnapshot.empty) {
             return {
                 statusCode: 500,
@@ -62,59 +63,74 @@ exports.handler = async (event) => {
         licenseKeyToUpdate = freeLicenseSnapshot.docs[0].id;
     }
 
-    // ২. রুলস চেকিং (Rules Checking)
+    // 2. Rules Checking & Credit Calculation
     const requestedPackage = data.Package;
+    
+    // Credit Mapping based on your pricing plan
+    const creditMap = {
+        "Free Trial": 50,
+        "Starter": 2000,
+        "Beginner": 3500,
+        "Professional": 6000,
+        "Ultimate": 10000,
+        "Corporate": 20000,
+        "Enterprise": 35000
+    };
+
+    // Assign credits based on package (Default to 0 if not found)
+    const creditsToAssign = creditMap[requestedPackage] || 0;
 
     if (!isNewUser) {
-        // যদি ইউজার আগে থেকেই থাকে এবং সে "Free Trial" চায়
+        // Free Trial Validation for existing users
         if (requestedPackage === 'Free Trial') {
             
-            // কেইস ১: সে আগে একবার ফ্রি ট্রায়াল নিয়েছে
+            // Case 1: Already used Free Trial
             if (userData.Package === 'Free Trial') {
                 return {
                     statusCode: 400,
-                    body: JSON.stringify({ message: "আপনি ইতিমধ্যে একবার ফ্রি ট্রায়াল ব্যবহার করেছেন। দয়া করে পেইড প্যাকেজ কিনুন।" })
+                    body: JSON.stringify({ message: "You have already used the Free Trial once. Please purchase a paid package." })
                 };
             }
 
-            // কেইস ২: সে পেইড ইউজার, এখন ফ্রি ট্রায়ালে নামতে চাচ্ছে
-            if (userData.Package !== 'Free Trial' && userData.Package !== null) {
+            // Case 2: Downgrading from Premium
+            if (userData.Package !== 'Free Trial' && userData.Package !== null && userData.Package !== "") {
                 return {
                     statusCode: 400,
-                    body: JSON.stringify({ message: "আপনি একজন প্রিমিয়াম ইউজার। আপনি ফ্রি ট্রায়ালে ডাউনগ্রেড করতে পারবেন না।" })
+                    body: JSON.stringify({ message: "You are a premium user. You cannot downgrade to Free Trial." })
                 };
             }
         }
     }
 
-    // ৩. সব ঠিক থাকলে purchaseForm এ রিকোয়েস্ট জমা করা
+    // 3. Prepare Purchase Data (Store credits here, but NOT in license DB yet)
     const purchaseData = {
         "Your Full Name": data.FullName,
         "Email": data.Email,
         "Phone Number": data.Phone,
         "Select Your Package": data.Package,
         "Package Duration": data.Duration || "30 Days",
-        "Assigned Credits": 0, // Admin can set this later
+        "Assigned Credits": creditsToAssign, // Automatically assigned based on package
         "Payment Method": data.PaymentMethod || "N/A",
         "Amount Sent (BDT)": data.AmountSent || "0",
         "Sender's Number or TrxID": data.SenderInfo || "N/A",
-        "License Key": licenseKeyToUpdate, // কোন লাইসেন্সে আপডেট হবে তা রেফারেন্স রাখা হলো
+        "License Key": licenseKeyToUpdate, 
         "Status": "Pending",
         "Timestamp": new Date(),
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
+    // Add to purchaseForm collection
     await db.collection('purchaseForm').add(purchaseData);
     
-    // ৪. লাইসেন্স ডাটাবেস আপডেট (স্ট্যাটাস পেন্ডিং রাখা হলো)
-    // যাতে ইউজার অ্যাপে লগইন করতে না পারে যতক্ষণ না আপনি অ্যাপ্রুভ করছেন
+    // 4. Update License Database (ONLY Status and Info, NO Credits)
     const licenseUpdateData = {
         "Email": data.Email,
         "Customer Name": data.FullName,
         "Phone Number": data.Phone,
         "Package": data.Package, 
-        "Status": "Pending", // Admin approve korle Active hobe
+        "Status": "Pending", // Admin approval required to become Active
         "RequestDate": new Date()
+        // Note: 'Credits' field is NOT updated here, so it remains safe until approval
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
@@ -123,7 +139,7 @@ exports.handler = async (event) => {
         statusCode: 200, 
         body: JSON.stringify({ 
             status: "success",
-            message: "আপনার রিকোয়েস্ট জমা হয়েছে। অ্যাডমিন অ্যাপ্রুভাল এর জন্য অপেক্ষা করুন।"
+            message: "Your request has been submitted successfully. Please wait for admin approval."
         }) 
     };
 
