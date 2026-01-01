@@ -32,7 +32,7 @@ exports.handler = async (event) => {
     const { fields } = await parseMultipartForm(event);
     const data = fields;
 
-    // 1. Find User by Email
+    // ১. ডাটাবেসে ইউজার চেক করা
     const userSnapshot = await db.collection('licenseDatabase')
                                  .where('Email', '==', data.Email)
                                  .limit(1)
@@ -48,7 +48,7 @@ exports.handler = async (event) => {
         userData = userDoc.data();
         licenseKeyToUpdate = userDoc.id;
     } else {
-        // Find an empty license key for new user
+        // নতুন ইউজারের জন্য খালি লাইসেন্স খোঁজা
         const freeLicenseSnapshot = await db.collection('licenseDatabase')
                                             .where('Email', 'in', ["", null])
                                             .limit(1)
@@ -63,36 +63,32 @@ exports.handler = async (event) => {
         licenseKeyToUpdate = freeLicenseSnapshot.docs[0].id;
     }
 
-    // 2. Rules Checking & Credit Calculation
-    const requestedPackage = data.Package;
-    
-    // Credit Mapping based on your pricing plan
-    const creditMap = {
-        "Free Trial": 50,
-        "Starter": 2000,
-        "Beginner": 3500,
-        "Professional": 6000,
-        "Ultimate": 10000,
-        "Corporate": 20000,
-        "Enterprise": 35000
+    // ২. প্রাইস সিকিউরিটি (Backend Price Validation)
+    // ইউজার ফ্রন্টএন্ডে প্রাইস চেঞ্জ করলেও লাভ হবে না, এখান থেকেই প্রাইস সেট হবে।
+    const priceMap = {
+        "Free Trial": 0,
+        "Starter": 150,      // 150 TK
+        "Beginner": 200,     // 200 TK
+        "Professional": 400, // 400 TK
+        "Ultimate": 700,     // 700 TK
+        "Corporate": 1000,   // 1000 TK
+        "Enterprise": 1700   // 1700 TK
     };
 
-    // Assign credits based on package (Default to 0 if not found)
-    const creditsToAssign = creditMap[requestedPackage] || 0;
+    const requestedPackage = data.Package;
+    
+    // প্যাকেজ অনুযায়ী অটোমেটিক প্রাইস সেট করা হচ্ছে
+    const officialPrice = priceMap[requestedPackage] !== undefined ? priceMap[requestedPackage] : 0;
 
+    // ৩. রুলস চেকিং
     if (!isNewUser) {
-        // Free Trial Validation for existing users
         if (requestedPackage === 'Free Trial') {
-            
-            // Case 1: Already used Free Trial
             if (userData.Package === 'Free Trial') {
                 return {
                     statusCode: 400,
                     body: JSON.stringify({ message: "You have already used the Free Trial once. Please purchase a paid package." })
                 };
             }
-
-            // Case 2: Downgrading from Premium
             if (userData.Package !== 'Free Trial' && userData.Package !== null && userData.Package !== "") {
                 return {
                     statusCode: 400,
@@ -102,16 +98,22 @@ exports.handler = async (event) => {
         }
     }
 
-    // 3. Prepare Purchase Data (Store credits here, but NOT in license DB yet)
+    // ৪. ডাটাবেসে রিকোয়েস্ট জমা দেওয়া
     const purchaseData = {
         "Your Full Name": data.FullName,
         "Email": data.Email,
         "Phone Number": data.Phone,
         "Select Your Package": data.Package,
         "Package Duration": data.Duration || "30 Days",
-        "Assigned Credits": creditsToAssign, // Automatically assigned based on package
+        
+        "Assigned Credits": 0, // আপনার রিকোয়ারমেন্ট অনুযায়ী ০ রাখা হলো
+        
         "Payment Method": data.PaymentMethod || "N/A",
-        "Amount Sent (BDT)": data.AmountSent || "0",
+        
+        // এখানে সিকিউরিটি আপডেট করা হয়েছে:
+        // ফ্রন্টএন্ডের data.AmountSent বাদ দিয়ে ব্যাকএন্ডের officialPrice বসানো হলো
+        "Amount Sent (BDT)": officialPrice.toString(), 
+        
         "Sender's Number or TrxID": data.SenderInfo || "N/A",
         "License Key": licenseKeyToUpdate, 
         "Status": "Pending",
@@ -119,18 +121,16 @@ exports.handler = async (event) => {
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
-    // Add to purchaseForm collection
     await db.collection('purchaseForm').add(purchaseData);
     
-    // 4. Update License Database (ONLY Status and Info, NO Credits)
+    // ৫. লাইসেন্স ডাটাবেস আপডেট (স্ট্যাটাস পেন্ডিং)
     const licenseUpdateData = {
         "Email": data.Email,
         "Customer Name": data.FullName,
         "Phone Number": data.Phone,
         "Package": data.Package, 
-        "Status": "Pending", // Admin approval required to become Active
+        "Status": "Pending", 
         "RequestDate": new Date()
-        // Note: 'Credits' field is NOT updated here, so it remains safe until approval
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
