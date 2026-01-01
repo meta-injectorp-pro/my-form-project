@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -24,105 +23,47 @@
         .visible { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        /* Hide number input arrows */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
     </style>
 </head>
 
-<script>
-    // 1. URL থেকে প্যাকেজ ইনফরমেশন নেওয়া
-    const urlParams = new URLSearchParams(window.location.search);
-    const packageName = urlParams.get('package') || 'Starter'; 
-    const packagePrice = urlParams.get('price') || '0';
-
-    // ইনপুট ফিল্ডে ভ্যালু সেট করা
-    document.getElementById('package').value = packageName;
-    document.getElementById('price').value = packagePrice;
-
-    // 2. "Free Trial" হলে পেমেন্ট সেকশন লুকিয়ে ফেলা
-    const paymentSection = document.getElementById('payment-section');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    // পেমেন্ট ইনপুট গুলো ধরা (যাতে required রিমুভ করা যায়)
-    const payMethod = document.getElementById('paymentMethod');
-    const amountInput = document.getElementById('amountSent');
-    const senderInput = document.getElementById('senderInfo');
-
-    if (packageName === 'Free Trial') {
-        // সেকশন লুকিয়ে ফেলা
-        paymentSection.style.display = 'none';
-        
-        // বাটন টেক্সট চেঞ্জ
-        submitBtn.textContent = "Activate Free Trial";
-
-        // ফিল্ডগুলো যাতে সাবমিটে বাধা না দেয় তাই required থাকলে সরিয়ে ফেলা
-        if(payMethod) payMethod.removeAttribute('required');
-        if(amountInput) amountInput.removeAttribute('required');
-        if(senderInput) senderInput.removeAttribute('required');
-    } else {
-        // পেইড প্যাকেজ হলে required সেট করা (ঐচ্ছিক)
-        paymentSection.style.display = 'block';
-        submitBtn.textContent = `Pay ৳${packagePrice} & Activate`;
-        
-        // পেইড ইউজারদের জন্য পেমেন্ট ইনফো বাধ্যতামূলক করতে পারেন
-        if(amountInput) amountInput.setAttribute('required', 'true');
-        if(senderInput) senderInput.setAttribute('required', 'true');
-    }
-
-    // 3. ফর্ম সাবমিশন এবং সাকসেস মেসেজ হ্যান্ডলিং
-    async function submitForm(event) {
-        event.preventDefault();
-        
-        // লোডিং ইফেক্ট
-        const originalBtnText = submitBtn.textContent;
-        submitBtn.textContent = "Processing...";
-        submitBtn.disabled = true;
-
-        const formData = new FormData(event.target);
-
-        try {
-            // আপনার Netlify Function বা API লিংক
-            const response = await fetch('/.netlify/functions/submit-form', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                // সফল হলে ফর্ম লুকিয়ে সাকসেস মেসেজ দেখানো
-                document.getElementById('checkout-form-container').style.display = 'none';
-                document.getElementById('success-message').classList.remove('hidden');
-                
-                // স্ক্রল করে উপরে নিয়ে যাওয়া
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                // এরর হলে এলার্ট
-                alert(result.message || "Something went wrong!");
-                submitBtn.textContent = originalBtnText;
-                submitBtn.disabled = false;
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert("Network error. Please try again.");
-            submitBtn.textContent = originalBtnText;
-            submitBtn.disabled = false;
-        }
-    }
-</script>
-    
 <body class="antialiased overflow-x-hidden">
 
     <nav class="fixed w-full z-40 top-0 start-0 border-b border-white/10 bg-[#0F0A1E]/80 backdrop-blur-md">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="index.html" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="https://i.postimg.cc/JhMFkr1t/logo.png" class="h-8" alt="Logo">
+                <img src="logo.png" class="h-8" alt="Logo" onerror="this.src='https://placehold.co/100x40?text=Logo'">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Meta Injector Pro</span>
             </a>
             <a href="index.html" class="text-gray-400 hover:text-white transition">Back to Home</a>
         </div>
     </nav>
 
-    <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex items-center">
-        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-10">
+    <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex flex-col items-center justify-center">
+        
+        <div id="success-view" class="hidden max-w-2xl w-full text-center fade-in">
+            <div class="bg-[#150d24] border border-white/10 rounded-2xl p-10 shadow-2xl">
+                <div class="mb-6 flex justify-center">
+                    <div class="h-24 w-24 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold text-white mb-4">Request Submitted!</h2>
+                <p class="text-gray-300 text-lg mb-8">
+                    Thank you for your request. Our team will review your payment and activate your license shortly.
+                    <br><span class="text-sm text-gray-500 mt-2 block">You will receive an email confirmation.</span>
+                </p>
+                <a href="index.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+
+        <div id="checkout-grid" class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-10">
             
             <div class="lg:col-span-2 fade-in" style="animation-delay: 0.1s;">
                 <div class="bg-[#150d24] border border-white/10 rounded-2xl p-8 sticky top-32">
@@ -208,10 +149,16 @@
                                     <p class="font-mono text-2xl font-bold text-white tracking-wider" id="payNumber">017XXXXXXXX</p>
                                 </div>
 
-                                <div id="trxGroup" class="hidden">
-                                    <label class="block text-sm font-medium text-gray-400 mb-2">Transaction ID</label>
-                                    <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase" placeholder="8HGD73...">
-                                    <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div id="trxGroup" class="hidden md:col-span-2">
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">Transaction ID</label>
+                                        <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase" placeholder="8HGD73...">
+                                        <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
+                                    </div>
+                                    <div id="amountGroup" class="hidden md:col-span-2 mt-4">
+                                        <label class="block text-sm font-medium text-gray-400 mb-2">Amount Sent</label>
+                                        <input type="number" id="amountSent" name="AmountSent" class="custom-input" placeholder="e.g. 500">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -226,277 +173,226 @@
                 </div>
             </div>
         </div>
-
-        <div class="max-w-[800px] mx-auto mt-10 px-4">
-    
-    <div id="success-message" class="hidden text-center py-20 bg-dark rounded-xl border border-white/10">
-        <div class="mb-6">
-            <svg class="w-20 h-20 mx-auto text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-        <h2 class="text-3xl font-bold text-white mb-4">Request Submitted!</h2>
-        <p class="text-gray-400 text-lg mb-8">Thank you for your request. Please wait for admin approval.</p>
-        <a href="index.html" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition">Back to Home</a>
-    </div>
-
-    <div id="checkout-form-container" class="bg-dark p-8 rounded-xl border border-white/10">
-        <h2 class="text-3xl font-bold text-white mb-6">Customer Details</h2>
-        <p class="text-gray-400 mb-8">Enter your details to proceed.</p>
-
-        <form id="checkoutForm" onsubmit="submitForm(event)">
-            
-            <input type="hidden" id="package" name="Package">
-            <input type="hidden" id="price" name="Price">
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label class="block text-white mb-2">Full Name</label>
-                    <input type="text" name="FullName" required class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-white mb-2">Email</label>
-                    <input type="email" name="Email" required class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none">
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-white mb-2">Phone Number</label>
-                <input type="tel" name="Phone" required class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none">
-            </div>
-
-            <div id="payment-section">
-                <div class="border-t border-white/10 my-8"></div>
-                <h3 class="text-xl font-bold text-white mb-6">Payment Details</h3>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-white mb-2">Payment Method</label>
-                        <select name="PaymentMethod" id="paymentMethod" class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none">
-                            <option value="Bkash">Bkash</option>
-                            <option value="Nagad">Nagad</option>
-                            <option value="Rocket">Rocket</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-white mb-2">Amount Sent (BDT)</label>
-                        <input type="number" name="AmountSent" id="amountSent" class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none">
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-white mb-2">Sender's Number or TrxID</label>
-                    <input type="text" name="SenderInfo" id="senderInfo" class="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:border-purple-500 outline-none">
-                </div>
-            </div>
-            <button type="submit" id="submitBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 rounded-lg transition duration-300 mt-4">
-                Confirm Purchase
-            </button>
-        </form>
-    </div>
-</div>
     </section>
 
     <script>
-        // CONFIG
-        const packageDetails = {
-            "Free Trial":   { label: "3 Days",   days: "3" },
-            "Starter":      { label: "1 Month",  days: "30" },
-            "Beginner":     { label: "1 Month",  days: "30" },
-            "Professional": { label: "2 Months", days: "60" },
-            "Ultimate":     { label: "3 Months", days: "90" },
-            "Corporate":    { label: "6 Months", days: "180" },
-            "Enterprise":   { label: "1 Year",   days: "365" }
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            // CONFIG
+            const packageDetails = {
+                "Free Trial":   { label: "3 Days",   days: "3" },
+                "Starter":      { label: "1 Month",  days: "30" },
+                "Beginner":     { label: "1 Month",  days: "30" },
+                "Professional": { label: "2 Months", days: "60" },
+                "Ultimate":     { label: "3 Months", days: "90" },
+                "Corporate":    { label: "6 Months", days: "180" },
+                "Enterprise":   { label: "1 Year",   days: "365" }
+            };
 
-        const paymentNumbers = {
-            "bKash": "01729816172",
-            "Nagad": "01729816172",
-            "Rocket": "01729816172"
-        };
+            const paymentNumbers = {
+                "bKash": "01729816172",
+                "Nagad": "01729816172",
+                "Rocket": "01729816172"
+            };
 
-        // Parse URL
-        const params = new URLSearchParams(window.location.search);
-        const pkgName = params.get('package') || 'Unknown Package';
-        const pkgPrice = parseInt(params.get('price')) || 0;
-        const pkgCredits = params.get('credits') || '0';
+            // Parse URL Params
+            const params = new URLSearchParams(window.location.search);
+            const pkgName = params.get('package') || 'Starter';
+            const pkgPrice = params.get('price') || '0';
+            const pkgCredits = params.get('credits') || '0';
 
-        // DOM Elements
-        const elPkgName = document.getElementById('pkgName');
-        const elPkgCredits = document.getElementById('pkgCredits');
-        const elPkgDurationDisplay = document.getElementById('pkgDurationDisplay');
-        const elTotalPrice = document.getElementById('totalPrice');
-        const elPriceRow = document.getElementById('priceRow');
-        const paymentSection = document.getElementById('paymentSection');
-        const elPayInstruction = document.getElementById('paymentInstruction');
-        const elPayNumber = document.getElementById('payNumber');
-        const elTrxGroup = document.getElementById('trxGroup');
-        const form = document.getElementById('checkoutForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const statusMsg = document.getElementById('statusMsg');
+            // DOM Elements
+            const elPkgName = document.getElementById('pkgName');
+            const elPkgCredits = document.getElementById('pkgCredits');
+            const elPkgDurationDisplay = document.getElementById('pkgDurationDisplay');
+            const elTotalPrice = document.getElementById('totalPrice');
+            const elPriceRow = document.getElementById('priceRow');
+            const paymentSection = document.getElementById('paymentSection');
+            const elPayInstruction = document.getElementById('paymentInstruction');
+            const elPayNumber = document.getElementById('payNumber');
+            const elTrxGroup = document.getElementById('trxGroup');
+            const elAmountGroup = document.getElementById('amountGroup');
+            const elAmountSent = document.getElementById('amountSent');
+            
+            const form = document.getElementById('checkoutForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const statusMsg = document.getElementById('statusMsg');
+            
+            const checkoutGrid = document.getElementById('checkout-grid');
+            const successView = document.getElementById('success-view');
 
-        // Inputs & Warnings
-        const inputs = {
-            name: document.getElementById('fullName'),
-            phone: document.getElementById('phone'),
-            email: document.getElementById('email'),
-            trx: document.getElementById('senderInfo')
-        };
-        const warns = {
-            name: document.getElementById('warnName'),
-            phone: document.getElementById('warnPhone'),
-            email: document.getElementById('warnEmail'),
-            trx: document.getElementById('warnTrx')
-        };
+            // Inputs & Warnings
+            const inputs = {
+                name: document.getElementById('fullName'),
+                phone: document.getElementById('phone'),
+                email: document.getElementById('email'),
+                trx: document.getElementById('senderInfo')
+            };
+            const warns = {
+                name: document.getElementById('warnName'),
+                phone: document.getElementById('warnPhone'),
+                email: document.getElementById('warnEmail'),
+                trx: document.getElementById('warnTrx')
+            };
 
-        // Initial View Setup
-        elPkgName.innerText = pkgName;
-        elPkgCredits.innerText = pkgCredits;
-        elTotalPrice.innerText = '৳' + pkgPrice;
+            // 1. Setup UI based on Package
+            elPkgName.innerText = pkgName;
+            elPkgCredits.innerText = pkgCredits;
+            elTotalPrice.innerText = '৳' + pkgPrice;
 
-        let durationDays = "30"; 
-        if (packageDetails[pkgName]) {
-            elPkgDurationDisplay.innerText = packageDetails[pkgName].label;
-            durationDays = packageDetails[pkgName].days;
-        } else {
-            elPkgDurationDisplay.innerText = "1 Month";
-        }
+            // Set Duration
+            let durationDays = "30"; 
+            if (packageDetails[pkgName]) {
+                elPkgDurationDisplay.innerText = packageDetails[pkgName].label;
+                durationDays = packageDetails[pkgName].days;
+            } else {
+                elPkgDurationDisplay.innerText = "1 Month";
+            }
 
-        const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
+            // Check if Free Trial
+            const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === '0');
 
-        if (isFreeTrial) {
-            paymentSection.style.display = 'none';
-            elPriceRow.style.display = 'none';
-            submitBtn.innerText = "Activate Free Trial";
-        }
+            if (isFreeTrial) {
+                // Hide Payment Details for Free User
+                paymentSection.style.display = 'none';
+                elPriceRow.style.display = 'none';
+                submitBtn.innerText = "Activate Free Trial";
+            } else {
+                submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
+                if(elAmountSent) elAmountSent.value = pkgPrice; // Pre-fill amount
+            }
 
-        // Payment Method Handling
-        document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const method = e.target.value;
-                if(paymentNumbers[method]) {
-                    elPayNumber.innerText = paymentNumbers[method];
-                    elPayInstruction.classList.remove('hidden');
-                    elTrxGroup.classList.remove('hidden');
-                }
+            // 2. Handle Payment Method Selection
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const method = e.target.value;
+                    if(paymentNumbers[method]) {
+                        elPayNumber.innerText = paymentNumbers[method];
+                        elPayInstruction.classList.remove('hidden');
+                        elTrxGroup.classList.remove('hidden');
+                        elAmountGroup.classList.remove('hidden');
+                    }
+                });
             });
-        });
 
-        // Input Sanitization
-        inputs.phone.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-            warns.phone.classList.remove('visible');
-            this.classList.remove('border-red-500');
-        });
-        inputs.name.addEventListener('input', function() {
-            if (/[0-9]/.test(this.value)) this.value = this.value.replace(/[0-9]/g, '');
-            warns.name.classList.remove('visible');
-            this.classList.remove('border-red-500');
-        });
-        inputs.email.addEventListener('input', () => {
-             warns.email.classList.remove('visible');
-             inputs.email.classList.remove('border-red-500');
-        });
+            // 3. Input Validation Listeners
+            inputs.phone.addEventListener('input', function() {
+                this.value = this.value.replace[^0-9]/g, '');
+                warns.phone.classList.remove('visible');
+                this.classList.remove('border-red-500');
+            });
+            inputs.name.addEventListener('input', function() {
+                // Remove numbers from name
+                if (/[0-9]/.test(this.value)) this.value = this.value.replace(/[0-9]/g, '');
+                warns.name.classList.remove('visible');
+                this.classList.remove('border-red-500');
+            });
+            inputs.email.addEventListener('input', () => {
+                 warns.email.classList.remove('visible');
+                 inputs.email.classList.remove('border-red-500');
+            });
 
-        // Submit Logic
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            let isValid = true;
+            // 4. Form Submission Logic
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                let isValid = true;
 
-            // 1. Validate Name
-            const nameVal = inputs.name.value.trim();
-            const nameHasSpace = nameVal.indexOf(' ') > 0;
-            if (nameVal === "" || !nameHasSpace) {
-                warns.name.classList.add('visible');
-                inputs.name.classList.add('border-red-500');
-                isValid = false;
-            }
-
-            // 2. Validate Phone
-            const phoneVal = inputs.phone.value.trim();
-            if (phoneVal.length < 11) {
-                warns.phone.classList.add('visible');
-                inputs.phone.classList.add('border-red-500');
-                isValid = false;
-            }
-
-            // 3. Validate Email
-            const emailVal = inputs.email.value.trim();
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(emailVal)) {
-                warns.email.classList.add('visible');
-                inputs.email.classList.add('border-red-500');
-                isValid = false;
-            }
-
-            // 4. Validate Payment (If not free trial)
-            let selectedMethodVal = "Free Trial";
-            let trxVal = "N/A";
-
-            if (!isFreeTrial) {
-                const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
-                if(!selectedMethod) {
-                    alert("Please select a payment method.");
-                    return;
-                }
-                selectedMethodVal = selectedMethod.value;
-                trxVal = inputs.trx.value.trim();
-                if (trxVal.length < 4) {
-                    warns.trx.classList.add('visible');
-                    inputs.trx.classList.add('border-red-500');
+                // Validate Name
+                const nameVal = inputs.name.value.trim();
+                const nameHasSpace = nameVal.indexOf(' ') > 0;
+                if (nameVal === "" || !nameHasSpace) {
+                    warns.name.classList.add('visible');
+                    inputs.name.classList.add('border-red-500');
                     isValid = false;
                 }
-            }
 
-            if(!isValid) return;
-
-            // Send Data
-            submitBtn.disabled = true;
-            submitBtn.innerText = "Processing...";
-            statusMsg.classList.add('hidden'); // hide previous msgs
-            
-            const formData = new FormData();
-            formData.append('FullName', nameVal);
-            formData.append('Email', emailVal);
-            formData.append('Phone', phoneVal);
-            formData.append('Package', pkgName);
-            formData.append('Duration', durationDays);
-            formData.append('Price', pkgPrice);
-            formData.append('PaymentMethod', selectedMethodVal);
-            formData.append('SenderInfo', trxVal);
-            formData.append('AmountSent', pkgPrice); 
-
-            try {
-                const response = await fetch('/.netlify/functions/submit-form', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                statusMsg.classList.remove('hidden');
-                
-                if(response.ok) {
-                    // Success
-                    form.reset();
-                    document.querySelector('.lg\\:col-span-2').style.display = 'none';
-                    form.style.display = 'none'; // hide form
-
-                    statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-green-900/50 border-green-500 text-green-200";
-                    statusMsg.innerHTML = `<h3 class="text-xl font-bold">Success!</h3><p>${data.message}</p>`;
-                } else {
-                    // Error (Already used, Downgrade attempt etc.)
-                    throw new Error(data.message || 'Submission failed');
+                // Validate Phone
+                const phoneVal = inputs.phone.value.trim();
+                if (phoneVal.length < 11) {
+                    warns.phone.classList.add('visible');
+                    inputs.phone.classList.add('border-red-500');
+                    isValid = false;
                 }
 
-            } catch (error) {
-                console.error(error);
-                statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
-                statusMsg.innerHTML = `<h3 class="text-lg font-bold">Request Failed</h3><p>${error.message}</p>`;
-                
-                submitBtn.disabled = false;
-                submitBtn.innerText = isFreeTrial ? "Activate Free Trial" : "Confirm Purchase";
-            }
+                // Validate Email
+                const emailVal = inputs.email.value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailVal)) {
+                    warns.email.classList.add('visible');
+                    inputs.email.classList.add('border-red-500');
+                    isValid = false;
+                }
+
+                // Validate Payment (Only if NOT Free Trial)
+                let selectedMethodVal = "Free Trial";
+                let trxVal = "N/A";
+                let amountVal = "0";
+
+                if (!isFreeTrial) {
+                    const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
+                    if(!selectedMethod) {
+                        alert("Please select a payment method.");
+                        return;
+                    }
+                    selectedMethodVal = selectedMethod.value;
+                    
+                    trxVal = inputs.trx.value.trim();
+                    if (trxVal.length < 4) {
+                        warns.trx.classList.add('visible');
+                        inputs.trx.classList.add('border-red-500');
+                        isValid = false;
+                    }
+                    amountVal = elAmountSent.value;
+                }
+
+                if(!isValid) return;
+
+                // Disable button
+                const originalBtnText = submitBtn.innerText;
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Processing...";
+                statusMsg.classList.add('hidden'); 
+
+                // Prepare Data
+                const formData = new FormData();
+                formData.append('FullName', nameVal);
+                formData.append('Email', emailVal);
+                formData.append('Phone', phoneVal);
+                formData.append('Package', pkgName);
+                formData.append('Duration', durationDays);
+                formData.append('Price', pkgPrice);
+                formData.append('PaymentMethod', selectedMethodVal);
+                formData.append('SenderInfo', trxVal);
+                formData.append('AmountSent', amountVal); 
+
+                try {
+                    // Send to Backend
+                    const response = await fetch('/.netlify/functions/submit-form', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if(response.ok) {
+                        // SUCCESS: Switch Views
+                        checkoutGrid.style.display = 'none'; // Hide Form
+                        successView.classList.remove('hidden'); // Show Success
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        // ERROR
+                        throw new Error(data.message || 'Submission failed');
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    statusMsg.classList.remove('hidden');
+                    statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
+                    statusMsg.innerHTML = `<h3 class="text-lg font-bold">Request Failed</h3><p>${error.message}</p>`;
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalBtnText;
+                }
+            });
         });
     </script>
 </body>
