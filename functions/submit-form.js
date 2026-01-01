@@ -9,7 +9,6 @@ try {
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        // Private Key-এর নিউলাইন (\n) সমস্যা সমাধান করা হলো
         privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
       })
     });
@@ -82,7 +81,6 @@ exports.handler = async (event) => {
     // ২. রুলস চেকিং (ফ্রি ট্রায়াল একবারই)
     if (!isNewUser) {
         if (data.Package === 'Free Trial') {
-            // যদি আগে কখনো ফ্রি ট্রায়াল বা অন্য কোনো প্যাকেজ নিয়ে থাকে
             if (userData.Package) {
                 return { 
                     statusCode: 400, 
@@ -93,25 +91,25 @@ exports.handler = async (event) => {
     }
 
     // ==========================================
-    // FREE TRIAL LOGIC (তোমার রিকোয়ারমেন্ট অনুযায়ী)
+    // FREE TRIAL LOGIC
     // ==========================================
     if (data.Package === "Free Trial") {
         
-        // ১. License Database সরাসরি আপডেট (Purchase Form এ যাবে না)
+        // ১. License Database আপডেট
         const licenseUpdateData = {
             "Email": data.Email,
             "Customer Name": data.FullName,
             "Phone Number": data.Phone,
             "Package": "Free Trial",
-            "Duration": "3 Days",      // Duration 3 days
-            "Credits": 50,             // 50 Credits add hobe
-            "Status": "Sent",          // Status 'Sent'
+            "Duration": 3,             // Database-e sudhu sonkha '3' jabe
+            "Credits": 50,             
+            "Status": "Sent",          
             "RequestDate": new Date()
         };
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
-        // ২. ইমেইল পাঠানো (বাটন সহ)
+        // ২. ইমেইল পাঠানো (Button Only)
         const softwareLink = process.env.SOFTWARE_LINK || "#";
 
         const mailOptions = {
@@ -119,28 +117,31 @@ exports.handler = async (event) => {
             to: data.Email,
             subject: '🎉 Your Free Trial License Key',
             html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-                    <h2 style="color: #6E25ED; text-align: center;">Welcome to Meta Injector Pro!</h2>
-                    <p>Hi <strong>${data.FullName}</strong>,</p>
-                    <p>Your Free Trial has been activated. Here are your details:</p>
+                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff;">
                     
-                    <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #6E25ED;">
-                        <p style="margin: 5px 0;"><strong>License Key:</strong> <span style="font-family: monospace; font-size: 16px;">${licenseKeyToUpdate}</span></p>
-                        <p style="margin: 5px 0;"><strong>Credits:</strong> 50</p>
-                        <p style="margin: 5px 0;"><strong>Duration:</strong> 3 Days</p>
+                    <h2 style="color: #6E25ED; text-align: center; margin-bottom: 10px;">Welcome to Meta Injector Pro!</h2>
+                    <p style="color: #555; font-size: 16px; text-align: center;">Hi <strong>${data.FullName}</strong>, your Free Trial is ready.</p>
+                    
+                    <div style="background-color: #f8f5ff; padding: 20px; border-radius: 8px; margin: 25px 0; border: 1px solid #eaddff; text-align: center;">
+                        <p style="margin: 5px 0; color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">License Key</p>
+                        <h2 style="color: #333; margin: 5px 0 15px 0; font-family: monospace; font-size: 24px; letter-spacing: 2px;">${licenseKeyToUpdate}</h2>
+                        
+                        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
+                            <span style="background: #fff; padding: 5px 15px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px;">Credits: <strong>50</strong></span>
+                            <span style="background: #fff; padding: 5px 15px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px;">Duration: <strong>3 Days</strong></span>
+                        </div>
                     </div>
 
-                    <p>Click the button below to download the software:</p>
+                    <p style="text-align: center; color: #555; margin-bottom: 20px;">Download the software and start automating your workflow.</p>
                     
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: white; padding: 14px 28px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(110, 37, 237, 0.3);">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: white; padding: 15px 35px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(110, 37, 237, 0.3); transition: transform 0.2s;">
                             Download Software
                         </a>
                     </div>
                     
-                    <p style="font-size: 12px; color: #888; text-align: center;">If the button doesn't work, copy this link: <br> ${softwareLink}</p>
                     <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="text-align: center; color: #666;">Best Regards,<br>Meta Injector Team</p>
+                    <p style="text-align: center; color: #999; font-size: 12px;">&copy; Meta Injector Team</p>
                 </div>
             `
         };
@@ -151,7 +152,7 @@ exports.handler = async (event) => {
             console.error("Email sending failed:", emailError);
         }
 
-        // ৩. সাকসেস মেসেজ রিটার্ন (Email check করতে বলা হচ্ছে)
+        // ৩. সাকসেস মেসেজ রিটার্ন
         return { 
             statusCode: 200, 
             body: JSON.stringify({ 
@@ -162,10 +163,9 @@ exports.handler = async (event) => {
     }
 
     // ==========================================
-    // PAID PACKAGE LOGIC (আগের মতোই থাকবে)
+    // PAID PACKAGE LOGIC
     // ==========================================
     
-    // Price Logic
     const priceMap = {
         "Starter": 150, "Beginner": 200, 
         "Professional": 400, "Ultimate": 700, 
@@ -173,7 +173,6 @@ exports.handler = async (event) => {
     };
     const officialPrice = priceMap[data.Package] || 0;
 
-    // Purchase Form এ ডাটা অ্যাড করা
     const purchaseData = {
         "Your Full Name": data.FullName,
         "Email": data.Email,
@@ -192,7 +191,6 @@ exports.handler = async (event) => {
 
     await db.collection('purchaseForm').add(purchaseData);
     
-    // License Database আপডেট (পেইড ইউজারদের জন্য Pending)
     const licenseUpdateData = {
         "Email": data.Email,
         "Customer Name": data.FullName,
