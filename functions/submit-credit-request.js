@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-// ফায়ারবেস ইনিশিয়ালাইজেশন (যদি একই ফাইলে না থাকে)
+// ফায়ারবেস ইনিশিয়ালাইজেশন
 if (!admin.apps.length) {
     admin.initializeApp({
         credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY))
@@ -21,16 +21,31 @@ exports.handler = async (event) => {
             return { statusCode: 400, body: JSON.stringify({ message: "Missing fields" }) };
         }
 
-        // ২. নতুন 'Credits_Purchase' কালেকশনে রিকোয়েস্ট জমা দেওয়া
+        // ২. সিকিউরিটি চেক: এই লাইসেন্সের কোনো রিকোয়েস্ট ইতিমধ্যে Pending আছে কিনা?
+        const pendingCheck = await db.collection('Credits_Purchase')
+            .where('License Key', '==', data.licenseKey)
+            .where('Status', '==', 'Pending')
+            .get();
+
+        if (!pendingCheck.empty) {
+            return { 
+                statusCode: 429, // Too Many Requests
+                body: JSON.stringify({ 
+                    message: "You already have a Pending request! Please wait for admin approval." 
+                }) 
+            };
+        }
+
+        // ৩. নতুন রিকোয়েস্ট জমা দেওয়া
         const creditRequest = {
             "Customer Name": data.name,
             "Phone Number": data.phone,
-            "License Key": data.licenseKey, // আগের স্টেপ থেকে পাওয়া লাইসেন্স কী
-            "Requested Credits": data.credits, // কত ক্রেডিট কিনছে
+            "License Key": data.licenseKey,
+            "Requested Credits": data.credits,
             "Amount Sent": data.amount,
             "TrxID": data.trxId,
             "Payment Method": data.paymentMethod,
-            "Status": "Pending", // এডমিন অ্যাপ্রুভালের জন্য
+            "Status": "Pending",
             "Request Date": new Date(),
             "Type": "Credit Top-up"
         };

@@ -20,7 +20,7 @@
             border-radius: 20px;
         }
         
-        /* Input Field Fix (Text Color White) */
+        /* Custom Input Field */
         .custom-input {
             background-color: rgba(255, 255, 255, 0.1) !important;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -32,21 +32,42 @@
             transition: all 0.3s ease;
             font-size: 1rem;
         }
-        .custom-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
+        .custom-input::placeholder { color: rgba(255, 255, 255, 0.5); }
         .custom-input:focus {
             border-color: #A073EE;
             background-color: rgba(255, 255, 255, 0.15) !important;
         }
 
-        /* Ribbon Position */
-        .ribbon-img-outside {
-            position: absolute;
-            top: -8px; left: -8px; width: 80px; z-index: 50; pointer-events: none;
+        /* Purple Gradient Button Style */
+        .pricing-button-gradient {
+            background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%);
+            color: white;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            border: none;
+        }
+        
+        /* Hover Effect (Glow + Lift) */
+        .pricing-button-gradient:hover {
+            box-shadow: 0 0 25px rgba(160, 115, 238, 0.5); /* Purple Glow */
+            transform: translateY(-3px); /* Lift Up Effect */
         }
 
-        /* Credits Box Style */
+        /* Payment Method Button */
+        .payment-btn.active {
+            border-color: #A073EE;
+            background-color: rgba(160, 115, 238, 0.1);
+            box-shadow: 0 0 15px rgba(160, 115, 238, 0.2);
+        }
+
+        /* Ribbon Position */
+        .ribbon-img-outside {
+            position: absolute; top: -8px; left: -8px; width: 80px; z-index: 50; pointer-events: none;
+        }
+
+        /* Credits Box */
         .credits-box {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; padding: 12px; margin-top: 20px; margin-bottom: 20px;
@@ -55,10 +76,7 @@
             border-radius: 12px;
         }
 
-        /* Hidden Sections */
         .step-hidden { display: none; }
-        
-        /* Spinner */
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
@@ -79,17 +97,13 @@
                     Meta Injector <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#A073EE] to-[#6E25ED]">Pro</span>
                 </span>
             </a>
-            
-            <a href="index.html" class="text-sm font-medium text-gray-300 hover:text-white transition hover:opacity-80">
-                Back to Home
-            </a>
+            <a href="index.html" class="text-sm font-medium text-gray-300 hover:text-white transition hover:opacity-80">Back to Home</a>
         </div>
     </header>
 
     <main class="pt-35 pb-20">
         
         <div id="step-pricing" class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
-            
             <div class="text-center mb-12">
                 <h1 class="text-3xl md:text-4xl font-bold mb-4">Select Credit Pack</h1>
                 <p class="text-gray-400">Choose a package to add credits to your existing account.</p>
@@ -100,25 +114,20 @@
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
-                    
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Starter</h3>
-                    
                     <div class="flex items-end gap-2">
                         <span class="text-gray-400 line-through text-sm mb-1.5">৳200</span>
                         <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳150</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 1 Month</p>
                     </div>
-
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">2,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-
                     <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
                     <div class="h-4"></div>
-
-                    <button onclick="selectPackage('Starter', 150, 2000)" class="w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    <button onclick="selectPackage('Starter', 150, 2000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
                     <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
@@ -127,25 +136,20 @@
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
-                    
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Beginner</h3>
-                    
                     <div class="flex items-end gap-2">
                         <span class="text-gray-400 line-through text-sm mb-1.5">৳300</span>
                         <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳200</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 1 Month</p>
                     </div>
-
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">3,500</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-
                     <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
                     <div class="h-4"></div>
-
-                    <button onclick="selectPackage('Beginner', 200, 3500)" class="w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    <button onclick="selectPackage('Beginner', 200, 3500)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
                     <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
@@ -154,25 +158,20 @@
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
-                    
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Professional</h3>
-                    
                     <div class="flex items-end gap-2">
                         <span class="text-gray-400 line-through text-sm mb-1.5">৳600</span>
                         <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳400</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 2 Months</p>
                     </div>
-
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">6,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-
                     <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
                     <div class="h-4"></div>
-
-                    <button onclick="selectPackage('Professional', 400, 6000)" class="w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    <button onclick="selectPackage('Professional', 400, 6000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
                     <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
@@ -181,25 +180,20 @@
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
-                    
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Ultimate</h3>
-                    
                     <div class="flex items-end gap-2">
                         <span class="text-gray-400 line-through text-sm mb-1.5">৳1000</span>
                         <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳700</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 3 Months</p>
                     </div>
-
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">10,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-
                     <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
                     <div class="h-4"></div>
-
-                    <button onclick="selectPackage('Ultimate', 700, 10000)" class="w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    <button onclick="selectPackage('Ultimate', 700, 10000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
                     <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
@@ -208,25 +202,20 @@
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
-                    
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Corporate</h3>
-                    
                     <div class="flex items-end gap-2">
                         <span class="text-gray-400 line-through text-sm mb-1.5">৳1400</span>
                         <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1000</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 6 Months</p>
                     </div>
-
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">20,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-
                     <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
                     <div class="h-4"></div>
-
-                    <button onclick="selectPackage('Corporate', 1000, 20000)" class="w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    <button onclick="selectPackage('Corporate', 1000, 20000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
                     <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
@@ -235,25 +224,20 @@
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
-                    
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Enterprise</h3>
-                    
                     <div class="flex items-end gap-2">
                         <span class="text-gray-400 line-through text-sm mb-1.5">৳2300</span>
                         <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1700</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 1 Year</p>
                     </div>
-
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">35,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-
                     <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
                     <div class="h-4"></div>
-
-                    <button onclick="selectPackage('Enterprise', 1700, 35000)" class="w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    <button onclick="selectPackage('Enterprise', 1700, 35000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
                     <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
@@ -263,46 +247,37 @@
         </div>
 
         <div id="step-verify" class="step-hidden max-w-[500px] mx-auto px-6 mt-10">
-            <button onclick="backToPricing()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm">
-                ← Back to Packages
-            </button>
-
+            <button onclick="backToPricing()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm">← Back to Packages</button>
             <div class="glass-panel p-10 text-center relative overflow-hidden">
                 <div class="mb-8 border-b border-white/10 pb-4">
                     <p class="text-gray-400 text-sm">Selected Package</p>
                     <h3 class="text-2xl font-bold text-white mt-1" id="selected-pkg-name">Starter</h3>
                     <p class="text-purple font-semibold">৳<span id="selected-pkg-price">150</span></p>
                 </div>
-
                 <h2 class="text-2xl font-bold mb-2">Account Verification</h2>
                 <p class="text-gray-400 mb-6 text-sm">Enter the phone number linked to your license.</p>
-                
-                <input type="text" id="userPhone" placeholder="Enter Phone Number (e.g., 017xxxxxxxx)" 
-                       class="custom-input mb-4 text-center">
-                
-                <button onclick="checkUser()" id="verifyBtn"
-                        class="button-border-gradient hover:button-gradient-hover w-full py-3 rounded-lg text-white font-semibold transition hover:shadow-button">
-                    Next Step
-                </button>
+                <input type="text" id="userPhone" placeholder="Enter Phone Number (e.g., 017xxxxxxxx)" class="custom-input mb-4 text-center">
+                <button onclick="checkUser()" id="verifyBtn" class="w-full py-3 rounded-lg font-bold text-white pricing-button-gradient hover:shadow-button transition">Next Step</button>
                 <p id="verify-msg" class="text-sm mt-4 min-h-[20px]"></p>
             </div>
         </div>
 
-        <div id="step-payment" class="step-hidden max-w-[500px] mx-auto px-6 mt-10 text-center">
-            
+        <div id="step-payment" class="step-hidden max-w-[550px] mx-auto px-6 mt-10">
             <div class="glass-panel p-8 text-left">
                 <div class="text-center mb-6">
-                    <div class="w-12 h-12 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
-                        ✓
-                    </div>
-                    <h2 class="text-xl font-bold">User Found!</h2>
-                    <p class="text-gray-300 mt-1">Hello, <span class="text-white font-bold" id="display-name">User</span></p>
+                    <div class="w-12 h-12 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">✓</div>
+                    <h2 class="text-xl font-bold text-white">User Found!</h2>
+                    <p class="text-gray-300 mt-1">Hello, <span class="text-purple font-bold" id="display-name">User</span></p>
                     <input type="hidden" id="hiddenLicenseKey">
                 </div>
 
                 <div class="bg-white/5 rounded-lg p-4 mb-6 border border-white/10">
                     <div class="flex justify-between mb-2">
-                        <span class="text-gray-400 text-sm">Adding Credits:</span>
+                        <span class="text-gray-400 text-sm">Package:</span>
+                        <strong class="text-white" id="conf-pkg-name">Starter</strong>
+                    </div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-gray-400 text-sm">Credits:</span>
                         <strong class="text-white" id="conf-credits">2,000</strong>
                     </div>
                     <div class="flex justify-between border-t border-white/10 pt-2 mt-2">
@@ -311,19 +286,32 @@
                     </div>
                 </div>
 
-                <div class="bg-purple/10 border border-purple/30 p-3 rounded-lg mb-4 text-xs text-center text-gray-300">
-                    Send money to <strong>017xxxxxxxx (Bkash/Nagad)</strong>.
+                <label class="block text-sm text-gray-400 mb-3 font-semibold">Select Payment Method</label>
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div onclick="selectPayment('Bkash')" id="btn-Bkash" class="payment-btn bg-white/5 border border-white/10 rounded-lg p-3 text-center cursor-pointer hover:border-purple/50 transition"><span class="text-pink-500 font-bold block">Bkash</span></div>
+                    <div onclick="selectPayment('Nagad')" id="btn-Nagad" class="payment-btn bg-white/5 border border-white/10 rounded-lg p-3 text-center cursor-pointer hover:border-purple/50 transition"><span class="text-orange-500 font-bold block">Nagad</span></div>
+                    <div onclick="selectPayment('Rocket')" id="btn-Rocket" class="payment-btn bg-white/5 border border-white/10 rounded-lg p-3 text-center cursor-pointer hover:border-purple/50 transition"><span class="text-purple-500 font-bold block">Rocket</span></div>
                 </div>
 
-                <label class="block text-xs text-gray-400 mb-2 uppercase tracking-wide">Transaction ID</label>
-                <input type="text" id="trxId" placeholder="e.g. 8H3K9L2M" class="custom-input mb-6">
-
-                <div class="flex gap-3">
-                    <button onclick="location.reload()" class="w-1/3 py-3 rounded-lg border border-white/20 hover:bg-white/10 transition text-sm text-gray-300">Cancel</button>
-                    <button onclick="submitCreditRequest()" id="payBtn" class="w-2/3 button-border-gradient hover:button-gradient-hover py-3 rounded-lg text-white font-bold transition hover:shadow-button">
-                        Confirm & Pay
-                    </button>
+                <div id="payment-instruction" class="bg-purple/10 border border-purple/30 p-3 rounded-lg mb-6 text-sm text-center text-gray-300 hidden">
+                    Send Money to: <strong class="text-white text-lg" id="pay-number">017xxxxxxxx</strong> (Personal)
                 </div>
+
+                <div id="payment-inputs" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">Sender Number</label>
+                        <input type="text" id="senderNumber" placeholder="Your Phone Number" class="custom-input">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">Transaction ID (TrxID)</label>
+                        <input type="text" id="trxId" placeholder="e.g. 8H3K9L2M" class="custom-input">
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="location.reload()" class="w-1/3 py-3 rounded-lg border border-white/20 hover:bg-white/10 transition text-sm text-gray-300">Cancel</button>
+                        <button onclick="submitCreditRequest()" id="payBtn" class="w-2/3 pricing-button-gradient py-3 rounded-lg text-white font-bold hover:shadow-button transition">Confirm & Pay</button>
+                    </div>
+                </div>
+                
                 <p id="payment-msg" class="text-center mt-4 text-sm"></p>
             </div>
         </div>
@@ -336,79 +324,159 @@
 
     <script>
         let selectedData = {};
+        let selectedMethod = "";
+        
+        // Security Variables
+        let failedAttempts = 0;
+        let isLocked = false;
+        let countdownInterval;
+
+        // Admin Numbers
+        const paymentNumbers = {
+            "Bkash": "017xxxxxxxx",
+            "Nagad": "018xxxxxxxx",
+            "Rocket": "019xxxxxxxx"
+        };
 
         // 1. Select Package
         function selectPackage(name, price, credits) {
             selectedData = { name, price, credits };
-            
-            // Update Verify Screen info
             document.getElementById('selected-pkg-name').innerText = name;
             document.getElementById('selected-pkg-price').innerText = price;
-
-            // Switch to Step 2
+            
             document.getElementById('step-pricing').classList.add('step-hidden');
             document.getElementById('step-verify').classList.remove('step-hidden');
             window.scrollTo(0, 0);
         }
 
         function backToPricing() {
+            // লক অবস্থায় থাকলে ব্যাক করা যাবে না
+            if(isLocked) return; 
             document.getElementById('step-verify').classList.add('step-hidden');
             document.getElementById('step-pricing').classList.remove('step-hidden');
         }
 
-        // 2. Check User
+        // 2. Check User (With 3-Strike Lockout)
         async function checkUser() {
-            const phone = document.getElementById('userPhone').value;
+            if (isLocked) return; // লক থাকলে কাজ করবে না
+
+            const phoneInput = document.getElementById('userPhone');
             const btn = document.getElementById('verifyBtn');
             const msg = document.getElementById('verify-msg');
+            const phone = phoneInput.value;
 
             if (phone.length < 11) {
                 msg.innerHTML = "<span class='text-red-400'>Invalid phone number.</span>";
                 return;
             }
 
+            // Loading State
             btn.innerHTML = "<span class='spinner'></span> Checking...";
             btn.disabled = true;
+            phoneInput.disabled = true; // ইনপুট ডিজেবল
             msg.innerText = "";
 
             try {
                 const response = await fetch('/.netlify/functions/check-user', {
-                    method: 'POST',
-                    body: JSON.stringify({ phone: phone })
+                    method: 'POST', body: JSON.stringify({ phone: phone })
                 });
-
                 const result = await response.json();
 
                 if (result.found) {
-                    // Update Confirm Screen info
+                    // সফল হলে কাউন্টার রিসেট
+                    failedAttempts = 0;
+                    
                     document.getElementById('display-name').innerText = result.name;
                     document.getElementById('hiddenLicenseKey').value = result.licenseKey;
+                    document.getElementById('conf-pkg-name').innerText = selectedData.name;
                     document.getElementById('conf-credits').innerText = selectedData.credits.toLocaleString();
                     document.getElementById('conf-amount').innerText = selectedData.price;
 
-                    // Switch to Step 3
                     document.getElementById('step-verify').classList.add('step-hidden');
                     document.getElementById('step-payment').classList.remove('step-hidden');
                 } else {
-                    msg.innerHTML = "<span class='text-red-400'>User not found! Register first.</span>";
-                    btn.innerHTML = "Next Step";
-                    btn.disabled = false;
+                    // ইউজার না পাওয়া গেলে
+                    handleFailure(btn, phoneInput, msg);
                 }
             } catch (error) {
-                msg.innerHTML = "<span class='text-red-400'>Server Error. Try again.</span>";
-                btn.innerHTML = "Next Step";
-                btn.disabled = false;
+                // সার্ভার এরর হলেও ফেইল হিসেবে গণ্য হবে
+                handleFailure(btn, phoneInput, msg, "Server Error.");
             }
         }
 
-        // 3. Submit Payment
+        // ফেইল হ্যান্ডেল করার ফাংশন
+        function handleFailure(btn, input, msg, customError = "User not found!") {
+            failedAttempts++;
+            
+            if (failedAttempts >= 3) {
+                // ৩ বার ভুল হলে লকডাউন শুরু
+                startLockdown(60, btn, input, msg);
+            } else {
+                // ৩ বারের কম হলে সাধারণ ওয়ার্নিং
+                msg.innerHTML = `<span class='text-red-400'>${customError} Try ${failedAttempts}/3.</span>`;
+                btn.innerHTML = "Next Step";
+                btn.disabled = false;
+                input.disabled = false;
+            }
+        }
+
+        // লকডাউন টাইমার ফাংশন
+        function startLockdown(seconds, btn, input, msg) {
+            isLocked = true;
+            let timeLeft = seconds;
+
+            btn.disabled = true;
+            input.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed'); // বাটন কালার ডিমে হবে
+
+            // কাউন্টডাউন আপডেট
+            msg.innerHTML = `<span class='text-red-500 font-bold'>Too many wrong attempts! <br> Locked for ${timeLeft}s</span>`;
+            btn.innerHTML = `Locked (${timeLeft}s)`;
+
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                msg.innerHTML = `<span class='text-red-500 font-bold'>Too many wrong attempts! <br> Locked for ${timeLeft}s</span>`;
+                btn.innerHTML = `Locked (${timeLeft}s)`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    resetLockdown(btn, input, msg);
+                }
+            }, 1000);
+        }
+
+        // লকডাউন শেষ হওয়ার পর
+        function resetLockdown(btn, input, msg) {
+            isLocked = false;
+            failedAttempts = 0; // কাউন্টার রিসেট
+            
+            btn.disabled = false;
+            input.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            btn.innerHTML = "Next Step";
+            msg.innerHTML = "<span class='text-green-400'>You can try again now.</span>";
+        }
+
+        // 3. Select Payment Method
+        function selectPayment(method) {
+            selectedMethod = method;
+            document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + method).classList.add('active');
+            document.getElementById('payment-instruction').classList.remove('hidden');
+            document.getElementById('pay-number').innerText = paymentNumbers[method];
+            document.getElementById('payment-inputs').classList.remove('hidden');
+        }
+
+        // 4. Submit Payment
         async function submitCreditRequest() {
+            const senderNumber = document.getElementById('senderNumber').value;
             const trxId = document.getElementById('trxId').value;
             const btn = document.getElementById('payBtn');
             const msg = document.getElementById('payment-msg');
 
-            if (!trxId) {
-                msg.innerHTML = "<span class='text-red-400'>Please enter Transaction ID.</span>";
+            if (!senderNumber || !trxId) {
+                msg.innerHTML = "<span class='text-red-400'>Please fill both Sender Number & TrxID.</span>";
                 return;
             }
 
@@ -421,16 +489,15 @@
                 licenseKey: document.getElementById('hiddenLicenseKey').value,
                 credits: selectedData.credits,
                 amount: selectedData.price,
-                trxId: trxId,
-                paymentMethod: "Bkash/Nagad"
+                paymentMethod: selectedMethod,
+                senderNumber: senderNumber,
+                trxId: trxId
             };
 
             try {
                 const response = await fetch('/.netlify/functions/submit-credit-request', {
-                    method: 'POST',
-                    body: JSON.stringify(requestData)
+                    method: 'POST', body: JSON.stringify(requestData)
                 });
-
                 const result = await response.json();
 
                 if (response.ok) {
@@ -439,7 +506,7 @@
                             <div class="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✓</div>
                             <h2 class="text-2xl font-bold text-white mb-2">Request Submitted!</h2>
                             <p class="text-gray-400 mb-6">${result.message}</p>
-                            <a href="index.html" class="button-border-gradient px-6 py-2 rounded-lg text-white font-semibold">Back to Home</a>
+                            <a href="index.html" class="pricing-button-gradient px-6 py-2 rounded-lg text-white font-semibold hover:shadow-button transition">Back to Home</a>
                         </div>
                     `;
                 } else {
