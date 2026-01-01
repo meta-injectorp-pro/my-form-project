@@ -34,7 +34,7 @@
     <nav class="fixed w-full z-40 top-0 start-0 border-b border-white/10 bg-[#0F0A1E]/80 backdrop-blur-md">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <a href="index.html" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="logo.png" class="h-8" alt="Logo" onerror="this.src='https://placehold.co/100x40?text=Logo'">
+                <img src="logo.svg" class="h-10 w-auto" alt="Logo">
                 <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Meta Injector Pro</span>
             </a>
             <a href="index.html" class="text-gray-400 hover:text-white transition">Back to Home</a>
@@ -54,8 +54,8 @@
                 </div>
                 <h2 class="text-3xl font-bold text-white mb-4">Request Submitted!</h2>
                 <p class="text-gray-300 text-lg mb-8">
-                    Thank you for your request. Our team will review your payment and activate your license shortly.
-                    <br><span class="text-sm text-gray-500 mt-2 block">You will receive an email confirmation.</span>
+                    Thank you for your request. Our team will review and activate your license shortly.
+                    <br><span class="text-sm text-gray-500 mt-2 block">Check your email for confirmation.</span>
                 </p>
                 <a href="index.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
                     Back to Home
@@ -71,23 +71,23 @@
                     
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-gray-400">Package</span>
-                        <span id="pkgName" class="text-purple-400 font-bold text-lg">Loading...</span>
+                        <span id="pkgName" class="text-purple-400 font-bold text-lg">Starter</span>
                     </div>
 
                     <div class="flex justify-between items-center mb-4">
                         <span class="text-gray-400">Credits</span>
-                        <span id="pkgCredits" class="text-white font-medium">--</span>
+                        <span id="pkgCredits" class="text-white font-medium">2,000</span>
                     </div>
 
                     <div class="flex justify-between items-center mb-4 bg-white/5 p-3 rounded-lg border border-white/10">
                         <span class="text-gray-300">Validity</span>
-                        <span id="pkgDurationDisplay" class="text-yellow-400 font-bold">--</span>
+                        <span id="pkgDurationDisplay" class="text-yellow-400 font-bold">30 Days</span>
                     </div>
 
                     <div class="border-t border-dashed border-white/20 pt-4 mt-4" id="priceRow">
                         <div class="flex justify-between items-center">
                             <span class="text-lg font-bold text-white">Total To Pay</span>
-                            <span id="totalPrice" class="text-2xl font-extrabold text-green-400">৳0</span>
+                            <span id="totalPrice" class="text-2xl font-extrabold text-green-400">৳130</span>
                         </div>
                     </div>
                 </div>
@@ -177,15 +177,15 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // CONFIG
+            // Configuration Data (Fallback if URL params are missing)
             const packageDetails = {
-                "Free Trial":   { label: "3 Days",   days: "3" },
-                "Starter":      { label: "1 Month",  days: "30" },
-                "Beginner":     { label: "1 Month",  days: "30" },
-                "Professional": { label: "2 Months", days: "60" },
-                "Ultimate":     { label: "3 Months", days: "90" },
-                "Corporate":    { label: "6 Months", days: "180" },
-                "Enterprise":   { label: "1 Year",   days: "365" }
+                "Free Trial":   { label: "3 Days",   days: "3", credits: "50" },
+                "Starter":      { label: "1 Month",  days: "30", credits: "2,000" },
+                "Beginner":     { label: "1 Month",  days: "30", credits: "3,500" },
+                "Professional": { label: "2 Months", days: "60", credits: "6,000" },
+                "Ultimate":     { label: "3 Months", days: "90", credits: "10,000" },
+                "Corporate":    { label: "6 Months", days: "180", credits: "20,000" },
+                "Enterprise":   { label: "1 Year",   days: "365", credits: "35,000" }
             };
 
             const paymentNumbers = {
@@ -197,9 +197,9 @@
             // Parse URL Params
             const params = new URLSearchParams(window.location.search);
             const pkgName = params.get('package') || 'Starter';
-            const pkgPrice = params.get('price') || '0';
-            const pkgCredits = params.get('credits') || '0';
-
+            // Ensure price is handled as number
+            const pkgPrice = params.get('price') ? parseInt(params.get('price')) : (pkgName === 'Free Trial' ? 0 : 130);
+            
             // DOM Elements
             const elPkgName = document.getElementById('pkgName');
             const elPkgCredits = document.getElementById('pkgCredits');
@@ -216,7 +216,6 @@
             const form = document.getElementById('checkoutForm');
             const submitBtn = document.getElementById('submitBtn');
             const statusMsg = document.getElementById('statusMsg');
-            
             const checkoutGrid = document.getElementById('checkout-grid');
             const successView = document.getElementById('success-view');
 
@@ -234,31 +233,36 @@
                 trx: document.getElementById('warnTrx')
             };
 
-            // 1. Setup UI based on Package
+            // 1. Setup UI based on Package (Order Summary Fix)
             elPkgName.innerText = pkgName;
-            elPkgCredits.innerText = pkgCredits;
             elTotalPrice.innerText = '৳' + pkgPrice;
 
-            // Set Duration
+            // Set Duration & Credits using Fallback Map
             let durationDays = "30"; 
             if (packageDetails[pkgName]) {
                 elPkgDurationDisplay.innerText = packageDetails[pkgName].label;
+                elPkgCredits.innerText = packageDetails[pkgName].credits; // Credits Show Fix
                 durationDays = packageDetails[pkgName].days;
             } else {
                 elPkgDurationDisplay.innerText = "1 Month";
+                elPkgCredits.innerText = params.get('credits') || "--";
             }
 
-            // Check if Free Trial
-            const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === '0');
+            // CHECK FREE TRIAL (Logic Fix)
+            const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
 
             if (isFreeTrial) {
-                // Hide Payment Details for Free User
+                // Free Trial: Hide Payment Section & Price Row
                 paymentSection.style.display = 'none';
                 elPriceRow.style.display = 'none';
-                submitBtn.innerText = "Activate Free Trial";
+                // Button Text Fix
+                submitBtn.innerText = "Start Your Free Trial";
             } else {
+                // Paid: Show Payment Section
+                paymentSection.style.display = 'block';
+                elPriceRow.style.display = 'flex';
                 submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
-                if(elAmountSent) elAmountSent.value = pkgPrice; // Pre-fill amount
+                if(elAmountSent) elAmountSent.value = pkgPrice; 
             }
 
             // 2. Handle Payment Method Selection
@@ -276,12 +280,11 @@
 
             // 3. Input Validation Listeners
             inputs.phone.addEventListener('input', function() {
-                this.value = this.value.replace[^0-9]/g, '');
+                this.value = this.value.replace(/[^0-9]/g, '');
                 warns.phone.classList.remove('visible');
                 this.classList.remove('border-red-500');
             });
             inputs.name.addEventListener('input', function() {
-                // Remove numbers from name
                 if (/[0-9]/.test(this.value)) this.value = this.value.replace(/[0-9]/g, '');
                 warns.name.classList.remove('visible');
                 this.classList.remove('border-red-500');
