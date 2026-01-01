@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meta Injector Pro - Ai Metadata Tool</title>
+  <link rel="icon" href="./Source_Files/favicon.ico">
+  <link href="./Source_Files/style.css" rel="stylesheet">
+  <style>undefined</style>
+</head>
+
+<body x-data="{ page: 'home', 'loaded': true, 'stickyMenu': false, 'navigationOpen': false, 'scrollTop': false }">
+  
+  <header class="fixed left-0 top-0 w-full z-9999 py-7 lg:py-0" 
+          :class="{ 'bg-dark/70 backdrop-blur-lg shadow !py-4 lg:!py-0 transition duration-100 before:absolute before:w-full before:h-[1px] before:bottom-0 before:left-0 before:features-row-border' : stickyMenu }" 
+          @scroll.window="stickyMenu = (window.scrollY > 0) ? true : false">
+    
+    <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 lg:flex items-center justify-between relative">
+      <div class="w-full lg:w-1/4 flex items-center justify-between">
+        
+        <a href="index.html">
+          <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" style="height: 50px; width: auto;">
+        </a>
+
+      <!-- Hamburger Toggle BTN -->
+      <button class="lg:hidden block" @click="navigationOpen = !navigationOpen">
+        <span class="block relative cursor-pointer w-5.5 h-5.5">
+          <span class="du-block absolute right-0 w-full h-full">
+            <span class="block relative top-0 left-0 bg-white rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-[0] !w-full delay-300" :class="{ &#39;!w-full delay-300&#39;: !navigationOpen }"></span>
+            <span class="block relative top-0 left-0 bg-white rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-150 !w-full delay-400" :class="{ &#39;!w-full delay-400&#39;: !navigationOpen }"></span>
+            <span class="block relative top-0 left-0 bg-white rounded-sm w-0 h-0.5 my-1 ease-in-out duration-200 delay-200 !w-full delay-500" :class="{ &#39;!w-full delay-500&#39;: !navigationOpen }"></span>
+          </span>
+          <span class="du-block absolute right-0 w-full h-full rotate-45">
+            <span class="block bg-white rounded-sm ease-in-out duration-200 delay-300 absolute left-2.5 top-0 w-0.5 h-full !h-0 delay-[0]" :class="{ &#39;!h-0 delay-[0]&#39;: !navigationOpen }"></span>
+            <span class="block bg-white rounded-sm ease-in-out duration-200 delay-400 absolute left-0 top-2.5 w-full h-0.5 !h-0 dealy-200" :class="{ &#39;!h-0 dealy-200&#39;: !navigationOpen }"></span>
+          </span>
+        </span>
+      </button>
+      <!-- Hamburger Toggle BTN -->
+    </div>
+
+    <div class="w-full lg:w-3/4 h-0 lg:h-auto invisible lg:visible lg:flex items-center justify-between" :class="{ &#39;!visible bg-dark shadow-lgrelative !h-auto max-h-[400px] overflow-y-scroll rounded-md mt-4 p-7.5&#39;: navigationOpen }">
+      <nav>
+        <ul class="flex lg:items-center flex-col lg:flex-row gap-5 lg:gap-2">
+          <li class="nav__menu lg:py-7" :class="{ &#39;lg:!py-4&#39; : stickyMenu }">
+            <a href="#home" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient !text-white nav-gradient" :class="{&#39;!text-white nav-gradient&#39; :page === &#39;home&#39;}">Home</a>
+          </li>
+		  <li class="nav__menu lg:py-7" :class="{ &#39;lg:!py-4&#39; : stickyMenu }">
+            <a href="#pricing" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient">Pricing</a>
+          </li>
+          <li class="nav__menu lg:py-7" :class="{ &#39;lg:!py-4&#39; : stickyMenu }">
+            <a href="#features" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient">Features</a>
+          </li>              
+          <li class="nav__menu lg:py-7" :class="{ &#39;lg:!py-4&#39; : stickyMenu }">
+            <a href="#support" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient">Support</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="flex items-center gap-3 mt-7 lg:mt-0">
+        
+        <span class="text-white/90 text-sm font-medium hidden sm:block">Connect with us:</span>
+
+        <a href="https://www.facebook.com/metainjector" target="_blank" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#1877F2] text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-blue-500/50">
+          <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.641c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.737-.9 10.125-5.864 10.125-11.854z"/>
+          </svg>
+        </a>
+
+        <a href="https://wa.me/+8801729816172" target="_blank" class="flex items-center justify-center w-9 h-9 rounded-full bg-[#25D366] text-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-green-500/50">
+          <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</header>
+  <!-- ===== Header End ===== -->
+
+  <main>
+    <!-- ===== Hero Section Start ===== -->
+    <section id="home" class="relative overflow-hidden z-10 pt-35 md:pt-40 xl:pt-45">
+      <!-- Hero Bg Shapes -->
+      <div class="max-w-7xl mx-auto">
+        <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden -mx-28">
+          <div class="absolute -z-1 -top-[128%] sm:-top-[107%] xl:-top-[73%] left-1/2 -translate-x-1/2 -u-z-10 hero-circle-gradient w-full h-[1282px] rounded-full max-w-[1282px]">
+          </div>
+          <div class="absolute -z-1 -top-[112%] sm:-top-[93%] xl:-top-[62%] left-1/2 -translate-x-1/2 -u-z-10 hero-circle-gradient w-full h-[1046px] rounded-full max-w-[1046px]">
+          </div>
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 -u-z-10">
+            <img src="./Source_Files/blur-02.svg" alt="blur" class="max-w-none">
+          </div>
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 -u-z-10">
+            <img src="./Source_Files/blur-01.svg" alt="blur" class="max-w-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Content -->
+      <section id="home" class="relative overflow-hidden z-10 pt-18 md:pt-25 xl:pt-30">
+      
+      <div class="max-w-7xl mx-auto">
+        <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden -mx-28">
+          <div class="absolute -z-1 -top-[128%] sm:-top-[107%] xl:-top-[73%] left-1/2 -translate-x-1/2 -u-z-10 hero-circle-gradient w-full h-[1282px] rounded-full max-w-[1282px]"></div>
+          <div class="absolute -z-1 -top-[112%] sm:-top-[93%] xl:-top-[62%] left-1/2 -translate-x-1/2 -u-z-10 hero-circle-gradient w-full h-[1046px] rounded-full max-w-[1046px]"></div>
+        </div>
+      </div>
+
+      <div class="mx-auto max-w-[1170px] px-4 sm:px-8 xl:px-0 relative z-1">
+        <div class="text-center">
+          
+          <a href="#" class="hero-subtitle-gradient hover:hero-subtitle-hover relative mb-5 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+            <img src="./Source_Files/icon-title.svg" alt="icon">
+            <span class="hero-subtitle-text">
+              Your Ultimate Metadata Companion!
+            </span>
+          </a>
+
+          <h1 class="text-white mb-6 text-3xl font-extrabold sm:text-5xl xl:text-heading-1 min-h-[80px] sm:min-h-[120px]">
+            <span id="typewriter-text"></span><span class="cursor">|</span>
+          </h1>
+
+          <p class="max-w-[900px] mx-auto mb-9 font-medium md:text-lg">
+            Meta Injector ᴾʳᵒ automates SEO-optimized metadata for JPG, PNG, EPS, AI, and video files using advanced AI. Boost your global visibility and sales potential while streamlining your creative workflow with intelligent, high-performing keywords.
+          </p>
+
+          <a href="checkout.html?package=Free Trial&price=0&credits=50" class="hero-button-gradient inline-flex rounded-lg py-3 px-7 text-white font-medium ease-in duration-300 hover:opacity-80">
+            Start Your Free Trial
+          </a>
+          
+        </div>
+      </div>
+
+      <div class="mt-17 relative z-10 max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0" data-wow-delay="0.1s">        
+    <div class="relative rounded-3xl features-box-border">            
+        
+        <div class="relative overflow-hidden rounded-3xl p-6 sm:p-8 box-hover bg-dark/20">                
+            
+            <div class="relative z-20 flex justify-center">
+                <div class="hero-container w-full">
+                    <img class="w-full h-auto rounded-2xl shadow-2xl block bg-[#0F0A1E]" 
+                         src="./Source_Files/hero.svg" 
+                         alt="hero"> 
+                </div>
+            </div>                
+            
+            <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden -mx-28">
+                <span class="absolute right-0 bottom-0"><img src="./Source_Files/shape-01.png" alt="shape"></span>
+                <span class="absolute left-0 top-0"><img src="./Source_Files/shape-02.svg" alt="shape"></span>
+                <span class="absolute left-1/2 -translate-x-1/2 bottom-0"><img src="./Source_Files/blur-03.svg" alt="blur" class="max-w-none"></span>
+                <span class="absolute left-1/2 -translate-x-1/2 bottom-0"><img src="./Source_Files/blur-04.svg" alt="blur" class="max-w-none"></span>
+                <span class="absolute left-1/2 -translate-x-1/2 bottom-0"><img src="./Source_Files/blur-05.svg" alt="blur" class="max-w-none"></span>
+                <span class="absolute right-0 top-0"><img src="./Source_Files/shape-03.svg" alt="shape" class="max-w-none"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const textToType = "Meta Injector ᴾʳᵒ - The Ultimate Ai-Powered Metadata Tool for Contributors";
+            const typeContainer = document.getElementById('typewriter-text');
+            const cursor = document.querySelector('.cursor');
+            let charIndex = 0;
+            const typingSpeed = 40; 
+
+            function typeWriter() {
+                if (charIndex < textToType.length) {
+                    typeContainer.textContent += textToType.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeWriter, typingSpeed);
+                } else {
+                    // Hide cursor when finished
+                    if(cursor) cursor.style.display = 'none';
+                }
+            }
+            setTimeout(typeWriter, 500);
+        });
+      </script>
+
+      <style>
+        .cursor {
+            display: inline-block;
+            margin-left: 2px;
+            color: #a855f7; 
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0; } 
+        }
+      </style>
+
+    </section>
+    ```
+    <!-- ===== Hero Section End ===== -->
+
+<!-- ===== features list Section Start ===== -->
+    <section class="pt-12.5">
+      <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
+        <div class="grid sm:grid-cols-12 gap-7.5" data-highlighter="">
+          <!-- features item -->
+          <div class="sm:col-span-12" style="--mouse-x: 586.5px; --mouse-y: 764px;">
+            <div class="relative rounded-3xl features-box-border">
+              <div class="relative overflow-hidden rounded-3xl p-10 xl:p-15 box-hover">
+                <div class="flex items-center justify-between relative z-20">
+                  <div class="max-w-[477px] w-full">
+                    <span class="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+                      <img src="./Source_Files/icon-title.svg" alt="icon">
+
+                      <span class="hero-subtitle-text">
+                        AI-Powered Metadata Tool
+                      </span>
+                    </span>
+                    <h3 class="text-white mb-4.5 font-bold text-heading-4">
+                      The Future of SEO
+					  for Microstock Contributors
+                    </h3>
+                    <p class="font-medium mb-10">
+                      Stop wasting hours on manual tagging. Our AI writing assistant automates your SEO, ensuring your content is always discoverable and ready for the market....
+                    </p>
+                    <a href="features-details.html" class="features-button-gradient relative inline-flex items-center gap-1.5 rounded-full py-3 px-6 text-white text-sm ease-in duration-300 hover:shadow-button">
+                      Learn more
+                      <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.3992 5.60002L8.22422 0.350024C7.99922 0.125024 7.64922 0.125024 7.42422 0.350024C7.19922 0.575024 7.19922 0.925025 7.42422 1.15002L11.6242 5.42503H0.999219C0.699219 5.42503 0.449219 5.67502 0.449219 5.97502C0.449219 6.27502 0.699219 6.55003 0.999219 6.55003H11.6742L7.42422 10.875C7.19922 11.1 7.19922 11.45 7.42422 11.675C7.52422 11.775 7.67422 11.825 7.82422 11.825C7.97422 11.825 8.12422 11.775 8.22422 11.65L13.3992 6.40002C13.6242 6.17502 13.6242 5.82502 13.3992 5.60002Z" fill="white"></path>
+                      </svg>
+                    </a>
+                  </div>
+
+                  <div class="max-w-[428px] w-full hidden sm:block">
+                    <img src="./Source_Files/big-icon.svg" alt="icon">
+                  </div>
+                </div>
+
+                <!-- bg shapes -->
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden -mx-28">
+                  <span class="absolute right-0 bottom-0"><img src="./Source_Files/shape-01.png" alt="shape"></span>
+                  <span class="absolute left-0 top-0"><img src="./Source_Files/shape-02.svg" alt="shape"></span>
+                  <span class="absolute left-1/2 -translate-x-1/2 bottom-0">
+                    <img src="./Source_Files/blur-03.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute left-1/2 -translate-x-1/2 bottom-0">
+                    <img src="./Source_Files/blur-04.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute left-1/2 -translate-x-1/2 bottom-0">
+                    <img src="./Source_Files/blur-05.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute right-0 top-0">
+                    <img src="./Source_Files/shape-03.svg" alt="shape" class="max-w-none">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- features item -->
+          <div class="sm:col-span-7" style="--mouse-x: 586.5px; --mouse-y: 186px;">
+            <div class="relative rounded-3xl features-box-border">
+              <div class="relative overflow-hidden rounded-3xl px-11 pt-12.5 pb-14 box-hover box-hover-small">
+                <div class="relative z-20">
+                  <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-13.5 mx-auto">
+                    <img src="./Source_Files/icon-06.svg" alt="icon">
+                  </span>
+
+                  <h3 class="text-white mb-4.5 font-semibold text-heading-6">
+                    Effortless SEO-Ready Metadata
+                  </h3>
+                  <p class="font-medium">
+                    Stop struggling with keywords. Our AI instantly analyzes your images to generate high-ranking titles, descriptions, and tags tailored for major microstock platforms. Save hours of manual work and get your content discovered faster....
+                  </p>
+                </div>
+
+                <!-- bg shapes -->
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden">
+                  <span class="absolute left-0 bottom-0">
+                    <img src="./Source_Files/blur-06.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute right-0 top-0">
+                    <img src="./Source_Files/blur-07.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute right-[16%] top-[16%]"><img src="./Source_Files/shape-04.svg" alt="shape"></span>
+                  <span class="absolute left-0 bottom-0">
+                    <img src="./Source_Files/blur-08.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute left-0 bottom-0">
+                    <img src="./Source_Files/blur-09.svg" alt="blur" class="max-w-none">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- features item -->
+          <div class="sm:col-span-5" style="--mouse-x: -113.5px; --mouse-y: 186px;">
+            <div class="relative rounded-3xl features-box-border">
+              <div class="relative overflow-hidden rounded-3xl px-11 pt-12.5 pb-14 box-hover box-hover-small">
+                <div class="relative z-20">
+                  <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-13.5 mx-auto">
+                    <img src="./Source_Files/icon-07.svg" alt="icon">
+                  </span>
+
+                  <h3 class="text-white mb-4.5 font-semibold text-heading-6">
+                    Boost Your Visibility & Sales
+                  </h3>
+                  <p class="font-medium">
+                    Our tool uses advanced algorithms to find the most profitable keywords in your niche. By optimizing your SEO, we help your portfolio appear at the top of search results....
+                  </p>
+                </div>
+
+                <!-- bg shapes -->
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden">
+                  <span class="absolute right-[14%] top-[17%]"><img src="./Source_Files/shape-05.svg" alt="shape"></span>
+                  <span class="absolute left-0 bottom-0">
+                    <img src="./Source_Files/blur-10.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute top-0 right-0">
+                    <img src="./Source_Files/blur-11.svg" alt="blur" class="max-w-none">
+                  </span>
+                  <span class="absolute top-0 right-0">
+                    <img src="./Source_Files/blur-12.svg" alt="blur" class="max-w-none">
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== features list Section End ===== -->
+
+       
+
+    <!-- ====== Pricing Section Start -->
+    <style>
+    /* Ribbon position fixed at -8px */
+    .ribbon-img-outside {
+        position: absolute;
+        top: -8px;  
+        left: -8px; 
+        width: 80px; 
+        z-index: 50;
+        pointer-events: none;
+    }
+
+    /* Distinct Box Style for Credits */
+    .credits-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+    }
+
+    /* Regular price strikethrough styling */
+    .regular-price {
+        font-size: 0.9em;
+        color: #9ca3af;
+        text-decoration: line-through;
+        font-weight: 500;
+        margin-bottom: 6px;
+    }
+
+    /* Hover Glow Effect for Cards */
+    .pkg-card {
+        transition: all 0.3s ease-in-out;
+        border: 1px solid rgba(255, 255, 255, 0.1); /* Default Subtle Border */
+    }
+
+    .pkg-card:hover {
+        /* Purple Glow Effect */
+        box-shadow: 0 0 30px rgba(160, 115, 238, 0.25); 
+        border-color: #a073ee; /* Purple Border on Hover */
+        transform: translateY(-5px); /* Slight Lift Up */
+    }
+</style>
+
+<section id="pricing" class="relative z-20 pt-22.5 lg:pt-27.5 xl:pt-32.5 scroll-mt-17">
+    <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
+        
+        <div class="wow fadeInUp mb-17.5 -mt-24 text-center z-10 relative" style="visibility: visible;">
+            <span class="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+                <img src="./Source_Files/icon-title.svg" alt="icon">
+                <span class="hero-subtitle-text"> Get access </span>
+            </span>
+            <h2 class="text-white mb-4.5 text-2xl font-extrabold sm:text-4xl xl:text-heading-2">
+                Our Pricing Plan
+            </h2>
+            <p class="max-w-[714px] mx-auto font-medium">
+                Choose the perfect plan for your needs. Automated metadata generation for professionals.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5" id="pricingGrid">
+            
+            <div class="pkg-card wow fadeInUp rounded-3xl bg-dark relative z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border cursor-default" 
+                 data-package="Starter" data-price="150" style="visibility: visible;">
+                
+                <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
+                <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
+                
+                <h3 class="font-semibold text-heading-6 text-white mb-2">Starter</h3>
+                
+                <div class="flex items-end gap-2">
+                    <span class="regular-price">৳200</span>
+                    <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳150</h2>
+                    <p class="font-medium text-gray-400 mb-1.5">/ 1 Month</p>
+                </div>
+
+                <div class="credits-box">
+                    <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
+                    <span class="font-bold text-white text-xl">2,000</span>
+                    <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
+                </div>
+
+                <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
+                
+                <ul class="flex flex-col gap-1.5">
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">No Personal API Required</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">User-Friendly Dark UI</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                </ul>
+                <div class="h-10"></div>
+                <a href="checkout.html?package=Starter&price=150&credits=2000" class="mt-20 w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    Get this Plan
+                </a>
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
+            </div>
+
+            <div class="pkg-card wow fadeInUp rounded-3xl bg-dark relative z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border cursor-default" 
+                 data-package="Beginner" data-price="200" style="visibility: visible;">
+                
+                <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
+                <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
+                
+                <h3 class="font-semibold text-heading-6 text-white mb-2">Beginner</h3>
+                
+                <div class="flex items-end gap-2">
+                    <span class="regular-price">৳300</span>
+                    <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳200</h2>
+                    <p class="font-medium text-gray-400 mb-1.5">/ 1 Month</p>
+                </div>
+
+                <div class="credits-box">
+                    <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
+                    <span class="font-bold text-white text-xl">3,500</span>
+                    <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
+                </div>
+
+                <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
+                
+                <ul class="flex flex-col gap-1.5">
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">No Personal API Required</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">User-Friendly Dark UI</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                </ul>
+                <div class="h-10"></div>
+                <a href="checkout.html?package=Beginner&price=200&credits=3500" class="mt-20 w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    Get this Plan
+                </a>
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
+            </div>
+
+            <div class="pkg-card wow fadeInUp rounded-3xl bg-dark relative z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border cursor-default" 
+                 data-package="Professional" data-price="400" style="visibility: visible;">
+                
+                <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
+                <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
+                
+                <h3 class="font-semibold text-heading-6 text-white mb-2">Professional</h3>
+                
+                <div class="flex items-end gap-2">
+                    <span class="regular-price">৳600</span>
+                    <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳400</h2>
+                    <p class="font-medium text-gray-400 mb-1.5">/ 2 Months</p>
+                </div>
+
+                <div class="credits-box">
+                    <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
+                    <span class="font-bold text-white text-xl">6,000</span>
+                    <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
+                </div>
+
+                <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
+                
+                <ul class="flex flex-col gap-1.5">
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">No Personal API Required</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">User-Friendly Dark UI</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                </ul>
+                <div class="h-10"></div>                
+                <a href="checkout.html?package=Professional&price=400&credits=6000" class="mt-20 w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    Get this Plan
+                </a>
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
+            </div>
+
+            <div class="pkg-card wow fadeInUp rounded-3xl bg-dark relative z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border cursor-default" 
+                 data-package="Ultimate" data-price="700" style="visibility: visible;">
+                
+                <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
+                <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
+                
+                <h3 class="font-semibold text-heading-6 text-white mb-2">Ultimate</h3>
+                
+                <div class="flex items-end gap-2">
+                    <span class="regular-price">৳1000</span>
+                    <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳700</h2>
+                    <p class="font-medium text-gray-400 mb-1.5">/ 3 Months</p>
+                </div>
+
+                <div class="credits-box">
+                    <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
+                    <span class="font-bold text-white text-xl">10,000</span>
+                    <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
+                </div>
+
+                <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
+                
+                <ul class="flex flex-col gap-1.5">
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">No Personal API Required</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">User-Friendly Dark UI</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                </ul>
+                <div class="h-10"></div>
+                <a href="checkout.html?package=Ultimate&price=700&credits=10000" class="mt-20 w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    Get this Plan
+                </a>
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
+            </div>
+
+            <div class="pkg-card wow fadeInUp rounded-3xl bg-dark relative z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border cursor-default" 
+                 data-package="Corporate" data-price="1000" style="visibility: visible;">
+                
+                <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
+                <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
+                
+                <h3 class="font-semibold text-heading-6 text-white mb-2">Corporate</h3>
+                
+                <div class="flex items-end gap-2">
+                    <span class="regular-price">৳1400</span>
+                    <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1000</h2>
+                    <p class="font-medium text-gray-400 mb-1.5">/6 Months</p>
+                </div>
+
+                <div class="credits-box">
+                    <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
+                    <span class="font-bold text-white text-xl">20,000</span>
+                    <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
+                </div>
+
+                <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
+                
+                <ul class="flex flex-col gap-1.5">
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">No Personal API Required</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">User-Friendly Dark UI</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                </ul>
+                <div class="h-10"></div>
+                <a href="checkout.html?package=Corporate&price=1000&credits=20000" class="mt-20 w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    Get this Plan
+                </a>
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
+            </div>
+
+            <div class="pkg-card wow fadeInUp rounded-3xl bg-dark relative z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border cursor-default" 
+                 data-package="Enterprise" data-price="1700" style="visibility: visible;">
+                
+                <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
+                <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
+                
+                <h3 class="font-semibold text-heading-6 text-white mb-2">Enterprise</h3>
+                
+                <div class="flex items-end gap-2">
+                    <span class="regular-price">৳2300</span>
+                    <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1700</h2>
+                    <p class="font-medium text-gray-400 mb-1.5">/ 1 Year</p>
+                </div>
+
+                <div class="credits-box">
+                    <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
+                    <span class="font-bold text-white text-xl">35,000</span>
+                    <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
+                </div>
+
+                <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
+                
+                <ul class="flex flex-col gap-1.5">
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">No Personal API Required</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">User-Friendly Dark UI</span></li>
+                    <li class="flex items-center gap-3"><img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-4"><span class="font-medium text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                </ul>
+                <div class="h-10"></div>
+                <a href="checkout.html?package=Enterprise&price=1700&credits=35000" class="mt-20 w-full flex items-center justify-center gap-1.5 font-medium text-white p-3 rounded-lg transition-all ease-in-out duration-300 relative pricing-button-gradient hover:shadow-button cursor-pointer hover:scale-105">
+                    Get this Plan
+                </a>
+                <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
+            </div>
+
+        </div>
+    </div>
+</section>
+    <!-- ====== Pricing Section End -->
+	
+	<!-- ===== features grid Section Start ===== -->
+    <section id="features" class="overflow-hidden pt-17.5 lg:pt-22.5 xl:pt-27.5 scroll-mt-17">
+      <div class="max-w-[1222px] mx-auto px-4 sm:px-8 xl:px-0">
+        <!-- Section Title -->
+        <div class="wow fadeInUp text-center" style="visibility: visible;">
+          <span class="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+            <img src="./Source_Files/icon-title.svg" alt="icon">
+
+            <span class="hero-subtitle-text"> Some of Main Features </span>
+          </span>
+          <h2 class="text-white mb-4.5 text-2xl font-extrabold sm:text-4xl xl:text-heading-2">
+            Key Features of Our Meta Injector ᴾʳᵒ Tool
+          </h2>
+          <p class="max-w-[714px] mx-auto mb-5 font-medium">
+            Instantly create compelling, keyword-rich metadata tailored for microstock platforms and search engines to boost your sales.
+          </p>
+        </div>
+
+        <div class="relative">
+          <div class="features-row-border rotate-90 w-1/2 h-[1px] absolute top-1/2 left-1/2 -translate-y-1/2 lg:-translate-x-1/3 lg:left-1/4 hidden lg:block">
+          </div>
+          <div class="features-row-border rotate-90 w-1/2 h-[1px] absolute top-1/2 right-1/2 -translate-y-1/2 lg:right-[8.3%] hidden lg:block">
+          </div>
+
+          <!--=== Features Row ===-->
+          <div class="flex flex-wrap justify-center">
+            <!-- Features Item -->
+            <div class="w-full sm:w-1/2 lg:w-1/3">
+              <div class="group relative overflow-hidden text-center py-8 sm:py-10 xl:py-15 px-4 lg:px-8 xl:px-13">
+                <span class="group-hover:opacity-100 opacity-0 features-bg absolute w-full h-full left-0 top-0 -z-1"></span>
+                <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-8 mx-auto">
+                  <img src="./Source_Files/icon-01.svg" alt="icon">
+                </span>
+                <h4 class="font-semibold text-lg text-white mb-4">
+                  AI Based Metadata Generation
+                </h4>
+                <p class="font-medium">
+                  Generate SEO-optimized keywords instantly using advanced Ai Model.
+                </p>
+              </div>
+            </div>
+
+            <!-- Features Item -->
+            <div class="w-full sm:w-1/2 lg:w-1/3">
+              <div class="group relative overflow-hidden text-center py-8 sm:py-10 xl:py-15 px-4 lg:px-8 xl:px-13">
+                <span class="group-hover:opacity-100 opacity-0 features-bg absolute w-full h-full left-0 top-0 -z-1"></span>
+                <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-8 mx-auto">
+                  <img src="./Source_Files/icon-02.svg" alt="icon">
+                </span>
+                <h4 class="font-semibold text-lg text-white mb-4">
+                  Bulk Metadata Injection
+                </h4>
+                <p class="font-medium">
+                  Process hundreds of files at once, from JPGs to complex EPS vector files.
+                </p>
+              </div>
+            </div>
+
+            <!-- Features Item -->
+            <div class="w-full sm:w-1/2 lg:w-1/3">
+              <div class="group relative overflow-hidden text-center py-8 sm:py-10 xl:py-15 px-4 lg:px-8 xl:px-13">
+                <span class="group-hover:opacity-100 opacity-0 features-bg absolute w-full h-full left-0 top-0 -z-1"></span>
+                <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-8 mx-auto">
+                  <img src="./Source_Files/icon-03.svg" alt="icon">
+                </span>
+                <h4 class="font-semibold text-lg text-white mb-4">
+                  Vector & Video Support
+                </h4>
+                <p class="font-medium">
+                  Full compatibility with professional formats like AI, EPS, MP4, and MKV.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="features-row-border w-full h-[1px]"></div>
+
+          <!--=== Features Row ===-->
+          <div class="flex flex-wrap justify-center">
+            <!-- Features Item -->
+            <div class="w-full sm:w-1/2 lg:w-1/3">
+              <div class="group relative overflow-hidden text-center py-8 sm:py-10 xl:py-15 px-4 lg:px-8 xl:px-13">
+                <span class="group-hover:opacity-100 opacity-0 features-bg absolute w-full h-full left-0 top-0 -z-1 rotate-180"></span>
+                <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-8 mx-auto">
+                  <img src="./Source_Files/icon-04.svg" alt="icon">
+                </span>
+                <h4 class="font-semibold text-lg text-white mb-4">
+                  Microstock SEO Engine
+                </h4>
+                <p class="font-medium">
+                  Built-in algorithms designed specifically to boost ranking on platforms like Adobe Stock and Shutterstock.
+                </p>
+              </div>
+            </div>
+
+            <!-- Features Item -->
+            <div class="w-full sm:w-1/2 lg:w-1/3">
+              <div class="group relative overflow-hidden text-center py-8 sm:py-10 xl:py-15 px-4 lg:px-8 xl:px-13">
+                <span class="group-hover:opacity-100 opacity-0 features-bg absolute w-full h-full left-0 top-0 -z-1 rotate-180"></span>
+                <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-8 mx-auto">
+                  <img src="./Source_Files/icon-01.svg" alt="icon">
+                </span>
+                <h4 class="font-semibold text-lg text-white mb-4">
+                  Workflow Efficiency
+                </h4>
+                <p class="font-medium">
+                  Reduce manual work by 90%, allowing you to focus more on your creative process.
+                </p>
+              </div>
+            </div>
+
+            <!-- Features Item -->
+            <div class="w-full sm:w-1/2 lg:w-1/3">
+              <div class="group relative overflow-hidden text-center py-8 sm:py-10 xl:py-15 px-4 lg:px-8 xl:px-13">
+                <span class="group-hover:opacity-100 opacity-0 features-bg absolute w-full h-full left-0 top-0 -z-1 rotate-180"></span>
+                <span class="icon-border relative max-w-[80px] w-full h-20 rounded-full inline-flex items-center justify-center mb-8 mx-auto">
+                  <img src="./Source_Files/icon-06.svg" alt="icon">
+                </span>
+                <h4 class="font-semibold text-lg text-white mb-4">
+                  Intelligent Descriptions
+                </h4>
+                <p class="font-medium">
+                  Create compelling, accurate descriptions that attract buyers and improve click-through rates.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ===== features grid Section End ===== -->
+
+    <!-- ====== User Section Start -->
+    <section x-data="{ 'showContent': false, 'scrollContent': false, }" class="relative z-20 overflow-hidden pt-10 lg:pt-12 xl:pt-15 2xl:pt-20 pb-20">
+    <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
+        <div class="wow fadeInUp mb-15 text-center" style="visibility: visible;">
+            <span class="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+                <img src="./Source_Files/icon-title.svg" alt="icon">
+                <span class="hero-subtitle-text"> Wall of love </span>
+            </span>
+            <h2 class="text-white mb-4.5 text-2xl font-extrabold sm:text-4xl xl:text-heading-2">
+                What Our User Says
+            </h2>
+            <p class="max-w-[714px] mx-auto font-medium">
+                Empowering your vision with AI-driven metadata precision. Turn your creative content into global success with intelligent SEO, making your portfolio discoverable and your workflow effortless.
+            </p>
+        </div>
+
+        <div @scroll.window="scrollContent = (scrollY > $el.offsetTop - 500) ? true : false" 
+             :class="{ 'max-h-[855px] overflow-hidden' : !showContent }" 
+             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5 transition-all duration-500">
+            
+            <div class="space-y-7.5">
+                <div class="user-border-gradient relative overflow-hidden px-8 py-9 rounded-[19px]">
+                    <div class="flex items-center gap-4.5">
+                        <div class="max-w-[48px] w-full h-12 rounded-full"><img src="./Source_Files/user-01.png" alt="user"></div>
+                        <div><h5 class="text-white text-sm font-medium">Machel Pildium</h5><p class="font-medium text-sm">@machel</p></div>
+                    </div>
+                    <div class="user-divider relative my-6 w-full h-[1px]"></div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
+                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden"><span class="absolute right-0 bottom-0 -z-1"><img src="./Source_Files/blur-18.svg" alt="blur" class="max-w-none"></span></div>
+                </div>
+
+                <div class="user-border-gradient relative overflow-hidden px-8 py-9 rounded-[19px]">
+                    <div class="flex items-center gap-4.5">
+                        <div class="max-w-[48px] w-full h-12 rounded-full"><img src="./Source_Files/user-02.png" alt="user"></div>
+                        <div><h5 class="text-white text-sm font-medium">Wilson Bator</h5><p class="font-medium text-sm">@wilson</p></div>
+                    </div>
+                    <div class="user-divider relative my-6 w-full h-[1px]"></div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
+                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden"><span class="absolute right-0 bottom-0 -z-1"><img src="./Source_Files/blur-18.svg" alt="blur" class="max-w-none"></span></div>
+                </div>
+            </div>
+
+            <div class="space-y-7.5">
+                <div class="user-border-gradient relative overflow-hidden px-8 py-9 rounded-[19px]">
+                    <div class="flex items-center gap-4.5">
+                        <div class="max-w-[48px] w-full h-12 rounded-full"><img src="./Source_Files/user-04.png" alt="user"></div>
+                        <div><h5 class="text-white text-sm font-medium">Adison Dias</h5><p class="font-medium text-sm">@adison</p></div>
+                    </div>
+                    <div class="user-divider relative my-6 w-full h-[1px]"></div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
+                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden"><span class="absolute right-0 bottom-0 -z-1"><img src="./Source_Files/blur-18.svg" alt="blur" class="max-w-none"></span></div>
+                </div>
+
+                <div class="user-border-gradient relative overflow-hidden px-8 py-9 rounded-[19px]">
+                    <div class="flex items-center gap-4.5">
+                        <div class="max-w-[48px] w-full h-12 rounded-full"><img src="./Source_Files/user-05.png" alt="user"></div>
+                        <div><h5 class="text-white text-sm font-medium">Abram Lipshutz</h5><p class="font-medium text-sm">@abram</p></div>
+                    </div>
+                    <div class="user-divider relative my-6 w-full h-[1px]"></div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
+                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden"><span class="absolute right-0 bottom-0 -z-1"><img src="./Source_Files/blur-18.svg" alt="blur" class="max-w-none"></span></div>
+                </div>
+            </div>
+
+            <div class="space-y-7.5">
+                <div class="user-border-gradient relative overflow-hidden px-8 py-9 rounded-[19px]">
+                    <div class="flex items-center gap-4.5">
+                        <div class="max-w-[48px] w-full h-12 rounded-full"><img src="./Source_Files/user-07.png" alt="user"></div>
+                        <div><h5 class="text-white text-sm font-medium">Zain Franci</h5><p class="font-medium text-sm">@zain</p></div>
+                    </div>
+                    <div class="user-divider relative my-6 w-full h-[1px]"></div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
+                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden"><span class="absolute right-0 bottom-0 -z-1"><img src="./Source_Files/blur-18.svg" alt="blur" class="max-w-none"></span></div>
+                </div>
+
+                <div class="user-border-gradient relative overflow-hidden px-8 py-9 rounded-[19px]">
+                    <div class="flex items-center gap-4.5">
+                        <div class="max-w-[48px] w-full h-12 rounded-full"><img src="./Source_Files/user-08.png" alt="user"></div>
+                        <div><h5 class="text-white text-sm font-medium">Cristofer Carder</h5><p class="font-medium text-sm">@cristofer</p></div>
+                    </div>
+                    <div class="user-divider relative my-6 w-full h-[1px]"></div>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.</p>
+                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden"><span class="absolute right-0 bottom-0 -z-1"><img src="./Source_Files/blur-18.svg" alt="blur" class="max-w-none"></span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div :class="[ showContent ? 'sticky -u-mt-52 transition-opacity duration-300 opacity-0' : '', scrollContent ? '!opacity-100' : '' ]" class="inset-x-0 bottom-20 flex justify-center bg-gradient-to-t from-dark pt-32 pb-8 pointer-events-none absolute !opacity-100">
+            <button :class="[ showContent ? 'transition-transform translate-y-4' : '', scrollContent ? 'translate-y-0' : '' ]" @click="showContent = !showContent" type="button" class="button-border-gradient hover:button-gradient-hover relative top-20 text-sm text-white font-semibold px-4.5 py-3 rounded-lg pointer-events-auto flex mx-auto -mt-7.5 ease-in duration-300 translate-y-0">
+                <span x-text="showContent ? 'Okay, I get the point' : 'Show more...'">Show more...</span>
+            </button>
+        </div>
+    </div>
+</section>
+    <!-- ====== User Section End -->
+
+    <!-- ====== Clients Section Start -->
+    <section class="py-19">
+      <div class="max-w-[1104px] mx-auto px-4 sm:px-8 xl:px-0">
+        <div class="relative overflow-hidden z-10">
+          <span class="max-w-[128px] w-full h-[37px] block inset-0 pointer-events-none absolute z-10 left-0 top-1/2 -translate-y-1/2 bg-gradient-to-l from-dark/0 to-dark/100"></span>
+          <span class="max-w-[128px] w-full h-[37px] block inset-0 pointer-events-none absolute z-10 left-auto top-1/2 -translate-y-1/2 bg-gradient-to-r from-dark/0 to-dark/100"></span>
+          <div class="swiper clients-carousel swiper-initialized swiper-horizontal">
+            <div class="swiper-wrapper items-center select-none !ease-linear" style="transform: translate3d(-632px, 0px, 0px); transition-duration: 5000ms;">
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="0" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-01.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="1" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-02.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="2" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-03.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-prev" data-swiper-slide-index="3" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-04.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-active" data-swiper-slide-index="4" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-05.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-next" data-swiper-slide-index="5" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-06.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="6" style="margin-right: 64px;">
+                <a href="#">
+                  <img class="mt-3" src="./Source_Files/client-07.svg" alt="client">
+                </a>
+              </div>
+			  
+			  
+
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="0" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-01.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="1" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-02.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="2" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-03.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-prev" data-swiper-slide-index="3" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-04.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-active" data-swiper-slide-index="4" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-05.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-next" data-swiper-slide-index="5" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-06.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="6" style="margin-right: 64px;">
+                <a href="#">
+                  <img class="mt-3" src="./Source_Files/client-07.svg" alt="client">
+                </a>
+              </div>
+			  
+			  
+
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="0" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-01.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="1" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-02.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="2" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-03.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-prev" data-swiper-slide-index="3" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-04.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-active" data-swiper-slide-index="4" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-05.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto swiper-slide-next" data-swiper-slide-index="5" style="margin-right: 64px;">
+                <a href="#">
+                  <img src="./Source_Files/client-06.svg" alt="client">
+                </a>
+              </div>
+              <div class="swiper-slide !w-auto" data-swiper-slide-index="6" style="margin-right: 64px;">
+                <a href="#">
+                  <img class="mt-3" src="./Source_Files/client-07.svg" alt="client">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ====== Clients Section End -->
+
+    <!-- ====== Support Section Start -->
+    <section id="support" class="scroll-mt-17">
+      <div class="max-w-[1104px] mx-auto px-4 sm:px-8 xl:px-0">
+        <div class="relative z-999 overflow-hidden rounded-[30px] bg-dark pt-25 px-4 sm:px-20 lg:px-27.5">
+          <div class="flex justify-center gap-7.5 absolute left-1/2 -translate-x-1/2 -top-[16%] max-w-[690px] w-full -z-1 opacity-40">
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border bottom-12"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border bottom-7"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border bottom-3"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border bottom-2"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border bottom-5"></div>
+            <div class="max-w-[50px] w-full h-[250px] relative pricing-grid pricing-grid-border bottom-8"></div>
+          </div>
+
+          <div class="max-w-[482px] w-full h-60 overflow-hidden absolute -z-1 -top-30 left-1/2 -translate-x-1/2">
+            <div class="stars"></div>
+            <div class="stars2"></div>
+          </div>
+
+          <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden">
+            <span class="absolute left-1/2 top-0 -translate-x-1/2 -z-1">
+              <img src="./Source_Files/blur-19.svg" alt="blur" class="max-w-none">
+            </span>
+            <span class="absolute left-1/2 top-0 -translate-x-1/2 -z-1">
+              <img src="./Source_Files/blur-20.svg" alt="blur" class="max-w-none">
+            </span>
+            <span class="absolute left-1/2 top-0 -translate-x-1/2 -z-1">
+              <img src="./Source_Files/blur-21.svg" alt="blur" class="max-w-none">
+            </span>
+          </div>
+
+          <div class="wow fadeInUp mb-16 text-center relative z-999" style="visibility: hidden; animation-name: none;">
+            <span class="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+              <img src="./Source_Files/icon-title.svg" alt="icon">
+              <span class="hero-subtitle-text"> Need Any Help? </span>
+            </span>
+            <h2 class="text-white mb-4.5 text-2xl font-extrabold sm:text-4xl xl:text-heading-2">
+              Contact With Us
+            </h2>
+            <p class="max-w-[714px] mx-auto font-medium">
+              Meta Injector ᴾʳᵒ leverages advanced AI to generate and inject high-performing SEO metadata into your creative files, ensuring maximum visibility on global microstock platforms.
+            </p>
+          </div>
+
+          <div class="form-box-gradient relative overflow-hidden rounded-[25px] bg-dark p-6 sm:p-8 xl:p-15">
+            <form action="https://formspree.io/f/mjgkbady" method="POST" class="relative z-10">
+              <div class="-mx-4 xl:-mx-10 flex flex-wrap">
+                
+                <div class="w-full px-4 xl:px-5 md:w-1/2">
+                  <div class="mb-9.5">
+                    <label for="name" class="text-white mb-2.5 block font-medium">Name</label>
+                    <input id="name" type="text" name="name" placeholder="Enter your Name" required class="rounded-lg border border-white/[0.12] bg-white/[0.05] focus:border-purple w-full py-3 px-6 outline-none text-white">
+                  </div>
+                </div>
+
+                <div class="w-full px-4 xl:px-5 md:w-1/2">
+                  <div class="mb-9.5">
+                    <label for="email" class="text-white mb-2.5 block font-medium">Email</label>
+                    <input id="email" type="email" name="email" placeholder="Enter your Email" required class="rounded-lg border border-white/[0.12] bg-white/[0.05] focus:border-purple w-full py-3 px-6 outline-none text-white">
+                  </div>
+                </div>
+
+                <div class="w-full px-4 xl:px-5">
+                  <div class="mb-10">
+                    <label for="message" class="text-white mb-2.5 block font-medium">Message</label>
+                    <textarea id="message" name="message" placeholder="Type your message" rows="6" required class="rounded-lg border border-white/[0.12] bg-white/[0.05] focus:border-purple w-full py-5 px-6 outline-none text-white"></textarea>
+                  </div>
+                </div>
+
+                <div class="w-full px-4 xl:px-5">
+                  <div class="text-center">
+                    <button type="submit" class="hero-button-gradient inline-flex rounded-lg py-3 px-7 text-white font-medium ease-in duration-300 hover:opacity-80 cursor-pointer">
+                      Send Message
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ====== Support Section End -->
+
+    <!-- ====== CTA Section Start -->
+    <section>
+      <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
+        <div class="cta-box-gradient bg-dark rounded-[30px] relative overflow-hidden px-4 py-20 lg:py-25 z-999">
+          <!-- bg shapes -->
+          <span class="absolute bottom-0 left-0 -z-1"><img src="./Source_Files/grid.svg" alt="grid"></span>
+          <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden">
+            <span class="absolute left-1/2 bottom-0 -translate-x-1/2 -z-1">
+              <img src="./Source_Files/blur-22.svg" alt="blur" class="max-w-none">
+            </span>
+            <span class="absolute left-1/2 bottom-0 -translate-x-1/2 -z-1">
+              <img src="./Source_Files/blur-23.svg" alt="blur" class="max-w-none">
+            </span>
+            <span class="absolute left-1/2 bottom-0 -translate-x-1/2 -z-1">
+              <img src="./Source_Files/blur-24.svg" alt="blur" class="max-w-none">
+            </span>
+          </div>
+
+          <!-- stars -->
+          <div class="max-w-[482px] w-full h-60 overflow-hidden absolute -z-1 -bottom-25 left-1/2 -translate-x-1/2">
+            <div class="stars"></div>
+            <div class="stars2"></div>
+          </div>
+
+          <div class="wow fadeInUp text-center" style="visibility: hidden; animation-name: none;">
+            <span class="hero-subtitle-gradient relative mb-4 font-medium text-sm inline-flex items-center gap-2 py-2 px-4.5 rounded-full">
+              <img src="./Source_Files/icon-title.svg" alt="icon">
+
+              <span class="hero-subtitle-text">
+                Try our tool for Free
+              </span>
+            </span>
+            <h2 class="text-white mb-4.5 text-2xl font-extrabold sm:text-4xl xl:text-heading-2">
+              What are you waiting for?
+            </h2>
+            <p class="max-w-[714px] mx-auto font-medium mb-9">
+              Meta Injector Pro is designed to empower you with AI-driven metadata precision, making the microstock SEO and injection process faster, more accurate, and effortless.
+            </p>
+
+            <a href="checkout.html?package=Free Trial&price=0&credits=50" class="hero-button-gradient inline-flex rounded-lg py-3 px-7 text-white font-medium ease-in duration-300 hover:opacity-80">
+              Get Started for Free
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ====== CTA Section End -->
+
+  <!-- ===== Footer Start ===== -->
+  <!-- ====== Footer Section Start -->
+<footer class="relative z-10 pb-17.5 lg:pb-22.5 xl:pb-27.5">
+  <!-- bg shapes -->
+  <div class="absolute bottom-0 left-0 w-full flex flex-col gap-3 -z-1 opacity-50">
+    <div class="w-full h-[1.24px] footer-bg-gradient"></div>
+    <div class="w-full h-[2.47px] footer-bg-gradient"></div>
+    <div class="w-full h-[3.71px] footer-bg-gradient"></div>
+    <div class="w-full h-[4.99px] footer-bg-gradient"></div>
+    <div class="w-full h-[6.19px] footer-bg-gradient"></div>
+    <div class="w-full h-[7.42px] footer-bg-gradient"></div>
+    <div class="w-full h-[8.66px] footer-bg-gradient"></div>
+    <div class="w-full h-[9.90px] footer-bg-gradient"></div>
+    <div class="w-full h-[13px] footer-bg-gradient"></div>
+  </div>
+
+  <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 relative pt-17.5">
+    <div class="w-full h-[1px] footer-divider-gradient absolute top-0 left-0"></div>
+
+    <div class="flex flex-wrap justify-between">
+      <div class="mb-10 max-w-[571px] w-full">
+        <a class="mb-8.5 inline-block" href="https://ai-tool-tailwind.preview.uideck.com/index.html">
+          <img src="./Source_Files/logo.svg" alt="Logo">
+        </a>             
+        <p class="font-medium mt-5.5">
+          Meta Injector ᴾʳᵒ 2026. All rights reserved.
+        </p>
+      </div>                 
+    </div>
+  </div>
+</footer>
+<!-- ====== Footer Section End -->
+  <!-- ===== Footer End ===== -->
+
+  <!-- ====== Back To Top Start ===== -->
+  <button class="hidden items-center justify-center w-10 h-10 rounded-[4px] shadow-solid-5 bg-purple hover:opacity-70 fixed bottom-8 right-8 z-999" @click="window.scrollTo({top: 0, behavior: &#39;smooth&#39;})" @scroll.window="scrollTop = (window.pageYOffset &gt; 50) ? true : false" :class="{ &#39;!flex&#39; : scrollTop }">
+  <svg class="fill-white w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <path d="M233.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L256 173.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"></path>
+  </svg>
+</button>
+  <!-- ====== Back To Top End ===== -->
+<script defer="" src="./Source_Files/bundle.js.download"></script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f0b597887eded3',t:'MTc1Nzg2MTU1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./Source_Files/saved_resource.html"></iframe><script defer="" src="./Source_Files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;9a6015d415bb4773a0bff22543062d3b&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+</body></html>

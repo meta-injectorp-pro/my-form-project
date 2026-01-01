@@ -5,169 +5,245 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - Meta Injector Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="./Source_Files/favicon.ico">
+
+    <link href="./Source_Files/style.css" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #0F0A1E; color: #e0e0e0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #e0e0e0; }
+        
+        /* Glass Effect */
+        .glass-panel {
+            background: rgba(21, 13, 36, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
         .custom-input {
             width: 100%; padding: 14px 16px;
             background-color: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px; color: white; transition: all 0.3s;
+            border-radius: 10px; color: white; transition: all 0.3s;
         }
         .custom-input:focus {
             outline: none; border-color: #8A4DFF;
-            box-shadow: 0 0 0 3px rgba(138, 77, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(138, 77, 255, 0.15);
             background-color: rgba(255, 255, 255, 0.07);
         }
+        
         .warning-message { color: #ff4d4d; font-size: 13px; margin-top: 6px; display: none; font-weight: 500; }
         .visible { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        /* Hide number input arrows */
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        /* === NEW PAYMENT CARD STYLE === */
+        .payment-card { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            opacity: 1; /* Always visible */
+            filter: grayscale(0%); /* Always colorful */
+        }
+        
+        /* Hover State */
+        .payment-card:hover {
+            border-color: rgba(138, 77, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Selected State */
+        input[type="radio"]:checked + .payment-card { 
+            border-color: #8A4DFF; 
+            background: rgba(138, 77, 255, 0.15); 
+            box-shadow: 0 0 20px rgba(138, 77, 255, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Button Hover Glow */
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(138, 77, 255, 0.6);
+        }
     </style>
 </head>
 
-<body class="antialiased overflow-x-hidden">
+<body class="antialiased overflow-x-hidden bg-[#0F0A1E]">
 
-    <nav class="fixed w-full z-40 top-0 start-0 border-b border-white/10 bg-[#0F0A1E]/80 backdrop-blur-md">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <a href="index.html" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <img src="logo.svg" class="h-10 w-auto" alt="Logo">
-                <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Meta Injector Pro</span>
+    <div class="fixed inset-0 pointer-events-none -z-10">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-[128px]"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-900/20 rounded-full blur-[128px]"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/5 bg-[#0F0A1E]/80 backdrop-blur-xl">
+        <div class="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4 px-6">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="./Source_Files/logo.svg" class="h-10 w-auto hover:opacity-80 transition" alt="Meta Injector Pro">
             </a>
-            <a href="index.html" class="text-gray-400 hover:text-white transition">Back to Home</a>
+            <a href="index.html" class="text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Home
+            </a>
         </div>
     </nav>
 
     <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex flex-col items-center justify-center">
         
-        <div id="success-view" class="hidden max-w-2xl w-full text-center fade-in">
-            <div class="bg-[#150d24] border border-white/10 rounded-2xl p-10 shadow-2xl">
-                <div class="mb-6 flex justify-center">
-                    <div class="h-24 w-24 bg-green-500/20 rounded-full flex items-center justify-center">
-                        <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
+        <div id="success-view" class="hidden max-w-2xl w-full text-center fade-in-up">
+            <div class="glass-panel rounded-3xl p-12 shadow-2xl relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent opacity-50"></div>
+                
+                <div class="relative z-10">
+                    <div class="mb-8 flex justify-center">
+                        <div class="h-24 w-24 bg-gradient-to-tr from-purple-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30 animate-pulse">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
                     </div>
+                    <h2 class="text-4xl font-bold text-white mb-4">Success!</h2>
+                    <p class="text-gray-300 text-lg mb-8 max-w-lg mx-auto leading-relaxed">
+                        Your request has been submitted securely. Please check your email inbox for further instructions and license activation.
+                    </p>
+                    <a href="index.html" class="inline-flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 font-bold py-4 px-10 rounded-xl transition duration-300 transform hover:scale-105">
+                        Back to Home
+                    </a>
                 </div>
-                <h2 class="text-3xl font-bold text-white mb-4">Request Submitted!</h2>
-                <p class="text-gray-300 text-lg mb-8">
-                    Thank you for your request. Our team will review and activate your license shortly.
-                    <br><span class="text-sm text-gray-500 mt-2 block">Check your email for confirmation.</span>
-                </p>
-                <a href="index.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300">
-                    Back to Home
-                </a>
             </div>
         </div>
 
-        <div id="checkout-grid" class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-10">
+        <div id="checkout-grid" class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             
-            <div class="lg:col-span-2 fade-in" style="animation-delay: 0.1s;">
-                <div class="bg-[#150d24] border border-white/10 rounded-2xl p-8 sticky top-32">
-                    <h3 class="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4">Order Summary</h3>
+            <div class="lg:col-span-4 fade-in-up" style="animation-delay: 0.1s;">
+                <div class="glass-panel rounded-2xl p-8 sticky top-32">
+                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        Order Summary
+                    </h3>
                     
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-gray-400">Package</span>
-                        <span id="pkgName" class="text-purple-400 font-bold text-lg">Starter</span>
-                    </div>
-
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-gray-400">Credits</span>
-                        <span id="pkgCredits" class="text-white font-medium">2,000</span>
-                    </div>
-
-                    <div class="flex justify-between items-center mb-4 bg-white/5 p-3 rounded-lg border border-white/10">
-                        <span class="text-gray-300">Validity</span>
-                        <span id="pkgDurationDisplay" class="text-yellow-400 font-bold">30 Days</span>
-                    </div>
-
-                    <div class="border-t border-dashed border-white/20 pt-4 mt-4" id="priceRow">
-                        <div class="flex justify-between items-center">
-                            <span class="text-lg font-bold text-white">Total To Pay</span>
-                            <span id="totalPrice" class="text-2xl font-extrabold text-green-400">৳130</span>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/5">
+                            <span class="text-gray-400 text-sm">Package</span>
+                            <span id="pkgName" class="text-purple-400 font-bold text-lg">Starter</span>
                         </div>
+
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-gray-400 text-sm">Credits</span>
+                            <span id="pkgCredits" class="text-white font-medium">2,000</span>
+                        </div>
+
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-gray-400 text-sm">Duration</span>
+                            <span id="pkgDurationDisplay" class="text-yellow-400 font-medium">30 Days</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-dashed border-white/10 pt-6 mt-6" id="priceRow">
+                        <div class="flex justify-between items-end">
+                            <span class="text-gray-400 font-medium">Total</span>
+                            <span id="totalPrice" class="text-3xl font-bold text-white tracking-tight">৳130</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-red-500/5 rounded-lg border border-red-500/10 text-center">
+                        <p class="text-[11px] text-gray-400 leading-relaxed">
+                            <span class="text-red-400 font-bold">Note:</span> 
+                            By confirming, you agree that payments are <span class="text-white">non-refundable</span> under any circumstances.
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <div class="lg:col-span-3 fade-in" style="animation-delay: 0.2s;">
-                <div class="bg-[#150d24] border border-white/10 rounded-2xl p-8">
-                    <h2 class="text-2xl font-bold text-white mb-2">Customer Details</h2>
-                    <p class="text-gray-400 text-sm mb-8">Enter your details to proceed.</p>
+            <div class="lg:col-span-8 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="glass-panel rounded-2xl p-8 md:p-10">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-white mb-2">Customer Details</h2>
+                        <p class="text-gray-400 text-sm">Please fill in your valid information.</p>
+                    </div>
 
                     <form id="checkoutForm">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Full Name</label>
-                                <input type="text" id="fullName" name="FullName" class="custom-input" placeholder="First Last">
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Full Name</label>
+                                <input type="text" id="fullName" name="FullName" class="custom-input" placeholder="e.g. Rahim Ahmed">
                                 <div class="warning-message" id="warnName">Please enter full name (letters only).</div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Phone Number</label>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Phone Number</label>
                                 <input type="tel" id="phone" name="Phone" class="custom-input" placeholder="017XXXXXXXX" maxlength="11">
                                 <div class="warning-message" id="warnPhone">Please enter valid numeric phone number.</div>
                             </div>
                         </div>
 
-                        <div class="mb-8">
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
-                            <input type="email" id="email" name="Email" class="custom-input" placeholder="you@example.com">
+                        <div class="mb-10">
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Email Address</label>
+                            <input type="email" id="email" name="Email" class="custom-input" placeholder="name@example.com">
                             <div class="warning-message" id="warnEmail">Please enter a valid email address.</div>
                         </div>
 
                         <div id="paymentSection">
-                            <div class="mb-8">
-                                <h3 class="text-lg font-bold text-white mb-4 border-b border-white/10 pb-2">Payment Info</h3>
-                                
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Select Payment Method</label>
-                                <div class="grid grid-cols-3 gap-4 mb-4">
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="bKash" class="peer sr-only">
-                                        <div class="p-3 border border-white/20 rounded-lg text-center peer-checked:border-pink-500 peer-checked:bg-pink-500/10 hover:bg-white/5 transition">
-                                            <span class="font-bold text-pink-500">bKash</span>
-                                        </div>
-                                    </label>
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="Nagad" class="peer sr-only">
-                                        <div class="p-3 border border-white/20 rounded-lg text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 hover:bg-white/5 transition">
-                                            <span class="font-bold text-orange-500">Nagad</span>
-                                        </div>
-                                    </label>
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="Rocket" class="peer sr-only">
-                                        <div class="p-3 border border-white/20 rounded-lg text-center peer-checked:border-purple-500 peer-checked:bg-purple-500/10 hover:bg-white/5 transition">
-                                            <span class="font-bold text-purple-500">Rocket</span>
-                                        </div>
-                                    </label>
-                                </div>
+                            <div class="border-t border-white/10 my-8"></div>
+                            
+                            <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                                Payment Method
+                            </h3>
 
-                                <div id="paymentInstruction" class="hidden p-5 bg-gradient-to-r from-gray-900 to-gray-800 border border-white/10 rounded-xl mb-6 text-center shadow-inner">
-                                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-2">Send Money To (Personal)</p>
-                                    <p class="font-mono text-2xl font-bold text-white tracking-wider" id="payNumber">017XXXXXXXX</p>
-                                </div>
+                            <div class="grid grid-cols-3 gap-4 mb-8">
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="payment_method" value="bKash" class="peer sr-only">
+                                    <div class="payment-card h-24 rounded-xl flex items-center justify-center p-4">
+                                        <img src="./Source_Files/bkash.svg" alt="bKash" class="h-10 w-auto object-contain">
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="payment_method" value="Nagad" class="peer sr-only">
+                                    <div class="payment-card h-24 rounded-xl flex items-center justify-center p-4">
+                                        <img src="./Source_Files/nagad.svg" alt="Nagad" class="h-8 w-auto object-contain">
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="payment_method" value="Rocket" class="peer sr-only">
+                                    <div class="payment-card h-24 rounded-xl flex items-center justify-center p-4">
+                                        <img src="./Source_Files/rocket.svg" alt="Rocket" class="h-9 w-auto object-contain">
+                                    </div>
+                                </label>
+                            </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div id="trxGroup" class="hidden md:col-span-2">
-                                        <label class="block text-sm font-medium text-gray-400 mb-2">Transaction ID</label>
-                                        <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase" placeholder="8HGD73...">
-                                        <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
+                            <div id="paymentInstruction" class="hidden animate-fade-in mb-8">
+                                <div class="bg-gradient-to-r from-[#1E1435] to-[#150D24] border border-purple-500/30 rounded-xl p-6 text-center relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 p-2 opacity-20"><svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                                    
+                                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-3">Send Money To (Personal)</p>
+                                    
+                                    <div class="flex items-center justify-center gap-3 mb-2">
+                                        <span id="payNumber" class="text-2xl sm:text-3xl font-mono font-bold text-white tracking-wider">017XXXXXXXX</span>
+                                        <button type="button" id="copyBtn" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition group relative">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                            <span id="copyTooltip" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-0 transition-opacity">Copied!</span>
+                                        </button>
                                     </div>
-                                    <div id="amountGroup" class="hidden md:col-span-2 mt-4">
-                                        <label class="block text-sm font-medium text-gray-400 mb-2">Amount Sent</label>
-                                        <input type="number" id="amountSent" name="AmountSent" class="custom-input" placeholder="e.g. 500">
-                                    </div>
+                                    <p class="text-xs text-gray-500">Click icon to copy number</p>
                                 </div>
+                            </div>
+
+                            <div id="trxGroup" class="hidden animate-fade-in">
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Transaction ID (TrxID)</label>
+                                <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase font-mono tracking-widest text-center border-purple-500/30 focus:border-purple-500" placeholder="e.g. 8HGD73X...">
+                                <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
                             </div>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl text-lg shadow-lg shadow-purple-500/30 transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" id="submitBtn" class="mt-8 w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 btn-glow text-white font-bold rounded-xl text-lg shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                             Confirm Purchase
                         </button>
                         
-                        <div id="statusMsg" class="mt-4 hidden p-4 rounded-lg text-center border"></div>
+                        <div id="statusMsg" class="mt-4 hidden p-4 rounded-lg text-center border text-sm"></div>
 
                     </form>
                 </div>
@@ -175,9 +251,13 @@
         </div>
     </section>
 
+    <footer class="text-center py-8 text-gray-600 text-sm border-t border-white/5">
+        &copy; 2026 Meta Injector Pro. All Rights Reserved.
+    </footer>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Configuration Data (Fallback if URL params are missing)
+            // ================== CONFIGURATION ==================
             const packageDetails = {
                 "Free Trial":   { label: "3 Days",   days: "3", credits: "50" },
                 "Starter":      { label: "1 Month",  days: "30", credits: "2,000" },
@@ -189,37 +269,87 @@
             };
 
             const paymentNumbers = {
-                "bKash": "01729816172",
+                "bKash": "01729816172", // Replace with actual number
                 "Nagad": "01729816172",
                 "Rocket": "01729816172"
             };
 
-            // Parse URL Params
+            // ================== INITIALIZATION ==================
             const params = new URLSearchParams(window.location.search);
             const pkgName = params.get('package') || 'Starter';
-            // Ensure price is handled as number
-            const pkgPrice = params.get('price') ? parseInt(params.get('price')) : (pkgName === 'Free Trial' ? 0 : 130);
+            let pkgPrice = params.get('price') ? parseInt(params.get('price')) : 0;
             
-            // DOM Elements
-            const elPkgName = document.getElementById('pkgName');
-            const elPkgCredits = document.getElementById('pkgCredits');
-            const elPkgDurationDisplay = document.getElementById('pkgDurationDisplay');
-            const elTotalPrice = document.getElementById('totalPrice');
-            const elPriceRow = document.getElementById('priceRow');
-            const paymentSection = document.getElementById('paymentSection');
-            const elPayInstruction = document.getElementById('paymentInstruction');
-            const elPayNumber = document.getElementById('payNumber');
-            const elTrxGroup = document.getElementById('trxGroup');
-            const elAmountGroup = document.getElementById('amountGroup');
-            const elAmountSent = document.getElementById('amountSent');
-            
-            const form = document.getElementById('checkoutForm');
-            const submitBtn = document.getElementById('submitBtn');
-            const statusMsg = document.getElementById('statusMsg');
-            const checkoutGrid = document.getElementById('checkout-grid');
-            const successView = document.getElementById('success-view');
+            // Fix Price for Free Trial URL manual entry
+            if(pkgName === "Free Trial") pkgPrice = 0;
 
-            // Inputs & Warnings
+            // DOM Elements
+            const elements = {
+                pkgName: document.getElementById('pkgName'),
+                pkgCredits: document.getElementById('pkgCredits'),
+                pkgDuration: document.getElementById('pkgDurationDisplay'),
+                totalPrice: document.getElementById('totalPrice'),
+                priceRow: document.getElementById('priceRow'),
+                paymentSection: document.getElementById('paymentSection'),
+                payInstruction: document.getElementById('paymentInstruction'),
+                payNumber: document.getElementById('payNumber'),
+                trxGroup: document.getElementById('trxGroup'),
+                submitBtn: document.getElementById('submitBtn'),
+                checkoutGrid: document.getElementById('checkout-grid'),
+                successView: document.getElementById('success-view'),
+                statusMsg: document.getElementById('statusMsg'),
+                copyBtn: document.getElementById('copyBtn'),
+                copyTooltip: document.getElementById('copyTooltip')
+            };
+
+            // Setup UI Data
+            elements.pkgName.innerText = pkgName;
+            elements.totalPrice.innerText = '৳' + pkgPrice;
+
+            let durationDays = "30";
+            if (packageDetails[pkgName]) {
+                elements.pkgDuration.innerText = packageDetails[pkgName].label;
+                elements.pkgCredits.innerText = packageDetails[pkgName].credits;
+                durationDays = packageDetails[pkgName].days;
+            } else {
+                elements.pkgDuration.innerText = "1 Month";
+                elements.pkgCredits.innerText = params.get('credits') || "--";
+            }
+
+            // ================== FREE TRIAL LOGIC ==================
+            const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
+
+            if (isFreeTrial) {
+                elements.paymentSection.style.display = 'none';
+                elements.priceRow.style.display = 'none';
+                elements.submitBtn.innerText = "Start Your Free Trial";
+                // Default purple gradient kept as requested
+            } else {
+                elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
+            }
+
+            // ================== PAYMENT INTERACTIONS ==================
+            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const method = e.target.value;
+                    if(paymentNumbers[method]) {
+                        elements.payNumber.innerText = paymentNumbers[method];
+                        elements.payInstruction.classList.remove('hidden');
+                        elements.trxGroup.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // Copy Number Logic
+            elements.copyBtn.addEventListener('click', () => {
+                const number = elements.payNumber.innerText;
+                navigator.clipboard.writeText(number).then(() => {
+                    elements.copyTooltip.style.opacity = '1';
+                    setTimeout(() => { elements.copyTooltip.style.opacity = '0'; }, 1500);
+                });
+            });
+
+            // ================== FORM VALIDATION & SUBMIT ==================
+            const form = document.getElementById('checkoutForm');
             const inputs = {
                 name: document.getElementById('fullName'),
                 phone: document.getElementById('phone'),
@@ -233,167 +363,96 @@
                 trx: document.getElementById('warnTrx')
             };
 
-            // 1. Setup UI based on Package (Order Summary Fix)
-            elPkgName.innerText = pkgName;
-            elTotalPrice.innerText = '৳' + pkgPrice;
-
-            // Set Duration & Credits using Fallback Map
-            let durationDays = "30"; 
-            if (packageDetails[pkgName]) {
-                elPkgDurationDisplay.innerText = packageDetails[pkgName].label;
-                elPkgCredits.innerText = packageDetails[pkgName].credits; // Credits Show Fix
-                durationDays = packageDetails[pkgName].days;
-            } else {
-                elPkgDurationDisplay.innerText = "1 Month";
-                elPkgCredits.innerText = params.get('credits') || "--";
-            }
-
-            // CHECK FREE TRIAL (Logic Fix)
-            const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
-
-            if (isFreeTrial) {
-                // Free Trial: Hide Payment Section & Price Row
-                paymentSection.style.display = 'none';
-                elPriceRow.style.display = 'none';
-                // Button Text Fix
-                submitBtn.innerText = "Start Your Free Trial";
-            } else {
-                // Paid: Show Payment Section
-                paymentSection.style.display = 'block';
-                elPriceRow.style.display = 'flex';
-                submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
-                if(elAmountSent) elAmountSent.value = pkgPrice; 
-            }
-
-            // 2. Handle Payment Method Selection
-            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    const method = e.target.value;
-                    if(paymentNumbers[method]) {
-                        elPayNumber.innerText = paymentNumbers[method];
-                        elPayInstruction.classList.remove('hidden');
-                        elTrxGroup.classList.remove('hidden');
-                        elAmountGroup.classList.remove('hidden');
-                    }
-                });
+            // Real-time cleanup
+            inputs.phone.addEventListener('input', function() { 
+                this.value = this.value.replace(/[^0-9]/g, ''); 
+                warns.phone.style.display = 'none';
+                this.style.borderColor = '';
             });
-
-            // 3. Input Validation Listeners
-            inputs.phone.addEventListener('input', function() {
-                this.value = this.value.replace(/[^0-9]/g, '');
-                warns.phone.classList.remove('visible');
-                this.classList.remove('border-red-500');
-            });
-            inputs.name.addEventListener('input', function() {
-                if (/[0-9]/.test(this.value)) this.value = this.value.replace(/[0-9]/g, '');
-                warns.name.classList.remove('visible');
-                this.classList.remove('border-red-500');
+            inputs.name.addEventListener('input', function() { 
+                this.value = this.value.replace(/[0-9]/g, ''); 
+                warns.name.style.display = 'none';
+                this.style.borderColor = '';
             });
             inputs.email.addEventListener('input', () => {
-                 warns.email.classList.remove('visible');
-                 inputs.email.classList.remove('border-red-500');
+                warns.email.style.display = 'none';
+                inputs.email.style.borderColor = '';
             });
 
-            // 4. Form Submission Logic
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let isValid = true;
 
-                // Validate Name
-                const nameVal = inputs.name.value.trim();
-                const nameHasSpace = nameVal.indexOf(' ') > 0;
-                if (nameVal === "" || !nameHasSpace) {
-                    warns.name.classList.add('visible');
-                    inputs.name.classList.add('border-red-500');
-                    isValid = false;
+                // Simple Validation
+                if (inputs.name.value.trim().length < 3) {
+                    warns.name.style.display = 'block'; isValid = false;
                 }
-
-                // Validate Phone
-                const phoneVal = inputs.phone.value.trim();
-                if (phoneVal.length < 11) {
-                    warns.phone.classList.add('visible');
-                    inputs.phone.classList.add('border-red-500');
-                    isValid = false;
+                if (inputs.phone.value.length < 11) {
+                    warns.phone.style.display = 'block'; isValid = false;
                 }
-
-                // Validate Email
-                const emailVal = inputs.email.value.trim();
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(emailVal)) {
-                    warns.email.classList.add('visible');
-                    inputs.email.classList.add('border-red-500');
-                    isValid = false;
+                if (!emailRegex.test(inputs.email.value)) {
+                    warns.email.style.display = 'block'; isValid = false;
                 }
 
-                // Validate Payment (Only if NOT Free Trial)
+                // Payment Validation (if paid)
                 let selectedMethodVal = "Free Trial";
                 let trxVal = "N/A";
-                let amountVal = "0";
-
+                
                 if (!isFreeTrial) {
                     const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
                     if(!selectedMethod) {
-                        alert("Please select a payment method.");
-                        return;
+                        alert("Please select a payment method."); return;
                     }
                     selectedMethodVal = selectedMethod.value;
-                    
                     trxVal = inputs.trx.value.trim();
                     if (trxVal.length < 4) {
-                        warns.trx.classList.add('visible');
-                        inputs.trx.classList.add('border-red-500');
-                        isValid = false;
+                        warns.trx.style.display = 'block'; isValid = false;
                     }
-                    amountVal = elAmountSent.value;
                 }
 
                 if(!isValid) return;
 
-                // Disable button
-                const originalBtnText = submitBtn.innerText;
-                submitBtn.disabled = true;
-                submitBtn.innerText = "Processing...";
-                statusMsg.classList.add('hidden'); 
+                // Proceed to Submit
+                elements.submitBtn.disabled = true;
+                elements.submitBtn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 inline-block" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Processing...`;
+                elements.statusMsg.style.display = 'none';
 
-                // Prepare Data
                 const formData = new FormData();
-                formData.append('FullName', nameVal);
-                formData.append('Email', emailVal);
-                formData.append('Phone', phoneVal);
+                formData.append('FullName', inputs.name.value);
+                formData.append('Email', inputs.email.value);
+                formData.append('Phone', inputs.phone.value);
                 formData.append('Package', pkgName);
                 formData.append('Duration', durationDays);
                 formData.append('Price', pkgPrice);
                 formData.append('PaymentMethod', selectedMethodVal);
                 formData.append('SenderInfo', trxVal);
-                formData.append('AmountSent', amountVal); 
+                // "Amount Sent" removed from UI, sending Price automatically
+                formData.append('AmountSent', pkgPrice); 
 
                 try {
-                    // Send to Backend
                     const response = await fetch('/.netlify/functions/submit-form', {
                         method: 'POST',
                         body: formData
                     });
-                    
                     const data = await response.json();
-                    
+
                     if(response.ok) {
-                        // SUCCESS: Switch Views
-                        checkoutGrid.style.display = 'none'; // Hide Form
-                        successView.classList.remove('hidden'); // Show Success
+                        // Success Animation
+                        elements.checkoutGrid.style.display = 'none';
+                        elements.successView.classList.remove('hidden');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
-                        // ERROR
                         throw new Error(data.message || 'Submission failed');
                     }
-
                 } catch (error) {
                     console.error(error);
-                    statusMsg.classList.remove('hidden');
-                    statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
-                    statusMsg.innerHTML = `<h3 class="text-lg font-bold">Request Failed</h3><p>${error.message}</p>`;
+                    elements.statusMsg.style.display = 'block';
+                    elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
+                    elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
                     
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = originalBtnText;
+                    elements.submitBtn.disabled = false;
+                    elements.submitBtn.innerText = isFreeTrial ? "Start Your Free Trial" : "Confirm Purchase";
                 }
             });
         });
