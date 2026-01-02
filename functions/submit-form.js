@@ -143,7 +143,7 @@ New Free User is now Registered.`;
 
         const softwareLink = process.env.SOFTWARE_LINK || "#";
         
-        // EMAIL NOTIFICATION (FREE TRIAL)
+        // EMAIL NOTIFICATION (FREE TRIAL) - Light Outer / Dark Card
         const mailOptions = {
             from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
             to: data.Email,
@@ -156,25 +156,29 @@ New Free User is now Registered.`;
                     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
                 </style>
             </head>
-            <body style="margin:0; padding:0; background-color:#0F0A1E; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; padding: 40px 0;">
+            <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
                     <tr>
                         <td align="center">
-                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#151025; border-radius: 20px; border: 1px solid rgba(160, 115, 238, 0.2); overflow: hidden; box-shadow: 0 0 20px rgba(160, 115, 238, 0.1);">
+                            
+                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                                
                                 <tr>
                                     <td align="center" style="padding: 40px 40px 20px;">
                                         <h1 style="color:#ffffff; margin:0; font-size: 24px;">Welcome to Meta Injector <span style="color:#A073EE;">Pro</span></h1>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td align="center" style="padding: 0 40px;">
                                         <h2 style="color:#ffffff; margin:0 0 10px; font-size: 28px;">Free Trial <span style="color:#A073EE;">Activated!</span> 🚀</h2>
                                         <p style="color:#9ca3af; margin:0; font-size: 16px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td style="padding: 30px 40px;">
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(160, 115, 238, 0.08); border: 1px dashed #A073EE; border-radius: 15px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #1a1625; border: 1px dashed #A073EE; border-radius: 15px;">
                                             <tr>
                                                 <td align="center" style="padding: 25px;">
                                                     <p style="color:#9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px;">Your License Key</p>
@@ -184,6 +188,7 @@ New Free User is now Registered.`;
                                         </table>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td style="padding: 0 40px 30px;">
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -204,17 +209,21 @@ New Free User is now Registered.`;
                                         </table>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td align="center" style="padding: 0 40px 40px;">
                                         <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: #ffffff; text-decoration: none; padding: 14px 30px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(160, 115, 238, 0.4);">Download Software</a>
                                     </td>
                                 </tr>
+                            </table>
+                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
                                 <tr>
-                                    <td align="center" style="background-color:#0F0A1E; padding: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
-                                        <p style="color:#666; font-size: 12px; margin:0;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
+                                    <td align="center">
+                                        <p style="color:#6b7280; font-size: 12px; margin:0;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
                                     </td>
                                 </tr>
                             </table>
+
                         </td>
                     </tr>
                 </table>
@@ -293,7 +302,7 @@ Check Admin Panel to Approve.`;
         });
     } catch (e) { console.error("Telegram Error:", e); }
 
-    // EMAIL NOTIFICATION (PAID USER)
+    // EMAIL NOTIFICATION (PAID USER) - Light Outer / Dark Card
     const mailOptions = {
         from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
         to: data.Email,
@@ -306,30 +315,36 @@ Check Admin Panel to Approve.`;
                     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
                 </style>
             </head>
-            <body style="margin:0; padding:0; background-color:#0F0A1E; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; padding: 40px 0;">
+            <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
                     <tr>
                         <td align="center">
-                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#151025; border-radius: 20px; border: 1px solid rgba(255, 153, 0, 0.2); overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                            
+                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                                
                                 <tr>
                                     <td align="center" style="padding: 40px 40px 20px;">
                                         <h1 style="color:#ffffff; margin:0; font-size: 24px;">Meta Injector <span style="color:#A073EE;">Pro</span></h1>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td align="center">
                                         <span style="background: rgba(255, 153, 0, 0.1); color: #FF9900; border: 1px solid rgba(255, 153, 0, 0.3); padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Payment Pending</span>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td align="center" style="padding: 20px 40px 0;">
                                         <h2 style="color:#ffffff; margin:0 0 10px; font-size: 26px;">Order Received!</h2>
                                         <p style="color:#9ca3af; margin:0; font-size: 15px; line-height: 1.5;">Hi <strong>${data.FullName}</strong>, we received your request for the <strong>${data.Package}</strong> plan.</p>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td style="padding: 30px 40px;">
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.03); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                                            
                                             <tr>
                                                 <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                                     <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
@@ -340,6 +355,7 @@ Check Admin Panel to Approve.`;
                                                     <p style="color:#fff; font-size: 14px; font-weight:bold; margin:5px 0 0;">${selectedPkg.credits}</p>
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td style="padding: 15px 20px;">
                                                     <p style="color:#9ca3af; font-size: 12px; margin:0;">Amount Sent</p>
@@ -353,19 +369,23 @@ Check Admin Panel to Approve.`;
                                         </table>
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <td align="center" style="padding: 0 40px 40px;">
-                                        <p style="color:#666; font-size: 13px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; display:inline-block;">
+                                        <p style="color:#666; font-size: 13px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display:inline-block;">
                                             ⏱ Your license will activate automatically after admin verification.
                                         </p>
                                     </td>
                                 </tr>
+                            </table>
+                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
                                 <tr>
-                                    <td align="center" style="background-color:#0F0A1E; padding: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
-                                        <p style="color:#666; font-size: 12px; margin:0;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
+                                    <td align="center">
+                                        <p style="color:#6b7280; font-size: 12px; margin:0;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
                                     </td>
                                 </tr>
                             </table>
+
                         </td>
                     </tr>
                 </table>
