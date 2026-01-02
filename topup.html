@@ -49,17 +49,27 @@
             border: none;
         }
         
-        /* Hover Effect (Glow + Lift) */
         .pricing-button-gradient:hover {
-            box-shadow: 0 0 25px rgba(160, 115, 238, 0.5); /* Purple Glow */
-            transform: translateY(-3px); /* Lift Up Effect */
+            box-shadow: 0 0 25px rgba(160, 115, 238, 0.5);
+            transform: translateY(-3px);
         }
 
         /* Payment Method Button */
+        .payment-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px; /* Fixed height for logos */
+        }
         .payment-btn.active {
             border-color: #A073EE;
             background-color: rgba(160, 115, 238, 0.1);
             box-shadow: 0 0 15px rgba(160, 115, 238, 0.2);
+        }
+        .payment-btn img {
+            max-height: 40px; /* Logo size control */
+            width: auto;
+            object-fit: contain;
         }
 
         /* Ribbon Position */
@@ -110,7 +120,6 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5">
-                
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
@@ -288,9 +297,15 @@
 
                 <label class="block text-sm text-gray-400 mb-3 font-semibold">Select Payment Method</label>
                 <div class="grid grid-cols-3 gap-3 mb-6">
-                    <div onclick="selectPayment('Bkash')" id="btn-Bkash" class="payment-btn bg-white/5 border border-white/10 rounded-lg p-3 text-center cursor-pointer hover:border-purple/50 transition"><span class="text-pink-500 font-bold block">Bkash</span></div>
-                    <div onclick="selectPayment('Nagad')" id="btn-Nagad" class="payment-btn bg-white/5 border border-white/10 rounded-lg p-3 text-center cursor-pointer hover:border-purple/50 transition"><span class="text-orange-500 font-bold block">Nagad</span></div>
-                    <div onclick="selectPayment('Rocket')" id="btn-Rocket" class="payment-btn bg-white/5 border border-white/10 rounded-lg p-3 text-center cursor-pointer hover:border-purple/50 transition"><span class="text-purple-500 font-bold block">Rocket</span></div>
+                    <div onclick="selectPayment('Bkash')" id="btn-Bkash" class="payment-btn bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:border-purple/50 transition">
+                        <img src="./Source_Files/bkash.svg" alt="Bkash">
+                    </div>
+                    <div onclick="selectPayment('Nagad')" id="btn-Nagad" class="payment-btn bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:border-purple/50 transition">
+                        <img src="./Source_Files/nagad.svg" alt="Nagad">
+                    </div>
+                    <div onclick="selectPayment('Rocket')" id="btn-Rocket" class="payment-btn bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:border-purple/50 transition">
+                        <img src="./Source_Files/rocket.svg" alt="Rocket">
+                    </div>
                 </div>
 
                 <div id="payment-instruction" class="bg-purple/10 border border-purple/30 p-3 rounded-lg mb-6 text-sm text-center text-gray-300 hidden">
@@ -299,14 +314,17 @@
 
                 <div id="payment-inputs" class="hidden space-y-4">
                     <div>
-                        <label class="block text-xs text-gray-400 mb-1.5">Sender Number</label>
-                        <input type="text" id="senderNumber" placeholder="Your Phone Number" class="custom-input">
+                        <label class="block text-xs text-gray-400 mb-1.5">Sender Number / Transaction ID</label>
+                        <input type="text" id="paymentDetails" placeholder="Enter Sender Number or TrxID" class="custom-input">
                     </div>
-                    <div>
-                        <label class="block text-xs text-gray-400 mb-1.5">Transaction ID (TrxID)</label>
-                        <input type="text" id="trxId" placeholder="e.g. 8H3K9L2M" class="custom-input">
+
+                    <div class="bg-red-500/10 border border-red-500/20 p-3 rounded-lg mt-4">
+                        <p class="text-xs text-red-400 text-center font-medium">
+                            ⚠ No Refund Policy: Credits are non-refundable under any circumstances once purchased.
+                        </p>
                     </div>
-                    <div class="flex gap-3 mt-6">
+
+                    <div class="flex gap-3 mt-4">
                         <button onclick="location.reload()" class="w-1/3 py-3 rounded-lg border border-white/20 hover:bg-white/10 transition text-sm text-gray-300">Cancel</button>
                         <button onclick="submitCreditRequest()" id="payBtn" class="w-2/3 pricing-button-gradient py-3 rounded-lg text-white font-bold hover:shadow-button transition">Confirm & Pay</button>
                     </div>
@@ -331,11 +349,11 @@
         let isLocked = false;
         let countdownInterval;
 
-        // Admin Numbers
+        // Admin Numbers (REPLACE THESE WITH YOUR ACTUAL NUMBERS)
         const paymentNumbers = {
-            "Bkash": "017xxxxxxxx",
-            "Nagad": "018xxxxxxxx",
-            "Rocket": "019xxxxxxxx"
+            "Bkash": "01700000000",  // আপনার আসল বিকাশ নাম্বার দিন
+            "Nagad": "01800000000",  // আপনার আসল নগদ নাম্বার দিন
+            "Rocket": "01900000000"  // আপনার আসল রকেট নাম্বার দিন
         };
 
         // 1. Select Package
@@ -350,7 +368,6 @@
         }
 
         function backToPricing() {
-            // লক অবস্থায় থাকলে ব্যাক করা যাবে না
             if(isLocked) return; 
             document.getElementById('step-verify').classList.add('step-hidden');
             document.getElementById('step-pricing').classList.remove('step-hidden');
@@ -358,7 +375,7 @@
 
         // 2. Check User (With 3-Strike Lockout)
         async function checkUser() {
-            if (isLocked) return; // লক থাকলে কাজ করবে না
+            if (isLocked) return; 
 
             const phoneInput = document.getElementById('userPhone');
             const btn = document.getElementById('verifyBtn');
@@ -373,7 +390,7 @@
             // Loading State
             btn.innerHTML = "<span class='spinner'></span> Checking...";
             btn.disabled = true;
-            phoneInput.disabled = true; // ইনপুট ডিজেবল
+            phoneInput.disabled = true;
             msg.innerText = "";
 
             try {
@@ -383,7 +400,6 @@
                 const result = await response.json();
 
                 if (result.found) {
-                    // সফল হলে কাউন্টার রিসেট
                     failedAttempts = 0;
                     
                     document.getElementById('display-name').innerText = result.name;
@@ -395,24 +411,19 @@
                     document.getElementById('step-verify').classList.add('step-hidden');
                     document.getElementById('step-payment').classList.remove('step-hidden');
                 } else {
-                    // ইউজার না পাওয়া গেলে
                     handleFailure(btn, phoneInput, msg);
                 }
             } catch (error) {
-                // সার্ভার এরর হলেও ফেইল হিসেবে গণ্য হবে
                 handleFailure(btn, phoneInput, msg, "Server Error.");
             }
         }
 
-        // ফেইল হ্যান্ডেল করার ফাংশন
         function handleFailure(btn, input, msg, customError = "User not found!") {
             failedAttempts++;
             
             if (failedAttempts >= 3) {
-                // ৩ বার ভুল হলে লকডাউন শুরু
                 startLockdown(60, btn, input, msg);
             } else {
-                // ৩ বারের কম হলে সাধারণ ওয়ার্নিং
                 msg.innerHTML = `<span class='text-red-400'>${customError} Try ${failedAttempts}/3.</span>`;
                 btn.innerHTML = "Next Step";
                 btn.disabled = false;
@@ -420,16 +431,14 @@
             }
         }
 
-        // লকডাউন টাইমার ফাংশন
         function startLockdown(seconds, btn, input, msg) {
             isLocked = true;
             let timeLeft = seconds;
 
             btn.disabled = true;
             input.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed'); // বাটন কালার ডিমে হবে
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            // কাউন্টডাউন আপডেট
             msg.innerHTML = `<span class='text-red-500 font-bold'>Too many wrong attempts! <br> Locked for ${timeLeft}s</span>`;
             btn.innerHTML = `Locked (${timeLeft}s)`;
 
@@ -445,10 +454,9 @@
             }, 1000);
         }
 
-        // লকডাউন শেষ হওয়ার পর
         function resetLockdown(btn, input, msg) {
             isLocked = false;
-            failedAttempts = 0; // কাউন্টার রিসেট
+            failedAttempts = 0;
             
             btn.disabled = false;
             input.disabled = false;
@@ -470,13 +478,13 @@
 
         // 4. Submit Payment
         async function submitCreditRequest() {
-            const senderNumber = document.getElementById('senderNumber').value;
-            const trxId = document.getElementById('trxId').value;
+            // Updated to get value from the SINGLE input box
+            const paymentDetails = document.getElementById('paymentDetails').value;
             const btn = document.getElementById('payBtn');
             const msg = document.getElementById('payment-msg');
 
-            if (!senderNumber || !trxId) {
-                msg.innerHTML = "<span class='text-red-400'>Please fill both Sender Number & TrxID.</span>";
+            if (!paymentDetails) {
+                msg.innerHTML = "<span class='text-red-400'>Please enter Sender Number or TrxID.</span>";
                 return;
             }
 
@@ -490,8 +498,10 @@
                 credits: selectedData.credits,
                 amount: selectedData.price,
                 paymentMethod: selectedMethod,
-                senderNumber: senderNumber,
-                trxId: trxId
+                // Sending the single input value as 'trxId' for backend compatibility
+                // You can also change your backend to look for 'paymentDetails' if preferred
+                senderNumber: "See TrxID Box", 
+                trxId: paymentDetails 
             };
 
             try {

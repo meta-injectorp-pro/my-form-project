@@ -58,6 +58,32 @@ exports.handler = async (event) => {
 
         await db.collection('Credits_Purchase').add(creditRequest);
 
+// ==========================================
+        // TELEGRAM NOTIFICATION (CREDIT TOP-UP)
+        // ==========================================
+        try {
+            const botToken = "8569188310:AAG_3n41JwtI5_1OL3i4FiXUjgrJTDtwtd4"; // আপনার টোকেন দিন
+            const chatId = "6276804742";     // আপনার চ্যাট আইডি দিন
+
+            const messageText = `💎 *New Credit Top-up Request!*
+
+👤 Name: ${data.name}
+📱 Phone: \`${data.phone}\`
+💰 Amount: ${data.amount} BDT
+gem Credits: ${data.credits}
+💳 Method: ${data.paymentMethod}
+📝 TrxID: \`${data.trxId}\`
+
+Check Admin Panel to Approve.`;
+
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+            });
+        } catch (e) { console.error("Telegram Error:", e); }
+        // ==========================================
+
         return {
             statusCode: 200,
             body: JSON.stringify({

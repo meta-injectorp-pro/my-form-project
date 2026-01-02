@@ -17,28 +17,41 @@
 
 <style>
 
-/* Hero Glow Effect - Size Increased */
+/* Hero Container Setup */
 .hero-container {
     position: relative;
     width: 100%;
-    max-width: 100%; /* আগে ছিল 900px, এখন 100% দেওয়া হলো যাতে পুরো জায়গা নেয় */
+    max-width: 100%;
     margin: 0 auto;
     border-radius: 1.5rem;
     z-index: 10;
+    overflow: hidden; /* গ্লো যেন বক্সের বাইরে না যায় */
+    background: rgba(255, 255, 255, 0.03); /* হালকা ব্যাকগ্রাউন্ড (অপশনাল) */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* হালকা বর্ডার */
 }
 
-/* অ্যানিমেটেড গ্লো (বড় ইমেজের সাথে মানানসই) */
+/* Mouse Moving Glow Effect */
 .hero-container::before {
     content: "";
     position: absolute;
-    inset: -5px;
-    z-index: -1;
-    background: linear-gradient(45deg, #ff00ff, #00ffff, #ff00ff, #00ffff);
-    background-size: 400%;
-    border-radius: 1.5rem;
-    filter: blur(30px); /* ব্লার একটু বাড়ানো হলো */
-    opacity: 0.3;
-    animation: glowing 30s linear infinite;
+    inset: 0;
+    z-index: -1; /* কন্টেন্টের নিচে থাকবে */
+    
+    /* শুরুতে গ্লো দেখা যাবে না, মাউস আনলে দেখা যাবে */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+
+    /* গ্লো এর কালার এবং সাইজ */
+    background: radial-gradient(
+        800px circle at var(--mouse-x) var(--mouse-y), 
+        rgba(168, 85, 247, 0.4), /* আপনার পার্পল কালার */
+        transparent 40%
+    );
+}
+
+/* মাউস হোভার করলে গ্লো দৃশ্যমান হবে */
+.hero-container:hover::before {
+    opacity: 1;
 }
 
 @keyframes glowing {
@@ -4726,6 +4739,42 @@ body{
     padding-top: 11.25rem;
   }
 }
+
+/* Purple Glass Button Effect */
+.purple-glass-btn {
+  position: relative;
+  background: rgba(134, 70, 244, 0.25); /* হালকা পার্পল ব্যাকগ্রাউন্ড */
+  border: 1px solid rgba(160, 115, 238, 0.3); /* হালকা বর্ডার */
+  color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px); /* গ্লাস ব্লার ইফেক্ট */
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 9999px; /* পুরোপুরি রাউন্ডেড */
+  box-shadow: 0 4px 15px rgba(134, 70, 244, 0.1);
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* হোভার করলে ইফেক্ট */
+.purple-glass-btn:hover {
+  background: rgba(134, 70, 244, 0.40); /* হোভারে একটু গাঢ় হবে */
+  border-color: rgba(160, 115, 238, 0.6);
+  box-shadow: 0 0 20px rgba(134, 70, 244, 0.4), inset 0 0 10px rgba(134, 70, 244, 0.2);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* Hero Button Hover Glow Effect */
+.hero-btn-glow {
+  transition: all 0.3s ease-out;
+}
+
+.hero-btn-glow:hover {
+  transform: translateY(-3px); /* বাটন একটু উপরে উঠবে */
+  box-shadow: 0 10px 25px -5px rgba(160, 115, 238, 0.6); /* নিচে সুন্দর পার্পল গ্লো শ্যাডো */
+  filter: brightness(1.15); /* কালারটি ১৫% বেশি উজ্জ্বল হবে */
+}
+
 
 /*!************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[1].use[2]!./node_modules/swiper/swiper.min.css ***!

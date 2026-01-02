@@ -122,6 +122,30 @@ exports.handler = async (event) => {
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
+// ==========================================
+        // TELEGRAM NOTIFICATION (FREE TRIAL)
+        // ==========================================
+        try {
+            const botToken = "8569188310:AAG_3n41JwtI5_1OL3i4FiXUjgrJTDtwtd4"; 
+            const chatId = "6276804742"; 
+
+            const msg = `🚀 *New Free Trial Activated!*
+
+👤 Name: ${data.FullName}
+📧 Email: ${data.Email}
+📱 Phone: \`${data.Phone}\`
+🔑 License: \`${licenseKeyToUpdate}\`
+
+User is now Active.`;
+
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+            });
+        } catch (e) { console.error("Telegram Error:", e); }
+        // 👆 টেলিগ্রাম কোড শেষ 👆
+
         // Send Email (Free Trial)
         const softwareLink = process.env.SOFTWARE_LINK || "#";
         const mailOptions = {
@@ -190,6 +214,34 @@ exports.handler = async (event) => {
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
+
+// 👇 এখানে টেলিগ্রাম কোড বসান 👇
+    // ==========================================
+    // TELEGRAM NOTIFICATION (NEW PURCHASE)
+    // ==========================================
+    try {
+        const botToken = "8569188310:AAG_3n41JwtI5_1OL3i4FiXUjgrJTDtwtd4"; 
+        const chatId = "6276804742"; 
+
+        const msg = `💰 *New Package Purchase!*
+
+📦 Package: *${data.Package}*
+👤 Name: ${data.FullName}
+📱 Phone: \`${data.Phone}\`
+💵 Amount: ${selectedPkg.price} BDT
+💳 Method: ${data.PaymentMethod || "N/A"}
+📝 TrxID: \`${data.SenderInfo || "N/A"}\`
+🔑 License: \`${licenseKeyToUpdate}\`
+
+Check Admin Panel to Approve.`;
+
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+        });
+    } catch (e) { console.error("Telegram Error:", e); }
+    // 👆 টেলিগ্রাম কোড শেষ 👆
 
     // ৩. Paid User Email Notification
     const mailOptions = {
