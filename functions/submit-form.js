@@ -59,7 +59,6 @@ exports.handler = async (event) => {
     const { fields } = await parseMultipartForm(event);
     const data = fields;
 
-    // ১. ইউজার চেক এবং লাইসেন্স পিক করা
     const userSnapshot = await db.collection('licenseDatabase')
                                  .where('Email', '==', data.Email)
                                  .limit(1)
@@ -70,13 +69,11 @@ exports.handler = async (event) => {
     let licenseKeyToUpdate;
 
     if (!userSnapshot.empty) {
-        // পুরাতন ইউজার (Free Trial থেকে Paid এ আসছে বা Renew করছে)
         isNewUser = false;
         const userDoc = userSnapshot.docs[0];
         userData = userDoc.data();
         licenseKeyToUpdate = userDoc.id;
     } else {
-        // একদম নতুন ইউজার
         const freeLicenseSnapshot = await db.collection('licenseDatabase')
                                             .where('Email', 'in', ["", null])
                                             .limit(1)
@@ -90,10 +87,8 @@ exports.handler = async (event) => {
         licenseKeyToUpdate = freeLicenseSnapshot.docs[0].id;
     }
 
-    // ২. প্যাকেজ ডিটেইলস বের করা
     const selectedPkg = packageRules[data.Package] || { credits: 0, duration: 0, price: 0 };
     
-    // ৩. রুলস চেকিং (শুধুমাত্র Free Trial এর জন্য)
     if (!isNewUser && data.Package === 'Free Trial') {
         if (userData.Package) {
             return { 
@@ -122,21 +117,21 @@ exports.handler = async (event) => {
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
-// ==========================================
+		// ==========================================
         // TELEGRAM NOTIFICATION (FREE TRIAL)
         // ==========================================
         try {
-            const botToken = "8569188310:AAG_3n41JwtI5_1OL3i4FiXUjgrJTDtwtd4"; 
-            const chatId = "6276804742"; 
+            const botToken = process.env.TELEGRAM_BOT_TOKEN;
+			const chatId = process.env.TELEGRAM_CHAT_ID; 
 
-            const msg = `🚀 *New Free Trial Activated!*
+            const msg = `🚀 *New Free Trial Registered!*
 
 👤 Name: ${data.FullName}
 📧 Email: ${data.Email}
 📱 Phone: \`${data.Phone}\`
 🔑 License: \`${licenseKeyToUpdate}\`
 
-User is now Active.`;
+User is now Registered.`;
 
             await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -144,9 +139,7 @@ User is now Active.`;
                 body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
             });
         } catch (e) { console.error("Telegram Error:", e); }
-        // 👆 টেলিগ্রাম কোড শেষ 👆
 
-        // Send Email (Free Trial)
         const softwareLink = process.env.SOFTWARE_LINK || "#";
         const mailOptions = {
             from: `"Meta Injector Team" <${process.env.SMTP_EMAIL}>`,
@@ -176,18 +169,13 @@ User is now Active.`;
         };
     }
 
-    // ==========================================
-    // PAID PACKAGE LOGIC (Migration/New Purchase)
-    // ==========================================
-    
-    // ১. Purchase Form-এ ডাটা অ্যাড করা (Credits সহ)
     const purchaseData = {
         "Your Full Name": data.FullName,
         "Email": data.Email,
         "Phone Number": data.Phone,
         "Select Your Package": data.Package,
-        "Package Duration": selectedPkg.duration,  // Duration (e.g., 30)
-        "Assigned Credits": selectedPkg.credits,   // Credits (e.g., 2000)
+        "Package Duration": selectedPkg.duration,
+        "Assigned Credits": selectedPkg.credits,
         "Payment Method": data.PaymentMethod || "N/A",
         "Amount Sent (BDT)": selectedPkg.price.toString(),
         "Sender's Number or TrxID": data.SenderInfo || "N/A",
@@ -199,29 +187,22 @@ User is now Active.`;
 
     await db.collection('purchaseForm').add(purchaseData);
     
-    // ২. License Database Overwrite/Update (Pending Status সহ)
-    // এখানে আমরা ক্রেডিটস এবং ডিউরেশন আপডেট করে দিচ্ছি, কিন্তু স্ট্যাটাস 'Pending' রাখছি।
-    // সফটওয়্যার 'Pending' স্ট্যাটাস দেখলে লগইন করতে দিবে না বা ক্রেডিট ইউজ করতে দিবে না (আপনার সফটওয়্যার লজিক অনুযায়ী)।
     const licenseUpdateData = {
         "Email": data.Email,
         "Customer Name": data.FullName,
         "Phone Number": data.Phone,
         "Package": data.Package,
         "Duration": selectedPkg.duration,
-        "Credits": selectedPkg.credits, // Credits সেট হয়ে থাকল
-        "Status": "Pending",            // কিন্তু স্ট্যাটাস পেন্ডিং
+        "Credits": selectedPkg.credits,
+        "Status": "Pending",
         "RequestDate": new Date()
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
-// 👇 এখানে টেলিগ্রাম কোড বসান 👇
-    // ==========================================
-    // TELEGRAM NOTIFICATION (NEW PURCHASE)
-    // ==========================================
     try {
-        const botToken = "8569188310:AAG_3n41JwtI5_1OL3i4FiXUjgrJTDtwtd4"; 
-        const chatId = "6276804742"; 
+        const botToken = process.env.TELEGRAM_BOT_TOKEN;
+		const chatId = process.env.TELEGRAM_CHAT_ID;
 
         const msg = `💰 *New Package Purchase!*
 
@@ -241,7 +222,6 @@ Check Admin Panel to Approve.`;
             body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
         });
     } catch (e) { console.error("Telegram Error:", e); }
-    // 👆 টেলিগ্রাম কোড শেষ 👆
 
     // ৩. Paid User Email Notification
     const mailOptions = {
