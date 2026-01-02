@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const Busboy = require('busboy');
 const nodemailer = require('nodemailer');
 
-// Firebase Config (Updated for Netlify 4KB Limit)
+// Firebase Config (Netlify 4KB limit fix)
 try {
   if (!admin.apps.length) {
     admin.initializeApp({
@@ -19,7 +19,7 @@ try {
 
 const db = admin.firestore();
 
-// Email Configuration
+// Email Transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -28,6 +28,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// Helper Function
 function parseMultipartForm(event) {
     return new Promise((resolve) => {
         const fields = {};
@@ -37,6 +38,17 @@ function parseMultipartForm(event) {
         busboy.end(Buffer.from(event.body, 'base64'));
     });
 }
+
+// Package Rules (Credits, Duration & Price Map)
+const packageRules = {
+    "Free Trial":   { credits: 50,    duration: 3,   price: 0 },
+    "Starter":      { credits: 2000,  duration: 30,  price: 150 },
+    "Beginner":     { credits: 3500,  duration: 30,  price: 200 },
+    "Professional": { credits: 6000,  duration: 60,  price: 400 },
+    "Ultimate":     { credits: 10000, duration: 90,  price: 700 },
+    "Corporate":    { credits: 20000, duration: 180, price: 1000 },
+    "Enterprise":   { credits: 35000, duration: 365, price: 1700 }
+};
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -58,13 +70,13 @@ exports.handler = async (event) => {
     let licenseKeyToUpdate;
 
     if (!userSnapshot.empty) {
-        // পুরাতন ইউজার
+        // পুরাতন ইউজার (Free Trial থেকে Paid এ আসছে বা Renew করছে)
         isNewUser = false;
         const userDoc = userSnapshot.docs[0];
         userData = userDoc.data();
         licenseKeyToUpdate = userDoc.id;
     } else {
-        // নতুন ইউজার: অব্যবহৃত লাইসেন্স খুঁজে বের করা
+        // একদম নতুন ইউজার
         const freeLicenseSnapshot = await db.collection('licenseDatabase')
                                             .where('Email', 'in', ["", null])
                                             .limit(1)
@@ -78,15 +90,16 @@ exports.handler = async (event) => {
         licenseKeyToUpdate = freeLicenseSnapshot.docs[0].id;
     }
 
-    // ২. রুলস চেকিং (ফ্রি ট্রায়াল একবারই)
-    if (!isNewUser) {
-        if (data.Package === 'Free Trial') {
-            if (userData.Package) {
-                return { 
-                    statusCode: 400, 
-                    body: JSON.stringify({ message: "You have already used the Free Trial or have an active plan." }) 
-                };
-            }
+    // ২. প্যাকেজ ডিটেইলস বের করা
+    const selectedPkg = packageRules[data.Package] || { credits: 0, duration: 0, price: 0 };
+    
+    // ৩. রুলস চেকিং (শুধুমাত্র Free Trial এর জন্য)
+    if (!isNewUser && data.Package === 'Free Trial') {
+        if (userData.Package) {
+            return { 
+                statusCode: 400, 
+                body: JSON.stringify({ message: "You have already used the Free Trial or have an active plan." }) 
+            };
         }
     }
 
@@ -95,93 +108,64 @@ exports.handler = async (event) => {
     // ==========================================
     if (data.Package === "Free Trial") {
         
-        // ১. License Database আপডেট
+        // Update License Database
         const licenseUpdateData = {
             "Email": data.Email,
             "Customer Name": data.FullName,
             "Phone Number": data.Phone,
             "Package": "Free Trial",
-            "Duration": 3,             // Database-e sudhu sonkha '3' jabe
-            "Credits": 50,             
-            "Status": "Sent",          
+            "Duration": selectedPkg.duration,
+            "Credits": selectedPkg.credits,
+            "Status": "Sent", // Active immediately
             "RequestDate": new Date()
         };
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
-        // ২. ইমেইল পাঠানো (Button Only)
+        // Send Email (Free Trial)
         const softwareLink = process.env.SOFTWARE_LINK || "#";
-
         const mailOptions = {
             from: `"Meta Injector Team" <${process.env.SMTP_EMAIL}>`,
             to: data.Email,
-            subject: '🎉 Your Free Trial License Key',
+            subject: '🎉 Your Free Trial Activated',
             html: `
-                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 12px; background-color: #ffffff;">
-                    
-                    <h2 style="color: #6E25ED; text-align: center; margin-bottom: 10px;">Welcome to Meta Injector Pro!</h2>
-                    <p style="color: #555; font-size: 16px; text-align: center;">Hi <strong>${data.FullName}</strong>, your Free Trial is ready.</p>
-                    
-                    <div style="background-color: #f8f5ff; padding: 20px; border-radius: 8px; margin: 25px 0; border: 1px solid #eaddff; text-align: center;">
-                        <p style="margin: 5px 0; color: #888; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">License Key</p>
-                        <h2 style="color: #333; margin: 5px 0 15px 0; font-family: monospace; font-size: 24px; letter-spacing: 2px;">${licenseKeyToUpdate}</h2>
-                        
-                        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 15px;">
-                            <span style="background: #fff; padding: 5px 15px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px;">Credits: <strong>50</strong></span>
-                            <span style="background: #fff; padding: 5px 15px; border-radius: 20px; border: 1px solid #ddd; font-size: 14px;">Duration: <strong>3 Days</strong></span>
-                        </div>
+                <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                    <h2 style="color: #6E25ED;">Free Trial Activated!</h2>
+                    <p>Hi <strong>${data.FullName}</strong>,</p>
+                    <p>Your license key is ready to use.</p>
+                    <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                        <p><strong>License Key:</strong> <code>${licenseKeyToUpdate}</code></p>
+                        <p><strong>Credits:</strong> ${selectedPkg.credits}</p>
                     </div>
-
-                    <p style="text-align: center; color: #555; margin-bottom: 20px;">Download the software and start automating your workflow.</p>
-                    
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: white; padding: 15px 35px; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 15px rgba(110, 37, 237, 0.3); transition: transform 0.2s;">
-                            Download Software
-                        </a>
-                    </div>
-                    
-                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                    <p style="text-align: center; color: #999; font-size: 12px;">&copy; Meta Injector Team</p>
+                    <a href="${softwareLink}" style="background: #6E25ED; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Download Software</a>
                 </div>
             `
         };
+        try { await transporter.sendMail(mailOptions); } catch (e) { console.error(e); }
 
-        try {
-            await transporter.sendMail(mailOptions);
-        } catch (emailError) {
-            console.error("Email sending failed:", emailError);
-        }
-
-        // ৩. সাকসেস মেসেজ রিটার্ন
         return { 
             statusCode: 200, 
             body: JSON.stringify({ 
                 status: "success",
-                message: "Registration Successful! Please check your email for the License Key & Download Link." 
+                message: "Registration Successful! Check email for License Key." 
             }) 
         };
     }
 
     // ==========================================
-    // PAID PACKAGE LOGIC
+    // PAID PACKAGE LOGIC (Migration/New Purchase)
     // ==========================================
     
-    const priceMap = {
-        "Starter": 150, "Beginner": 200, 
-        "Professional": 400, "Ultimate": 700, 
-        "Corporate": 1000, "Enterprise": 1700
-    };
-    const officialPrice = priceMap[data.Package] || 0;
-
+    // ১. Purchase Form-এ ডাটা অ্যাড করা (Credits সহ)
     const purchaseData = {
         "Your Full Name": data.FullName,
         "Email": data.Email,
         "Phone Number": data.Phone,
         "Select Your Package": data.Package,
-        "Package Duration": data.Duration || "30 Days",
-        "Assigned Credits": 0,
+        "Package Duration": selectedPkg.duration,  // Duration (e.g., 30)
+        "Assigned Credits": selectedPkg.credits,   // Credits (e.g., 2000)
         "Payment Method": data.PaymentMethod || "N/A",
-        "Amount Sent (BDT)": officialPrice.toString(),
+        "Amount Sent (BDT)": selectedPkg.price.toString(),
         "Sender's Number or TrxID": data.SenderInfo || "N/A",
         "License Key": licenseKeyToUpdate, 
         "Status": "Pending",
@@ -191,22 +175,57 @@ exports.handler = async (event) => {
 
     await db.collection('purchaseForm').add(purchaseData);
     
+    // ২. License Database Overwrite/Update (Pending Status সহ)
+    // এখানে আমরা ক্রেডিটস এবং ডিউরেশন আপডেট করে দিচ্ছি, কিন্তু স্ট্যাটাস 'Pending' রাখছি।
+    // সফটওয়্যার 'Pending' স্ট্যাটাস দেখলে লগইন করতে দিবে না বা ক্রেডিট ইউজ করতে দিবে না (আপনার সফটওয়্যার লজিক অনুযায়ী)।
     const licenseUpdateData = {
         "Email": data.Email,
         "Customer Name": data.FullName,
         "Phone Number": data.Phone,
-        "Package": data.Package, 
-        "Status": "Pending", 
+        "Package": data.Package,
+        "Duration": selectedPkg.duration,
+        "Credits": selectedPkg.credits, // Credits সেট হয়ে থাকল
+        "Status": "Pending",            // কিন্তু স্ট্যাটাস পেন্ডিং
         "RequestDate": new Date()
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
+    // ৩. Paid User Email Notification
+    const mailOptions = {
+        from: `"Meta Injector Team" <${process.env.SMTP_EMAIL}>`,
+        to: data.Email,
+        subject: '⏳ Order Received - Pending Approval',
+        html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                <h2 style="color: #FF9900;">Order Received!</h2>
+                <p>Hi <strong>${data.FullName}</strong>,</p>
+                <p>We have received your payment request for the <strong>${data.Package}</strong> plan.</p>
+                
+                <div style="background: #fff8e1; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #FF9900;">
+                    <p style="margin: 5px 0;"><strong>License Key:</strong> <code>${licenseKeyToUpdate}</code></p>
+                    <p style="margin: 5px 0;"><strong>Package:</strong> ${data.Package}</p>
+                    <p style="margin: 5px 0;"><strong>Credits:</strong> ${selectedPkg.credits}</p>
+                    <p style="margin: 5px 0;"><strong>Status:</strong> <span style="color: #FF9900; font-weight: bold;">Pending Approval</span></p>
+                </div>
+
+                <p>Your license will be activated shortly after we verify the transaction ID: <strong>${data.SenderInfo || "N/A"}</strong>.</p>
+                <p style="color: #666; font-size: 12px;">You will receive another email once activated.</p>
+            </div>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+    } catch (emailError) {
+        console.error("Email sending failed:", emailError);
+    }
+
     return { 
         statusCode: 200, 
         body: JSON.stringify({ 
             status: "success",
-            message: "Your purchase request submitted. Please wait for admin approval."
+            message: "Purchase request submitted! Check your email for details."
         }) 
     };
 
