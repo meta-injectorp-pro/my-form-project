@@ -41,7 +41,7 @@ function parseMultipartForm(event) {
 
 // Package Rules (Credits, Duration & Price Map)
 const packageRules = {
-    "Free Trial":   { credits: 50,    duration: 3,   price: 0 },
+    "Free Trial":   { credits: 100,    duration: 3,   price: 0 },
     "Starter":      { credits: 2000,  duration: 30,  price: 150 },
     "Beginner":     { credits: 3500,  duration: 30,  price: 200 },
     "Professional": { credits: 6000,  duration: 60,  price: 400 },
