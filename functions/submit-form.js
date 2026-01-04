@@ -115,12 +115,9 @@ exports.handler = async (event) => {
     // ==========================================
     if (data.Package === "Free Trial") {
         
-        // --- TIMEZONE FIX START ---
-        const bdNow = getBDTime(); // Activation Time (BD Time)
+        const bdNow = getBDTime(); 
         const bdExpiry = new Date(bdNow); 
-        // Add exact duration days to BD time
         bdExpiry.setDate(bdNow.getDate() + (selectedPkg.duration || 3));
-        // --- TIMEZONE FIX END ---
 
         const licenseUpdateData = {
             "Email": data.Email,
@@ -130,9 +127,7 @@ exports.handler = async (event) => {
             "Duration": selectedPkg.duration,
             "Credits": selectedPkg.credits,
             "Status": "Sent",
-            "RequestDate": bdNow, // Saved as timestamp object (optional)
-            
-            // Fixed String Format (BD Time)
+            "RequestDate": bdNow, 
             "Activation Date": formatCustomDate(bdNow),
             "Expiry Date": formatCustomDate(bdExpiry),
             "License Key": licenseKeyToUpdate
@@ -140,32 +135,32 @@ exports.handler = async (event) => {
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
-        // Telegram Notification
+        // Telegram Notification (HTML Mode)
         try {
             const botToken = process.env.TELEGRAM_BOT_TOKEN;
 			const chatId = process.env.TELEGRAM_CHAT_ID; 
             if(botToken && chatId) {
-                const msg = `🚀 *New Free Trial Registered!*
+                const msg = `🚀 <b>New Free Trial Registered!</b>
 
 👤 Name: ${data.FullName}
 📧 Email: ${data.Email}
-📱 Phone: \`${data.Phone}\`
-🔑 License: \`${licenseKeyToUpdate}\`
-📅 Activation: ${formatCustomDate(now)}
-⏳ Expiry: ${formatCustomDate(expiry)}
+📱 Phone: <code>${data.Phone}</code>
+🔑 License: <code>${licenseKeyToUpdate}</code>
+📅 Activation: ${formatCustomDate(bdNow)}
+⏳ Expiry: ${formatCustomDate(bdExpiry)}
 
 New Free User is now Registered.`;
                 await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+                    body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'HTML' })
                 });
             }
         } catch (e) { console.error("Telegram Error:", e); }
 
         const softwareLink = process.env.SOFTWARE_LINK || "#";
         
-        // EMAIL NOTIFICATION (FREE TRIAL) - UPDATED WITH CREDITS & DURATION
+        // EMAIL NOTIFICATION (FREE TRIAL)
         const mailOptions = {
             from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
             to: data.Email,
@@ -178,7 +173,6 @@ New Free User is now Registered.`;
                             <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
                                 <tr><td align="center" style="padding: 40px 40px 20px;"><h1 style="color:#ffffff; margin:0; font-size: 24px;">Welcome to Meta Injector <span style="color:#A073EE;">Pro</span></h1></td></tr>
                                 <tr><td align="center" style="padding: 0 40px;"><h2 style="color:#ffffff; margin:0 0 10px; font-size: 28px;">Free Trial <span style="color:#A073EE;">Activated!</span> 🚀</h2><p style="color:#9ca3af; margin:0; font-size: 16px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p></td></tr>
-                                
                                 <tr><td style="padding: 30px 40px;"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #1a1625; border: 1px dashed #A073EE; border-radius: 15px;"><tr><td align="center" style="padding: 25px;"><p style="color:#9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px;">Your License Key</p><code style="display:block; background:#0F0A1E; color:#fff; padding: 15px; border-radius: 8px; font-size: 18px; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.1); font-family: monospace;">${licenseKeyToUpdate}</code></td></tr></table></td></tr>
                                 
                                 <tr><td style="padding: 0 40px 30px;">
@@ -193,7 +187,7 @@ New Free User is now Registered.`;
                                             <td width="50%" style="padding-left: 10px;">
                                                 <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
                                                     <p style="color:#9ca3af; font-size: 12px; margin:0;">Duration</p>
-                                                    <p style="color:#ffffff; font-size: 18px; font-weight: bold; margin: 5px 0 0;">3 Days</p>
+                                                    <p style="color:#ffffff; font-size: 18px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -219,7 +213,6 @@ New Free User is now Registered.`;
     // PAID PURCHASE LOGIC
     // ==========================================
 
-    // ১. বাংলাদেশ টাইম বের করা (Get BD Time)
     const bdNow = getBDTime(); 
 
     const purchaseData = {
@@ -234,10 +227,7 @@ New Free User is now Registered.`;
         "Sender's Number or TrxID": data.SenderInfo || "N/A",
         "License Key": licenseKeyToUpdate, 
         "Status": "Pending",
-        
-        // ২. ফিক্সড ফরম্যাট ব্যবহার করা (Use Formatted String)
-        "Timestamp": formatCustomDate(bdNow),  
-        
+        "Timestamp": formatCustomDate(bdNow),
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
@@ -251,39 +241,37 @@ New Free User is now Registered.`;
         "Duration": selectedPkg.duration,
         "Credits": selectedPkg.credits,
         "Status": "Pending", 
-        
-        // ৩. লাইসেন্স ডাটাবেসেও আপডেট টাইম রাখা
-        "RequestDate": bdNow 
+        "RequestDate": bdNow
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
-    // Telegram Notification
+    // Telegram Notification (HTML Mode)
     try {
         const botToken = process.env.TELEGRAM_BOT_TOKEN;
 		const chatId = process.env.TELEGRAM_CHAT_ID;
         if(botToken && chatId) {
-            const msg = `💰 *New Package Purchase!*
+            const msg = `💰 <b>New Package Purchase!</b>
 
-📦 Package: *${data.Package}*
+📦 Package: <b>${data.Package}</b>
 👤 Name: ${data.FullName}
-📱 Phone: \`${data.Phone}\`
+📱 Phone: <code>${data.Phone}</code>
 💵 Amount: ${selectedPkg.price} BDT
 💳 Method: ${data.PaymentMethod || "N/A"}
-📝 TrxID: \`${data.SenderInfo || "N/A"}\`
-🔑 License: \`${licenseKeyToUpdate}\`
+📝 TrxID: <code>${data.SenderInfo || "N/A"}</code>
+🔑 License: <code>${licenseKeyToUpdate}</code>
 
 Check Admin Panel to Approve.`;
 
             await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+                body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'HTML' })
             });
         }
     } catch (e) { console.error("Telegram Error:", e); }
 
-    // EMAIL NOTIFICATION (PAID) - ADDED DURATION FIELD
+    // EMAIL NOTIFICATION (PAID)
     const mailOptions = {
         from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
         to: data.Email,
