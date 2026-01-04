@@ -39,8 +39,14 @@ function parseMultipartForm(event) {
 function formatCustomDate(date) {
     const d = new Date(date);
     const pad = (n) => n.toString().padStart(2, '0');
-    // Time separator changed to colon (:) as requested
     return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+// Helper: Get Bangladesh Time (UTC+6)
+function getBDTime() {
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    return new Date(utc + (3600000 * 6)); // Add 6 hours for BD Time
 }
 
 const packageRules = {
@@ -108,10 +114,13 @@ exports.handler = async (event) => {
     // FREE TRIAL LOGIC
     // ==========================================
     if (data.Package === "Free Trial") {
-        const now = new Date();
-        const expiry = new Date(now);
-        // Add duration days to current time
-        expiry.setDate(now.getDate() + (selectedPkg.duration || 3));
+        
+        // --- TIMEZONE FIX START ---
+        const bdNow = getBDTime(); // Activation Time (BD Time)
+        const bdExpiry = new Date(bdNow); 
+        // Add exact duration days to BD time
+        bdExpiry.setDate(bdNow.getDate() + (selectedPkg.duration || 3));
+        // --- TIMEZONE FIX END ---
 
         const licenseUpdateData = {
             "Email": data.Email,
@@ -121,11 +130,11 @@ exports.handler = async (event) => {
             "Duration": selectedPkg.duration,
             "Credits": selectedPkg.credits,
             "Status": "Sent",
-            "RequestDate": now,
+            "RequestDate": bdNow, // Saved as timestamp object (optional)
             
-            // Dates & License Key
-            "Activation Date": formatCustomDate(now),
-            "Expiry Date": formatCustomDate(expiry),
+            // Fixed String Format (BD Time)
+            "Activation Date": formatCustomDate(bdNow),
+            "Expiry Date": formatCustomDate(bdExpiry),
             "License Key": licenseKeyToUpdate
         };
         
@@ -210,6 +219,9 @@ New Free User is now Registered.`;
     // PAID PURCHASE LOGIC
     // ==========================================
 
+    // ১. বাংলাদেশ টাইম বের করা (Get BD Time)
+    const bdNow = getBDTime(); 
+
     const purchaseData = {
         "Your Full Name": data.FullName,
         "Email": data.Email,
@@ -222,7 +234,10 @@ New Free User is now Registered.`;
         "Sender's Number or TrxID": data.SenderInfo || "N/A",
         "License Key": licenseKeyToUpdate, 
         "Status": "Pending",
-        "Timestamp": new Date(),
+        
+        // ২. ফিক্সড ফরম্যাট ব্যবহার করা (Use Formatted String)
+        "Timestamp": formatCustomDate(bdNow),  
+        
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
@@ -236,7 +251,9 @@ New Free User is now Registered.`;
         "Duration": selectedPkg.duration,
         "Credits": selectedPkg.credits,
         "Status": "Pending", 
-        "RequestDate": new Date()
+        
+        // ৩. লাইসেন্স ডাটাবেসেও আপডেট টাইম রাখা
+        "RequestDate": bdNow 
     };
     
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
