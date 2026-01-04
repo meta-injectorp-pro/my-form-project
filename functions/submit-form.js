@@ -104,12 +104,14 @@ exports.handler = async (event) => {
     }
 
     // ==========================================
-    // FREE TRIAL LOGIC
+    // FREE TRIAL LOGIC (Updated Date Logic)
     // ==========================================
     if (data.Package === "Free Trial") {
-        const now = new Date();
-        const expiry = new Date(now);
-        expiry.setDate(now.getDate() + 3); // 3 Days Validity
+        const now = new Date(); // Activation Time (Now)
+        const expiry = new Date(now); 
+        
+        // Exact Duration Calculation: Activation Time + Duration Days
+        expiry.setDate(now.getDate() + (selectedPkg.duration || 3));
 
         const licenseUpdateData = {
             "Email": data.Email,
@@ -121,9 +123,11 @@ exports.handler = async (event) => {
             "Status": "Sent",
             "RequestDate": now,
             
-            // NEW: Fixed Dates
-            "ActivationDate": formatCustomDate(now),
-            "ExpiryDate": formatCustomDate(expiry)
+            // --- UPDATED FIELDS ---
+            "Activation Date": formatCustomDate(now),
+            "Expiry Date": formatCustomDate(expiry),
+            "License Key": licenseKeyToUpdate
+            // ----------------------
         };
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
@@ -139,6 +143,8 @@ exports.handler = async (event) => {
 📧 Email: ${data.Email}
 📱 Phone: \`${data.Phone}\`
 🔑 License: \`${licenseKeyToUpdate}\`
+📅 Activation: ${formatCustomDate(now)}
+⏳ Expiry: ${formatCustomDate(expiry)}
 
 New Free User is now Registered.`;
                 await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
