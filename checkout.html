@@ -322,7 +322,6 @@
                 elements.paymentSection.style.display = 'none';
                 elements.priceRow.style.display = 'none';
                 elements.submitBtn.innerText = "Start Your Free Trial";
-                // Default purple gradient kept as requested
             } else {
                 elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
             }
@@ -427,7 +426,6 @@
                 formData.append('Price', pkgPrice);
                 formData.append('PaymentMethod', selectedMethodVal);
                 formData.append('SenderInfo', trxVal);
-                // "Amount Sent" removed from UI, sending Price automatically
                 formData.append('AmountSent', pkgPrice); 
 
                 try {
@@ -443,6 +441,25 @@
                         elements.successView.classList.remove('hidden');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
+                        // === NEW: HANDLE ACTIVE PAID USER ERROR ===
+                        if (data.errorType === 'ACTIVE_PLAN') {
+                            elements.statusMsg.style.display = 'block';
+                            elements.statusMsg.className = "mt-6 p-6 rounded-xl text-center border bg-purple-900/20 border-[#A073EE]/50";
+                            elements.statusMsg.innerHTML = `
+                                <div class="flex flex-col items-center gap-3">
+                                    <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 mb-1">⚠️</div>
+                                    <h3 class="text-lg font-bold text-white">Action Required</h3>
+                                    <p class="text-gray-300 text-sm mb-2">${data.message}</p>
+                                    <a href="topup.html" class="inline-flex items-center justify-center px-6 py-2.5 bg-[#A073EE] hover:bg-[#8b5cf6] text-white font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(160,115,238,0.4)]">
+                                        Go to Credit Top-up
+                                    </a>
+                                </div>
+                            `;
+                            // Hide submit button to force them to click the link
+                            elements.submitBtn.style.display = 'none';
+                            return; // Stop further execution
+                        }
+
                         throw new Error(data.message || 'Submission failed');
                     }
                 } catch (error) {
