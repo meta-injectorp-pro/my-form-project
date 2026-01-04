@@ -35,11 +35,12 @@ function parseMultipartForm(event) {
     });
 }
 
-// Helper: Date Formatter (dd-mm-yyyy hh-mm-ss)
+// Helper: Date Formatter (dd-mm-yyyy HH:MM:SS)
 function formatCustomDate(date) {
     const d = new Date(date);
     const pad = (n) => n.toString().padStart(2, '0');
-    return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${d.getFullYear()} ${pad(d.getHours())}-${pad(d.getMinutes())}-${pad(d.getSeconds())}`;
+    // Time separator changed to colon (:) as requested
+    return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
 const packageRules = {
@@ -77,7 +78,7 @@ exports.handler = async (event) => {
         // RESTRICTION: Paid users cannot buy another plan
         if (userData.Package && userData.Package !== "Free Trial" && userData.Package !== "N/A") {
              return {
-                 statusCode: 409, // Conflict
+                 statusCode: 409, 
                  body: JSON.stringify({
                      status: "error",
                      errorType: "ACTIVE_PLAN",
@@ -104,13 +105,12 @@ exports.handler = async (event) => {
     }
 
     // ==========================================
-    // FREE TRIAL LOGIC (Updated Date Logic)
+    // FREE TRIAL LOGIC
     // ==========================================
     if (data.Package === "Free Trial") {
-        const now = new Date(); // Activation Time (Now)
-        const expiry = new Date(now); 
-        
-        // Exact Duration Calculation: Activation Time + Duration Days
+        const now = new Date();
+        const expiry = new Date(now);
+        // Add duration days to current time
         expiry.setDate(now.getDate() + (selectedPkg.duration || 3));
 
         const licenseUpdateData = {
@@ -123,11 +123,10 @@ exports.handler = async (event) => {
             "Status": "Sent",
             "RequestDate": now,
             
-            // --- UPDATED FIELDS ---
+            // Dates & License Key
             "Activation Date": formatCustomDate(now),
             "Expiry Date": formatCustomDate(expiry),
             "License Key": licenseKeyToUpdate
-            // ----------------------
         };
         
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
@@ -157,7 +156,7 @@ New Free User is now Registered.`;
 
         const softwareLink = process.env.SOFTWARE_LINK || "#";
         
-        // Email Notification (Free Trial)
+        // EMAIL NOTIFICATION (FREE TRIAL) - UPDATED WITH CREDITS & DURATION
         const mailOptions = {
             from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
             to: data.Email,
@@ -170,7 +169,28 @@ New Free User is now Registered.`;
                             <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
                                 <tr><td align="center" style="padding: 40px 40px 20px;"><h1 style="color:#ffffff; margin:0; font-size: 24px;">Welcome to Meta Injector <span style="color:#A073EE;">Pro</span></h1></td></tr>
                                 <tr><td align="center" style="padding: 0 40px;"><h2 style="color:#ffffff; margin:0 0 10px; font-size: 28px;">Free Trial <span style="color:#A073EE;">Activated!</span> 🚀</h2><p style="color:#9ca3af; margin:0; font-size: 16px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p></td></tr>
+                                
                                 <tr><td style="padding: 30px 40px;"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #1a1625; border: 1px dashed #A073EE; border-radius: 15px;"><tr><td align="center" style="padding: 25px;"><p style="color:#9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px;">Your License Key</p><code style="display:block; background:#0F0A1E; color:#fff; padding: 15px; border-radius: 8px; font-size: 18px; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.1); font-family: monospace;">${licenseKeyToUpdate}</code></td></tr></table></td></tr>
+                                
+                                <tr><td style="padding: 0 40px 30px;">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="50%" style="padding-right: 10px;">
+                                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Credits</p>
+                                                    <p style="color:#ffffff; font-size: 18px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>
+                                                </div>
+                                            </td>
+                                            <td width="50%" style="padding-left: 10px;">
+                                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Duration</p>
+                                                    <p style="color:#ffffff; font-size: 18px; font-weight: bold; margin: 5px 0 0;">3 Days</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td></tr>
+
                                 <tr><td align="center" style="padding: 0 40px 40px;"><a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: #ffffff; text-decoration: none; padding: 14px 30px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block;">Download Software</a></td></tr>
                             </table>
                             <p style="color:#6b7280; font-size: 12px; margin-top:20px;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
@@ -206,7 +226,6 @@ New Free User is now Registered.`;
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
-    // ONLY save to 'purchaseForm', NOT 'salesLog' as per instruction
     await db.collection('purchaseForm').add(purchaseData);
     
     const licenseUpdateData = {
@@ -216,7 +235,7 @@ New Free User is now Registered.`;
         "Package": data.Package,
         "Duration": selectedPkg.duration,
         "Credits": selectedPkg.credits,
-        "Status": "Pending", // Set Pending for upgrades
+        "Status": "Pending", 
         "RequestDate": new Date()
     };
     
@@ -247,7 +266,7 @@ Check Admin Panel to Approve.`;
         }
     } catch (e) { console.error("Telegram Error:", e); }
 
-    // Email Notification (Paid)
+    // EMAIL NOTIFICATION (PAID) - ADDED DURATION FIELD
     const mailOptions = {
         from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
         to: data.Email,
@@ -262,8 +281,36 @@ Check Admin Panel to Approve.`;
                         <tr><td align="center"><span style="background: rgba(255, 153, 0, 0.1); color: #FF9900; border: 1px solid rgba(255, 153, 0, 0.3); padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Payment Pending</span></td></tr>
                         <tr><td align="center" style="padding: 20px 40px 0;"><h2 style="color:#ffffff; margin:0 0 10px; font-size: 26px;">Order Received!</h2><p style="color:#9ca3af; margin:0; font-size: 15px; line-height: 1.5;">Hi <strong>${data.FullName}</strong>, we received your request for the <strong>${data.Package}</strong> plan.</p></td></tr>
                         <tr><td style="padding: 30px 40px;"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.03); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
-                            <tr><td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);"><p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p><p style="color:#fff; font-family: monospace; font-size: 14px; margin:5px 0 0;">${licenseKeyToUpdate}</p></td><td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);"><p style="color:#9ca3af; font-size: 12px; margin:0;">Credits</p><p style="color:#fff; font-size: 14px; font-weight:bold; margin:5px 0 0;">${selectedPkg.credits}</p></td></tr>
-                            <tr><td style="padding: 15px 20px;"><p style="color:#9ca3af; font-size: 12px; margin:0;">Amount Sent</p><p style="color:#A073EE; font-size: 14px; font-weight:bold; margin:5px 0 0;">${selectedPkg.price} BDT</p></td><td style="padding: 15px 20px;"><p style="color:#9ca3af; font-size: 12px; margin:0;">TrxID / Sender</p><p style="color:#fff; font-size: 14px; margin:5px 0 0;">${data.SenderInfo || "N/A"}</p></td></tr>
+                            
+                            <tr>
+                                <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
+                                    <p style="color:#fff; font-family: monospace; font-size: 14px; margin:5px 0 0;">${licenseKeyToUpdate}</p>
+                                </td>
+                                <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Duration</p>
+                                    <p style="color:#fff; font-size: 14px; font-weight:bold; margin:5px 0 0;">${selectedPkg.duration} Days</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Credits</p>
+                                    <p style="color:#fff; font-size: 14px; font-weight:bold; margin:5px 0 0;">${selectedPkg.credits}</p>
+                                </td>
+                                <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Amount Sent</p>
+                                    <p style="color:#A073EE; font-size: 14px; font-weight:bold; margin:5px 0 0;">${selectedPkg.price} BDT</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" style="padding: 15px 20px;">
+                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">TrxID / Sender</p>
+                                    <p style="color:#fff; font-size: 14px; margin:5px 0 0;">${data.SenderInfo || "N/A"}</p>
+                                </td>
+                            </tr>
+
                         </table></td></tr>
                         <tr><td align="center" style="padding: 0 40px 40px;"><p style="color:#666; font-size: 13px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display:inline-block;">⏱ Your license will activate automatically after admin verification.</p></td></tr>
                     </table>
