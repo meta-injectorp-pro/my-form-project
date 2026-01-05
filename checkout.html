@@ -58,7 +58,7 @@
                         <div class="flex justify-between items-center px-2"><span class="text-gray-400 text-sm">Duration</span><span id="pkgDurationDisplay" class="text-yellow-400 font-medium">30 Days</span></div>
                     </div>
                     
-                    <div class="mt-6 pt-6 border-t border-dashed border-white/10">
+                    <div id="promoSection" class="mt-6 pt-6 border-t border-dashed border-white/10">
                         <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Have a Promo Code?</label>
                         <div class="flex gap-2">
                             <input type="text" id="promoInput" placeholder="Enter Code" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white w-full focus:outline-none focus:border-purple-500 uppercase">
@@ -154,6 +154,7 @@
                 copyBtn: document.getElementById('copyBtn'),
                 copyTooltip: document.getElementById('copyTooltip'),
                 // Promo Code Elements
+                promoSection: document.getElementById('promoSection'),
                 promoInput: document.getElementById('promoInput'),
                 applyPromoBtn: document.getElementById('applyPromoBtn'),
                 promoMsg: document.getElementById('promoMsg')
@@ -179,6 +180,7 @@
             if (isFreeTrial) {
                 elements.paymentSection.style.display = 'none';
                 elements.priceRow.style.display = 'none';
+                elements.promoSection.style.display = 'none'; // HIDE PROMO SECTION FOR FREE TRIAL
                 elements.submitBtn.innerText = "Start Your Free Trial";
             } else {
                 elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
@@ -263,8 +265,10 @@
                 formData.append('Price', pkgPrice);
                 formData.append('PaymentMethod', selectedMethodVal);
                 formData.append('SenderInfo', trxVal);
-                formData.append('AmountSent', pkgPrice); // Price remains same
-                formData.append('CouponCode', activePromo || "N/A"); // Send Promo Code
+                formData.append('AmountSent', pkgPrice);
+                
+                // FORCE 'N/A' IF FREE TRIAL, ELSE SEND ACTIVE PROMO
+                formData.append('CouponCode', isFreeTrial ? "N/A" : (activePromo || "N/A")); 
 
                 try {
                     const response = await fetch('/.netlify/functions/submit-form', { method: 'POST', body: formData });

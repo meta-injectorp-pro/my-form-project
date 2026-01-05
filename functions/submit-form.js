@@ -120,14 +120,16 @@ exports.handler = async (event) => {
     let telegramMsg = "";
 
     if (data.Package === "Free Trial") {
-        // --- FREE TRIAL DATA ---
+        // --- FREE TRIAL DATA (NO BONUS) ---
+        // Ensure credits are strictly from package rules (100)
+        
         licenseUpdateData = {
             "Email": data.Email,
             "Customer Name": data.FullName,
             "Phone Number": data.Phone,
             "Package": "Free Trial",
             "Duration": selectedPkg.duration,
-            "Credits": selectedPkg.credits,
+            "Credits": selectedPkg.credits, // Fixed 100
             "Status": "Sent",
             "RequestDate": bdNow,
             "Activation Date": formatCustomDate(bdNow),
@@ -149,11 +151,11 @@ exports.handler = async (event) => {
 New Free User is now Registered.`;
 
     } else {
-        // --- PAID PURCHASE DATA ---
+        // --- PAID PURCHASE DATA (WITH BONUS LOGIC) ---
         const finalAmount = data.AmountSent || selectedPkg.price.toString();
         const promoCode = data.CouponCode || "N/A";
         
-        // Bonus Logic: Add 500 credits if code is BONUS500
+        // Bonus Logic: Add 500 credits ONLY if paid and code is BONUS500
         let finalCredits = selectedPkg.credits;
         if (promoCode === "BONUS500") {
             finalCredits += 500; 
