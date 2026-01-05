@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Meta Injector Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="./Source_Files/favicon.ico">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #9ca3af; }
+        
+        /* Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Typography */
+        h1 { color: white; font-size: 2.5rem; font-weight: 800; line-height: 1.2; margin-bottom: 0.5rem; }
+        h2 { color: white; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; border-left: 4px solid #A073EE; padding-left: 12px; }
+        h3 { color: #e0e0e0; font-size: 1rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; line-height: 1.6; font-size: 0.95rem; }
+        
+        /* Links - Highlighting Google Links */
+        .link-highlight { 
+            color: #60a5fa; 
+            font-weight: 600; 
+            text-decoration: underline; 
+            text-decoration-color: rgba(96, 165, 250, 0.3); 
+            text-underline-offset: 4px;
+            transition: all 0.2s;
+        }
+        .link-highlight:hover { color: #93c5fd; text-decoration-color: #93c5fd; }
+
+        /* Sidebar Navigation */
+        .sidebar-link {
+            display: block; padding: 12px 20px; color: #6b7280; font-size: 0.9rem; border-left: 2px solid rgba(255,255,255,0.05); transition: all 0.2s;
+        }
+        .sidebar-link:hover { color: #e0e0e0; background: rgba(255,255,255,0.02); }
+        .sidebar-link.active { 
+            color: #A073EE; 
+            border-left-color: #A073EE; 
+            background: linear-gradient(90deg, rgba(160, 115, 238, 0.1) 0%, transparent 100%);
+            font-weight: 600;
+        }
+
+        /* Content Boxes (Step Separation) */
+        .section-box {
+            padding: 2rem;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            scroll-margin-top: 140px; /* Fix for fixed header overlapping */
+        }
+
+        .box-warning { background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; padding: 1.5rem; }
+        .box-info { background: rgba(160, 115, 238, 0.05); border: 1px solid rgba(160, 115, 238, 0.2); border-radius: 8px; padding: 1.5rem; }
+        
+    </style>
+</head>
+
+<body class="antialiased selection:bg-purple-500/30 selection:text-white">
+
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/5 bg-[#0F0A1E]/90 backdrop-blur-xl">
+        <div class="max-w-7xl flex items-center justify-between mx-auto p-4 px-6">
+            <a href="index.html" class="flex items-center gap-2">
+                <span class="text-xl font-bold text-white tracking-wide">
+                    Meta Injector <span class="text-[#A073EE]">Pro</span>
+                </span>
+            </a>
+            <a href="index.html" class="text-xs font-bold text-gray-400 border border-white/10 px-4 py-2 rounded-full hover:bg-white/5 hover:text-white transition">
+                ← Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-6 pt-32 pb-32 flex flex-col lg:flex-row gap-12">
+        
+        <aside class="hidden lg:block w-64 flex-shrink-0">
+            <div class="sticky top-32">
+                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 pl-5">On this page</h4>
+                <nav class="space-y-1">
+                    <a href="#section-1" class="sidebar-link active">1. Agreement</a>
+                    <a href="#section-2" class="sidebar-link">2. Grant of License</a>
+                    <a href="#section-3" class="sidebar-link">3. Refunds & Credits</a>
+                    <a href="#section-4" class="sidebar-link">4. Data & Privacy</a>
+                    <a href="#section-5" class="sidebar-link">5. Third-Party Services</a>
+                    <a href="#section-6" class="sidebar-link">6. Restrictions</a>
+                    <a href="#section-7" class="sidebar-link">7. Disclaimer</a>
+                    <a href="#section-8" class="sidebar-link">8. Contact Us</a>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="flex-1 max-w-4xl">
+            
+            <div class="mb-12 border-b border-white/10 pb-8">
+                <h1>Terms and Conditions</h1>
+                <p class="text-lg text-gray-400">End-User License Agreement (EULA)</p>
+                <div class="flex items-center gap-4 text-xs mt-4 text-gray-500 font-mono">
+                    <span class="px-2 py-1 bg-white/5 rounded">Version 2.3</span>
+                    <span>Updated: Jan 05, 2026</span>
+                </div>
+            </div>
+
+            <section id="section-1" class="section-box">
+                <h2>1. Agreement Overview</h2>
+                <p>This End-User License Agreement ("EULA") is a legal agreement between you (either an individual or a single entity) and <strong>Meta Injector Pro</strong> regarding the use of the software.</p>
+                <p class="mb-0">By installing, copying, or otherwise using the Software, you agree to be bound by the terms of this EULA. If you do not agree, do not install or use the Software.</p>
+            </section>
+
+            <section id="section-2" class="section-box">
+                <h2>2. Grant of License</h2>
+                <p>Upon successful activation, we grant you a non-exclusive, non-transferable, limited license to use the Software.</p>
+                
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                    <div class="bg-white/5 p-4 rounded-lg">
+                        <h3 class="!mt-0 text-white">Single Device</h3>
+                        <p class="mb-0 text-sm">One license key is valid for use on a single computer only.</p>
+                    </div>
+                    <div class="bg-white/5 p-4 rounded-lg">
+                        <h3 class="!mt-0 text-white">Subscription Term</h3>
+                        <p class="mb-0 text-sm">The license is valid only for the duration of your purchased plan.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-3" class="section-box">
+                <h2>3. Payments, Refunds & Credits</h2>
+                
+                <div class="box-warning mb-6">
+                    <div class="flex gap-3">
+                        <span class="text-xl">⛔</span>
+                        <div>
+                            <h3 class="!mt-0 text-red-400">Strict No-Refund Policy</h3>
+                            <p class="text-sm text-gray-300 mb-0">
+                                Since Meta Injector Pro is a digital product with instant access, <strong>ALL SALES ARE FINAL</strong>. We do not offer refunds or exchanges once a purchase is confirmed.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-yellow-500">Credit Expiry Rules</h3>
+                <p>Credits assigned to your account have a specific validity period (e.g., 30 days).</p>
+                <ul class="list-disc list-inside space-y-1 text-sm">
+                    <li>You must consume credits within the validity period.</li>
+                    <li><strong>Unused credits will expire</strong> automatically after the validity date.</li>
+                    <li>Expired credits are <strong>non-refundable</strong>.</li>
+                </ul>
+            </section>
+
+            <section id="section-4" class="section-box">
+                <h2>4. Data Collection & Privacy</h2>
+                <p>We are transparent about the data we collect to manage licenses.</p>
+
+                <div class="space-y-4 mt-4">
+                    <div class="border-l-2 border-green-500 pl-4">
+                        <h3 class="!mt-0 text-green-400">✅ We Collect</h3>
+                        <ul class="text-sm text-gray-400 list-disc list-inside">
+                            <li>Name, Email, Phone (for Account Management)</li>
+                            <li>Device ID & OS Version (for License Locking)</li>
+                            <li>Usage Activity (Success count for credit deduction)</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-l-2 border-gray-600 pl-4">
+                        <h3 class="!mt-0 text-gray-300">🛡️ We DO NOT Collect</h3>
+                        <p class="text-sm text-gray-400 mb-0">
+                            We <strong>never</strong> store, view, or upload your creative files (Images, EPS, Videos) to our servers. Your assets remain 100% private on your local machine.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section-5" class="section-box">
+                <h2>5. Third-Party Services (AI)</h2>
+                <p>Our "AI Metadata" feature is powered by the <strong>Google Gemini API</strong>. By using this feature, you acknowledge that data (image thumbnails) is sent to Google for processing.</p>
+
+                <div class="box-info mt-4">
+                    <p class="text-sm text-white mb-3 font-bold">Please review Google's Policies:</p>
+                    <ul class="space-y-2">
+                        <li class="flex items-center gap-2">
+                            🔗 <a href="https://policies.google.com/privacy" target="_blank" class="link-highlight">Google Privacy Policy</a>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            🔗 <a href="https://policies.google.com/terms/generative-ai" target="_blank" class="link-highlight">Generative AI User Guidelines</a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="section-box">
+                <h2>6. License Restrictions</h2>
+                <p>You agree NOT to:</p>
+                <ul class="list-disc list-inside space-y-2 text-sm text-gray-400">
+                    <li>Share your license key with others.</li>
+                    <li>Reverse engineer, decompile, or crack the software.</li>
+                    <li>Resell, rent, or redistribute the software installer.</li>
+                </ul>
+                <p class="text-xs text-red-400 mt-4">* Violation of these terms will result in immediate license termination.</p>
+            </section>
+
+            <section id="section-7" class="section-box">
+                <h2>7. Disclaimer</h2>
+                <p class="italic text-gray-500">
+                    The Software is provided "AS IS" without warranty of any kind. Meta Injector Pro shall not be liable for any damages arising out of the use or inability to use the Software.
+                </p>
+            </section>
+
+            <section id="section-8" class="section-box">
+                <h2>8. Contact Us</h2>
+                <p>For support or legal inquiries regarding these terms:</p>
+                
+                <div class="mt-6 flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div class="bg-[#A073EE]/20 p-3 rounded-full text-[#A073EE]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider">Official Email</p>
+                        <a href="mailto:app.metainjectorpro@gmail.com" class="text-lg font-bold text-white hover:text-[#A073EE] transition">
+                            app.metainjectorpro@gmail.com
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="mt-10 pt-10 border-t border-white/5 text-center text-sm text-gray-600">
+                <p>&copy; 2026 Meta Injector Pro. All Rights Reserved.</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll(".section-box");
+        const navLi = document.querySelectorAll(".sidebar-link");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLi.forEach((li) => {
+                li.classList.remove("active");
+                if (li.getAttribute("href").includes(current)) {
+                    li.classList.add("active");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

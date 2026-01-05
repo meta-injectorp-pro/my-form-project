@@ -54,45 +54,53 @@ exports.handler = async (event) => {
             };
         }
 
-        // 3. Determine Duration
-        // Frontend should send 'packageName', if not, default to 0 or manual check
+        // 3. Determine Duration & Promo Logic
         const duration = packageDurations[data.packageName] || 0; 
+        
+        // --- PROMO CODE LOGIC START ---
+        let finalCredits = parseInt(data.credits);
+        const promoCode = data.promoCode || "N/A";
+        
+        if (promoCode === "BONUS500") {
+            finalCredits += 500; // Add 500 Bonus Credits
+        }
+        // --- PROMO CODE LOGIC END ---
 
-        // 4. Save to Database (Updated Fields)
+        // 4. Save to Database
         const creditRequest = {
             "Customer Name": data.name,
             "Phone Number": data.phone,
             "License Key": data.licenseKey,
-            "Credits Requested": parseInt(data.credits),
+            "Credits Requested": finalCredits, // Saved with bonus
             "Amount Sent (BDT)": data.amount.toString(),
             "Payment Method": data.paymentMethod,
             "TrxID": data.trxId,
             "Status": "Pending",
             "Request Date": new Date(),
             "Type": "Credit Top-up",
-            
-            // NEW FIELDS ADDED
             "Package Type": data.packageName || "Custom Credit Pack",
-            "Package Duration": duration
+            "Package Duration": duration,
+            "Promo Code": promoCode // Saving Promo Info
         };
 
         await db.collection('Credits_Purchase').add(creditRequest);
 
-        // 5. Telegram Notification
+        // 5. Telegram Notification (Updated to HTML & Promo Info)
         try {
             const botToken = process.env.TELEGRAM_BOT_TOKEN;
             const chatId = process.env.TELEGRAM_CHAT_ID;
 
             if (botToken && chatId) {
-                const messageText = `💎 *New Credit Top-up Request!*
+                const messageText = `💎 <b>New Credit Top-up Request!</b>
 
 📦 Package: ${data.packageName || "Credits"}
 👤 Name: ${data.name}
-📱 Phone: \`${data.phone}\`
+📱 Phone: <code>${data.phone}</code>
 💰 Amount: ${data.amount} BDT
-💎 Credits: ${data.credits}
+💎 Credits: ${finalCredits}
+🎫 Promo: ${promoCode}
 💳 Method: ${data.paymentMethod}
-📝 TrxID: \`${data.trxId}\`
+📝 TrxID: <code>${data.trxId}</code>
 ⏳ Duration: ${duration} Days
 
 Check Admin Panel to Approve.`;
@@ -100,7 +108,7 @@ Check Admin Panel to Approve.`;
                 await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'Markdown' })
+                    body: JSON.stringify({ chat_id: chatId, text: messageText, parse_mode: 'HTML' })
                 });
             }
         } catch (e) { console.error("Telegram Error:", e); }
