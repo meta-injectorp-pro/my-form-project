@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="./Source_Files/favicon.ico">
     <link href="./Source_Files/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #fff; }
@@ -89,6 +90,33 @@
         .step-hidden { display: none; }
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Checkbox Custom Style */
+        .checkbox-custom {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        .checkbox-custom:checked {
+            background-color: #A073EE;
+            border-color: #A073EE;
+        }
+        .checkbox-custom:checked:after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+        
+        .warning-message { color: #ff4d4d; font-size: 12px; margin-top: 5px; display: none; }
     </style>
 </head>
 
@@ -120,6 +148,7 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5">
+                
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
@@ -139,7 +168,6 @@
                     <button onclick="selectPackage('Starter', 150, 2000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
-                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
                 </div>
 
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
@@ -161,7 +189,6 @@
                     <button onclick="selectPackage('Beginner', 200, 3500)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
-                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
                 </div>
 
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
@@ -183,7 +210,6 @@
                     <button onclick="selectPackage('Professional', 400, 6000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
-                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
                 </div>
 
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
@@ -205,7 +231,6 @@
                     <button onclick="selectPackage('Ultimate', 700, 10000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
-                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
                 </div>
 
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
@@ -213,8 +238,8 @@
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Corporate</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳1400</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1000</h2>
+                        <span class="text-gray-400 line-through text-sm mb-1.5">৳1500</span>
+                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1,000</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 6 Months</p>
                     </div>
                     <div class="credits-box">
@@ -227,7 +252,6 @@
                     <button onclick="selectPackage('Corporate', 1000, 20000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
-                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
                 </div>
 
                 <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
@@ -235,8 +259,8 @@
                     <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
                     <h3 class="font-semibold text-heading-6 text-white mb-2">Enterprise</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳2300</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1700</h2>
+                        <span class="text-gray-400 line-through text-sm mb-1.5">৳2500</span>
+                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1,700</h2>
                         <p class="font-medium text-gray-400 mb-1.5">/ 1 Year</p>
                     </div>
                     <div class="credits-box">
@@ -249,7 +273,6 @@
                     <button onclick="selectPackage('Enterprise', 1700, 35000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
                         Top-Up Credit
                     </button>
-                    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden rounded-3xl"><span class="absolute left-0 bottom-0 -z-1"><img src="./Source_Files/blur-16.svg" alt="blur"></span><span class="absolute left-0 top-0 -z-1"><img src="./Source_Files/blur-17.svg" alt="blur"></span></div>
                 </div>
 
             </div>
@@ -318,10 +341,16 @@
                         <input type="text" id="paymentDetails" placeholder="Enter Sender Number or TrxID" class="custom-input">
                     </div>
 
-                    <div class="bg-red-500/10 border border-red-500/20 p-3 rounded-lg mt-4">
-                        <p class="text-xs text-red-400 text-center font-medium">
-                            ⚠ No Refund Policy: Credits are non-refundable under any circumstances once purchased.
-                        </p>
+                    <div class="mt-4 mb-2">
+                        <label class="flex items-start gap-3 cursor-pointer group select-none">
+                            <input type="checkbox" id="termsCheckTopup" class="checkbox-custom w-5 h-5 mt-0.5 flex-shrink-0" onchange="document.getElementById('warnTermsTopup').style.display='none'">
+                            <span class="text-sm text-gray-400 group-hover:text-gray-300 transition leading-snug">
+                                I have read and agree to the 
+                                <a href="terms.html" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms and Conditions</a>
+                                and Refund Policy.
+                            </span>
+                        </label>
+                        <div class="warning-message" id="warnTermsTopup">You must accept the Terms and Conditions to proceed.</div>
                     </div>
 
                     <div class="flex gap-3 mt-4">
@@ -344,19 +373,16 @@
         let selectedData = {};
         let selectedMethod = "";
         
-        // Security Variables
         let failedAttempts = 0;
         let isLocked = false;
         let countdownInterval;
 
-        // Admin Numbers (REPLACE THESE WITH YOUR ACTUAL NUMBERS)
         const paymentNumbers = {
-            "Bkash": "01729816172",  // আপনার আসল বিকাশ নাম্বার দিন
-            "Nagad": "01729816172",  // আপনার আসল নগদ নাম্বার দিন
-            "Rocket": "01729816172"  // আপনার আসল রকেট নাম্বার দিন
+            "Bkash": "01729816172",
+            "Nagad": "01729816172",
+            "Rocket": "01729816172"
         };
 
-        // 1. Select Package
         function selectPackage(name, price, credits) {
             selectedData = { name, price, credits };
             document.getElementById('selected-pkg-name').innerText = name;
@@ -373,7 +399,6 @@
             document.getElementById('step-pricing').classList.remove('step-hidden');
         }
 
-        // 2. Check User (With 3-Strike Lockout)
         async function checkUser() {
             if (isLocked) return; 
 
@@ -387,7 +412,6 @@
                 return;
             }
 
-            // Loading State
             btn.innerHTML = "<span class='spinner'></span> Checking...";
             btn.disabled = true;
             phoneInput.disabled = true;
@@ -420,7 +444,6 @@
 
         function handleFailure(btn, input, msg, customError = "User not found!") {
             failedAttempts++;
-            
             if (failedAttempts >= 3) {
                 startLockdown(60, btn, input, msg);
             } else {
@@ -434,11 +457,9 @@
         function startLockdown(seconds, btn, input, msg) {
             isLocked = true;
             let timeLeft = seconds;
-
             btn.disabled = true;
             input.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
-
             msg.innerHTML = `<span class='text-red-500 font-bold'>Too many wrong attempts! <br> Locked for ${timeLeft}s</span>`;
             btn.innerHTML = `Locked (${timeLeft}s)`;
 
@@ -446,7 +467,6 @@
                 timeLeft--;
                 msg.innerHTML = `<span class='text-red-500 font-bold'>Too many wrong attempts! <br> Locked for ${timeLeft}s</span>`;
                 btn.innerHTML = `Locked (${timeLeft}s)`;
-
                 if (timeLeft <= 0) {
                     clearInterval(countdownInterval);
                     resetLockdown(btn, input, msg);
@@ -457,16 +477,13 @@
         function resetLockdown(btn, input, msg) {
             isLocked = false;
             failedAttempts = 0;
-            
             btn.disabled = false;
             input.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            
             btn.innerHTML = "Next Step";
             msg.innerHTML = "<span class='text-green-400'>You can try again now.</span>";
         }
 
-        // 3. Select Payment Method
         function selectPayment(method) {
             selectedMethod = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
@@ -476,17 +493,32 @@
             document.getElementById('payment-inputs').classList.remove('hidden');
         }
 
-        // 4. Submit Payment
-        // 4. Submit Payment
         async function submitCreditRequest() {
             const paymentDetails = document.getElementById('paymentDetails').value;
+            const termsCheck = document.getElementById('termsCheckTopup');
+            const warnTerms = document.getElementById('warnTermsTopup');
             const btn = document.getElementById('payBtn');
             const msg = document.getElementById('payment-msg');
 
+            // --- VALIDATION START ---
+            let isValid = true;
+
+            // 1. Terms Check
+            if (!termsCheck.checked) {
+                warnTerms.style.display = 'block';
+                isValid = false;
+            } else {
+                warnTerms.style.display = 'none';
+            }
+
+            // 2. TrxID Check
             if (!paymentDetails) {
                 msg.innerHTML = "<span class='text-red-500'>Please enter Sender Number or TrxID.</span>";
-                return;
+                isValid = false;
             }
+
+            if (!isValid) return;
+            // --- VALIDATION END ---
 
             btn.innerHTML = "<span class='spinner'></span> Processing...";
             btn.disabled = true;
@@ -500,7 +532,6 @@
                 paymentMethod: selectedMethod,
                 senderNumber: "See TrxID Box", 
                 trxId: paymentDetails,
-                // NEW: Sending Package Name explicitly
                 packageName: selectedData.name 
             };
 
@@ -511,12 +542,41 @@
                 const result = await response.json();
 
                 if (response.ok) {
+                    // === UPDATED: INFORMATIVE SUCCESS PAGE ===
                     document.getElementById('step-payment').innerHTML = `
-                        <div class="glass-panel p-8 text-center">
-                            <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">✓</div>
-                            <h2 class="text-2xl font-bold text-gray-800 mb-2">Request Submitted!</h2>
-                            <p class="text-gray-500 mb-6">${result.message}</p>
-                            <a href="index.html" class="pricing-button-gradient px-6 py-2 rounded-lg text-white font-semibold hover:shadow-button transition">Back to Home</a>
+                        <div class="glass-panel p-8 text-center animate-fade-in">
+                            <div class="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-[0_0_20px_rgba(74,222,128,0.2)]">✓</div>
+                            <h2 class="text-2xl font-bold text-white mb-2">Payment Submitted!</h2>
+                            <p class="text-gray-400 text-sm mb-6">Your top-up request is under review.</p>
+
+                            <div class="bg-white/5 rounded-xl p-4 mb-6 border border-white/10 text-left space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-xs">Package</span>
+                                    <span class="text-white text-sm font-bold">${selectedData.name}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-xs">Credits</span>
+                                    <span class="text-white text-sm font-bold">${selectedData.credits.toLocaleString()}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-xs">Amount Paid</span>
+                                    <span class="text-purple-400 text-sm font-bold">৳${selectedData.price}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400 text-xs">TrxID / Number</span>
+                                    <span class="text-white text-sm font-mono break-all">${paymentDetails}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
+                                <p class="text-xs text-blue-300">
+                                    <i class="fa-solid fa-clock mr-1"></i> Credits will be added automatically after admin verification (10-30 mins).
+                                </p>
+                            </div>
+
+                            <a href="index.html" class="block w-full pricing-button-gradient py-3 rounded-lg text-white font-bold hover:shadow-button transition">
+                                Back to Home
+                            </a>
                         </div>
                     `;
                 } else {

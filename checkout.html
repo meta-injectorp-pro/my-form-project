@@ -70,6 +70,31 @@
         .btn-glow:hover {
             box-shadow: 0 0 25px rgba(138, 77, 255, 0.6);
         }
+
+        /* Custom Checkbox */
+        .checkbox-custom {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        .checkbox-custom:checked {
+            background-color: #A073EE;
+            border-color: #A073EE;
+        }
+        .checkbox-custom:checked:after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -239,7 +264,19 @@
                             </div>
                         </div>
 
-                        <button type="submit" id="submitBtn" class="mt-8 w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 btn-glow text-white font-bold rounded-xl text-lg shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                        <div class="mt-8 mb-6">
+                            <label class="flex items-start gap-3 cursor-pointer group select-none">
+                                <input type="checkbox" id="termsCheck" class="checkbox-custom w-5 h-5 mt-0.5 flex-shrink-0">
+                                <span class="text-sm text-gray-400 group-hover:text-gray-300 transition leading-snug">
+                                    I have read and agree to the 
+                                    <a href="terms.html" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms and Conditions</a>
+                                    and Refund Policy.
+                                </span>
+                            </label>
+                            <div class="warning-message" id="warnTerms">You must accept the Terms and Conditions to proceed.</div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 btn-glow text-white font-bold rounded-xl text-lg shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
                             Confirm Purchase
                         </button>
                         
@@ -353,16 +390,18 @@
                 name: document.getElementById('fullName'),
                 phone: document.getElementById('phone'),
                 email: document.getElementById('email'),
-                trx: document.getElementById('senderInfo')
+                trx: document.getElementById('senderInfo'),
+                terms: document.getElementById('termsCheck') // Added Terms Checkbox
             };
             const warns = {
                 name: document.getElementById('warnName'),
                 phone: document.getElementById('warnPhone'),
                 email: document.getElementById('warnEmail'),
-                trx: document.getElementById('warnTrx')
+                trx: document.getElementById('warnTrx'),
+                terms: document.getElementById('warnTerms') // Added Terms Warning
             };
 
-            // Real-time cleanup
+            // Real-time cleanup & validation
             inputs.phone.addEventListener('input', function() { 
                 this.value = this.value.replace(/[^0-9]/g, ''); 
                 warns.phone.style.display = 'none';
@@ -377,10 +416,18 @@
                 warns.email.style.display = 'none';
                 inputs.email.style.borderColor = '';
             });
+            inputs.terms.addEventListener('change', () => {
+                if(inputs.terms.checked) warns.terms.style.display = 'none';
+            });
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let isValid = true;
+
+                // Terms Validation
+                if (!inputs.terms.checked) {
+                    warns.terms.style.display = 'block'; isValid = false;
+                }
 
                 // Simple Validation
                 if (inputs.name.value.trim().length < 3) {
@@ -441,7 +488,7 @@
                         elements.successView.classList.remove('hidden');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
-                        // === NEW: HANDLE ACTIVE PAID USER ERROR ===
+                        // Handle Active Paid User Error
                         if (data.errorType === 'ACTIVE_PLAN') {
                             elements.statusMsg.style.display = 'block';
                             elements.statusMsg.className = "mt-6 p-6 rounded-xl text-center border bg-purple-900/20 border-[#A073EE]/50";
@@ -455,9 +502,8 @@
                                     </a>
                                 </div>
                             `;
-                            // Hide submit button to force them to click the link
                             elements.submitBtn.style.display = 'none';
-                            return; // Stop further execution
+                            return; 
                         }
 
                         throw new Error(data.message || 'Submission failed');
