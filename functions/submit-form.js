@@ -126,7 +126,7 @@ exports.handler = async (event) => {
             "Package": "Free Trial",
             "Duration": selectedPkg.duration,
             "Credits": selectedPkg.credits,
-            "Status": "Sent",
+            "Status": "Active",
             "RequestDate": bdNow, 
             "Activation Date": formatCustomDate(bdNow),
             "Expiry Date": formatCustomDate(bdExpiry),
