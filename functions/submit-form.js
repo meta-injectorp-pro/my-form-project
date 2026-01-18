@@ -271,7 +271,13 @@ Check Admin Panel to Approve.`;
         }
     } catch (e) { console.error("Telegram Error:", e); }
 
+    // ... আগের কোড ...
+
     // EMAIL NOTIFICATION (PAID)
+    
+    // ১. এই লাইনটি যোগ করুন (লিংক পাওয়ার জন্য)
+    const softwareLink = process.env.SOFTWARE_LINK || "#"; 
+
     const mailOptions = {
         from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
         to: data.Email,
@@ -317,6 +323,9 @@ Check Admin Panel to Approve.`;
                             </tr>
 
                         </table></td></tr>
+
+                        <tr><td align="center" style="padding: 0 40px 30px;"><a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: #ffffff; text-decoration: none; padding: 14px 30px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block;">Download Software</a></td></tr>
+
                         <tr><td align="center" style="padding: 0 40px 40px;"><p style="color:#666; font-size: 13px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display:inline-block;">⏱ Your license will activate automatically after admin verification.</p></td></tr>
                     </table>
                     <p style="color:#6b7280; font-size: 12px; margin-top:20px;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
