@@ -1238,182 +1238,212 @@
   <!-- ====== Back To Top End ===== -->
 <script defer="" src="./Source_Files/bundle.js.download"></script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f0b597887eded3',t:'MTc1Nzg2MTU1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./Source_Files/saved_resource.html"></iframe><script defer="" src="./Source_Files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;9a6015d415bb4773a0bff22543062d3b&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
-<!-- ====== Ai Chatbot Section Start ===== -->
-<style>
-    /* Pulse Animation */
-    @keyframes chatPulse {
-        0% { box-shadow: 0 0 0 0 rgba(160, 115, 238, 0.6); transform: scale(1); }
-        70% { box-shadow: 0 0 0 10px rgba(160, 115, 238, 0); transform: scale(1.05); }
-        100% { box-shadow: 0 0 0 0 rgba(160, 115, 238, 0); transform: scale(1); }
-    }
-    .chat-animate { animation: chatPulse 2s infinite; }
+<!-- ================= CHATBOT UI START ================= -->
 
-    /* Custom Scrollbar */
-    #chat-messages::-webkit-scrollbar { width: 5px; }
-    #chat-messages::-webkit-scrollbar-track { background: transparent; }
-    #chat-messages::-webkit-scrollbar-thumb { background: #A073EE; border-radius: 10px; }
-    
-    .chat-input:focus { border-color: #A073EE !important; box-shadow: 0 0 8px rgba(160, 115, 238, 0.3); }
+<style>
+/* 1. Ripple Animation */
+@keyframes rippleWave {
+    0% { box-shadow: 0 0 0 0 rgba(160,115,238,0.45), 0 0 0 8px rgba(160,115,238,0.25); transform: scale(1); }
+    70% { box-shadow: 0 0 0 14px rgba(160,115,238,0), 0 0 0 28px rgba(160,115,238,0); transform: scale(1.1); }
+    100% { box-shadow: none; transform: scale(1); }
+}
+.chat-animate { animation: rippleWave 2.6s infinite cubic-bezier(0.4,0,0.2,1); }
+
+/* 2. Scrollbar */
+#chat-messages::-webkit-scrollbar { width: 5px; }
+#chat-messages::-webkit-scrollbar-thumb { background: #A073EE; border-radius: 10px; }
+
+/* 3. Input Focus */
+.chat-input:focus { border-color: #A073EE; box-shadow: 0 0 8px rgba(160,115,238,0.3); }
+
+/* 4. Tooltip */
+#chat-tooltip {
+    position: absolute; bottom: 65px; right: 0;
+    background: #2a2342; color: #fff; font-size: 12px;
+    padding: 8px 12px; border-radius: 10px; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: all 0.3s;
+    border: 1px solid rgba(160,115,238,0.3);
+}
+#chat-toggle-btn:hover #chat-tooltip { opacity: 1; transform: translateY(-5px); }
 </style>
 
-<div id="chat-toggle-btn" class="chat-animate" style="position: fixed; bottom: 32px; right: 30px; z-index: 2147483647; background: #A073EE; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: bottom 0.3s ease-in-out, transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.2);">
-    <img src="./Source_Files/icon.svg" alt="Chat" style="width: 25px; height: 25px; filter: brightness(0) invert(1);">
+<div id="chat-toggle-btn" class="chat-animate"
+style="position:fixed;bottom:32px;right:30px;z-index:2147483647;
+background:#A073EE;width:52px;height:52px;border-radius:50%;
+cursor:pointer;display:flex;align-items:center;justify-content:center;
+transition: bottom 0.4s ease-in-out; /* Smooth Scroll Movement */
+box-shadow:0 4px 15px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.25);">
+    <img src="./Source_Files/icon.svg" style="width:26px;height:26px;filter:brightness(0) invert(1);">
+    <div id="chat-tooltip">Need help? Chat with us!</div>
 </div>
 
-<div id="chatbot-container" style="display: none; position: fixed; bottom: 100px; right: 30px; z-index: 2147483647; width: 340px; height: 480px; background: #1a1625; border-radius: 18px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); border: 1px solid rgba(160, 115, 238, 0.3); overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; transition: bottom 0.3s ease-in-out; flex-direction: column;">
-    
-    <div style="background: linear-gradient(135deg, #A073EE 0%, #7c3aed 100%); padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="background: white; padding: 5px; border-radius: 50%; width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
-                <img src="./Source_Files/icon.svg" alt="Bot" style="width: 20px; height: 20px;">
+<div id="chatbot-container"
+style="display:none;position:fixed;bottom:100px;right:30px;
+z-index:2147483647;width:340px;height:480px;
+background:#1a1625;border-radius:18px;
+box-shadow:0 10px 40px rgba(0,0,0,.6);
+border:1px solid rgba(160,115,238,.3);
+overflow:hidden;font-family:'Plus Jakarta Sans',sans-serif;
+transition: bottom 0.4s ease-in-out; /* Smooth Scroll Movement */
+flex-direction:column;">
+
+    <div style="background:linear-gradient(135deg,#A073EE,#7c3aed);
+    padding:15px;display:flex;justify-content:space-between;align-items:center;">
+        
+        <div style="display:flex;align-items:center;gap:10px;">
+            <div style="background:#fff;padding:5px;border-radius:50%;width:32px;height:32px;
+            display:flex;align-items:center;justify-content:center;">
+                <img src="./Source_Files/icon.svg" style="width:20px;">
             </div>
             <div>
-                <h3 style="margin: 0; color: white; font-size: 15px; font-weight: bold;">Meta Injector Assistant</h3>
-                <div style="display: flex; align-items: center; gap: 4px; margin-top: 2px;">
-                    <span style="width: 6px; height: 6px; background: #4ade80; border-radius: 50%;"></span>
-                    <p style="margin: 0; color: rgba(255,255,255,0.9); font-size: 11px;">Online</p>
-                </div>
+                <b style="color:#fff;font-size:15px;display:block;">Meta Injector Ai Assistant</b>
+                <span style="font-size:11px;color:#fff;font-weight:500;">
+                    <span style="color:#4ade80;font-size:14px;">●</span> Online
+                </span>
             </div>
         </div>
-        <button id="chat-close-btn" style="background: rgba(255,255,255,0.1); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
+
+        <div style="display:flex;align-items:center;gap:10px;">
+            
+            <a href="https://wa.me/8801729816172?text=Hi,%20I%20need%20help%20with%20Meta%20Injector%20Pro." 
+               target="_blank"
+               title="Talk to Human"
+               style="background:rgba(255,255,255,0.2);border:none;color:#fff;
+               width:32px;height:32px;border-radius:50%;cursor:pointer;
+               display:flex;align-items:center;justify-content:center;text-decoration:none;
+               transition: background 0.3s;">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 512 512">
+                    <path d="M256 64C150 64 64 150 64 256v48c0 26.5 21.5 48 48 48h48V208H96v-48c0-88.2 71.8-160 160-160s160 71.8 160 160v48h-64v144h48c26.5 0 48-21.5 48-48v-48c0-106-86-192-192-192z"/>
+                    <path d="M96 384h32c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32H96c-17.7 0-32 14.3-32 32v128c0 17.7 14.3 32 32 32zm320-192h-32c-17.7 0-32 14.3-32 32v128c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32z"/>
+                </svg>
+            </a>
+
+            <button id="chat-close-btn" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;">✕</button>
+        </div>
     </div>
 
-    <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 15px; background: #0F0A1E; display: flex; flex-direction: column; gap: 10px;">
-        <div style="align-self: flex-start; display: flex; gap: 8px; max-width: 90%;">
-            <img src="./Source_Files/icon.svg" style="width: 24px; height: 24px; background: white; border-radius: 50%; padding: 4px; align-self: flex-end; margin-bottom: 5px;">
-            <div style="background: #2d243e; color: #f3f4f6; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 13px; line-height: 1.5; border: 1px solid rgba(255,255,255,0.05);">
-                Hi! 👋 Need help with Meta Injector Pro?
+    <div id="chat-messages" style="flex:1;padding:15px;background:#0F0A1E;overflow-y:auto;display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:10px;max-width:90%;">
+            <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <img src="./Source_Files/icon.svg" style="width:18px;height:18px;">
+            </div>
+            <div style="background:#2d243e;color:#f3f4f6;padding:10px 14px;border-radius:18px 18px 18px 4px;font-size:13px;line-height:1.4;">
+                Hello Sir 👋 How may I assist you today?
             </div>
         </div>
     </div>
 
-    <div style="padding: 12px; background: #1a1625; border-top: 1px solid rgba(160, 115, 238, 0.15); display: flex; align-items: center; gap: 8px;">
-        <input type="text" id="user-input" class="chat-input" placeholder="Type here..." 
-            style="flex: 1; background: #0F0A1E; border: 1px solid rgba(160, 115, 238, 0.3); padding: 10px 15px; border-radius: 25px; color: white; outline: none; font-size: 13px; transition: all 0.3s;">
-        <button id="chat-send-btn" style="background: linear-gradient(135deg, #A073EE 0%, #7c3aed 100%); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(160, 115, 238, 0.3);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        </button>
+    <div style="padding:12px;background:#1a1625;border-top:1px solid rgba(160,115,238,.2);display:flex;gap:8px;">
+        <input id="user-input" class="chat-input" placeholder="Type here..."
+        style="flex:1;background:#0F0A1E;border:1px solid rgba(160,115,238,.3);
+        padding:10px 15px;border-radius:25px;color:#fff;outline:none;font-size:13px;">
+        
+        <button id="chat-send-btn" style="background:linear-gradient(135deg,#A073EE,#7c3aed);
+        border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;color:#fff;
+        display:flex;align-items:center;justify-content:center;">➤</button>
     </div>
+
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const toggleBtn = document.getElementById('chat-toggle-btn');
-        const chatBox = document.getElementById('chatbot-container');
-        const inputField = document.getElementById('user-input');
-        const closeBtn = document.getElementById('chat-close-btn');
-        const sendBtn = document.getElementById('chat-send-btn');
-        const messagesContainer = document.getElementById('chat-messages');
+document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("chat-toggle-btn");
+    const chatBox = document.getElementById("chatbot-container");
+    const closeBtn = document.getElementById("chat-close-btn");
+    const sendBtn = document.getElementById("chat-send-btn");
+    const inputField = document.getElementById("user-input");
+    const messages = document.getElementById("chat-messages");
 
-        // Scroll Logic
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                toggleBtn.style.bottom = '90px'; 
-                chatBox.style.bottom = '150px';
-            } else {
-                toggleBtn.style.bottom = '32px';
-                chatBox.style.bottom = '90px';
-            }
-        });
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) { 
 
-        // ✅ FIXED Toggle Function (Prevents instant closing)
-        function toggleChatBox(e) {
-            // This stops the click from reaching the 'document' listener immediately
-            if(e) e.stopPropagation();
-
-            if (chatBox.style.display === 'none' || chatBox.style.display === '') {
-                chatBox.style.display = 'flex';
-                setTimeout(() => inputField.focus(), 100);
-            } else {
-                chatBox.style.display = 'none';
-            }
-        }
-
-        // ✅ NEW: Close when clicking outside
-        document.addEventListener('click', function(event) {
-            // Check if chat is open
-            if (chatBox.style.display === 'flex') {
-                // If the click is NOT inside the chatbox AND NOT on the toggle button
-                if (!chatBox.contains(event.target) && !toggleBtn.contains(event.target)) {
-                    chatBox.style.display = 'none';
-                }
-            }
-        });
-
-        toggleBtn.addEventListener('click', toggleChatBox);
-        closeBtn.addEventListener('click', toggleChatBox);
-
-        async function sendMessage() {
-            const message = inputField.value.trim();
-            if (!message) return;
-
-            addMessage(message, 'user');
-            inputField.value = '';
-            const loadingId = addTypingIndicator();
-
-            try {
-                if (window.location.protocol === 'file:') {
-                    setTimeout(() => {
-                        document.getElementById(loadingId).remove();
-                        addMessage("Note: AI Chat needs Netlify server.", 'bot');
-                    }, 800);
-                    return;
-                }
-
-                const response = await fetch('/.netlify/functions/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-                addMessage(data.reply, 'bot');
-            } catch (error) {
-                document.getElementById(loadingId).remove();
-                addMessage("Connection Error.", 'bot');
-            }
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-        inputField.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-        function addMessage(text, sender) {
-            const div = document.createElement('div');
-            if (sender === 'user') {
-                div.style.cssText = "align-self: flex-end; background: linear-gradient(135deg, #A073EE 0%, #7c3aed 100%); color: white; padding: 10px 14px; border-radius: 18px 18px 4px 18px; font-size: 13px; max-width: 85%; line-height: 1.4; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 5px;";
-                div.innerText = text;
-            } else {
-                div.style.cssText = "align-self: flex-start; display: flex; gap: 8px; max-width: 90%;";
-                div.innerHTML = `
-                    <img src="./Source_Files/icon.svg" style="width: 24px; height: 24px; background: white; border-radius: 50%; padding: 4px; align-self: flex-end; margin-bottom: 5px;">
-                    <div style="background: #2d243e; color: #f3f4f6; padding: 10px 14px; border-radius: 18px 18px 18px 4px; font-size: 13px; line-height: 1.5; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                        ${text.replace(/\n/g, '<br>')}
-                    </div>
-                `;
-            }
-            messagesContainer.appendChild(div);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function addTypingIndicator() {
-            const id = 'typing-' + Date.now();
-            const div = document.createElement('div');
-            div.id = id;
-            div.style.cssText = "align-self: flex-start; display: flex; gap: 8px; max-width: 90%;";
-            div.innerHTML = `
-                <img src="./Source_Files/icon.svg" style="width: 24px; height: 24px; background: white; border-radius: 50%; padding: 4px; align-self: flex-end; margin-bottom: 5px;">
-                <div style="background: #2d243e; padding: 10px 14px; border-radius: 18px 18px 18px 4px; border: 1px solid rgba(255,255,255,0.05);">
-                    <span style="font-size: 12px; color: #aaa;">Typing...</span>
-                </div>
-            `;
-            messagesContainer.appendChild(div);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            return id;
+            toggleBtn.style.bottom = '110px'; 
+            chatBox.style.bottom = '170px';
+        } else {
+            toggleBtn.style.bottom = '32px';
+            chatBox.style.bottom = '100px';
         }
     });
+
+    function toggleChat(e) {
+        if(e) e.stopPropagation();
+        if (chatBox.style.display === "flex") {
+            chatBox.style.display = "none";
+        } else {
+            chatBox.style.display = "flex";
+            setTimeout(() => inputField.focus(), 100);
+        }
+    }
+
+    toggleBtn.onclick = toggleChat;
+    closeBtn.onclick = () => chatBox.style.display = "none";
+    chatBox.onclick = (e) => e.stopPropagation();
+
+    document.onclick = (e) => {
+        if (!chatBox.contains(e.target) && !toggleBtn.contains(e.target)) {
+            chatBox.style.display = "none";
+        }
+    };
+
+    async function sendMessage() {
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        inputField.value = "";
+
+        messages.innerHTML += `
+            <div style="align-self:flex-end;background:linear-gradient(135deg,#A073EE,#7c3aed);color:#fff;
+            padding:10px 14px;border-radius:18px 18px 4px 18px;max-width:80%;font-size:13px;">
+                ${text}
+            </div>`;
+        messages.scrollTop = messages.scrollHeight;
+
+        const loadingId = "typing-" + Date.now();
+        messages.innerHTML += `
+            <div id="${loadingId}" style="display:flex;gap:10px;max-width:90%;">
+                <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <img src="./Source_Files/icon.svg" style="width:18px;">
+                </div>
+                <div style="background:#2d243e;padding:10px 14px;border-radius:18px 18px 18px 4px;border:1px solid rgba(255,255,255,0.1);">
+                    <span style="font-size:12px;color:#aaa;">Typing...</span>
+                </div>
+            </div>`;
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+            const res = await fetch('/.netlify/functions/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await res.json();
+            
+            document.getElementById(loadingId).remove();
+
+            messages.innerHTML += `
+                <div style="display:flex;gap:10px;max-width:90%;">
+                    <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;
+                    display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <img src="./Source_Files/icon.svg" style="width:18px;height:18px;">
+                    </div>
+                    <div style="background:#2d243e;color:#f3f4f6;padding:10px 14px;border-radius:18px 18px 18px 4px;font-size:13px;line-height:1.4;">
+                        ${data.reply.replace(/\n/g, '<br>')}
+                    </div>
+                </div>`;
+            messages.scrollTop = messages.scrollHeight;
+
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            messages.innerHTML += `<div style="color:red;font-size:12px;margin-left:40px;">Connection Error.</div>`;
+        }
+    }
+
+    sendBtn.onclick = sendMessage;
+    inputField.onkeypress = (e) => { if (e.key === "Enter") sendMessage(); };
+});
 </script>
-<!-- ====== Ai Chatbot Section End ===== -->
+
+<!-- ================= CHATBOT UI END ================= -->
 	  
 </body></html>
