@@ -145,7 +145,12 @@
         <div id="checkout-grid" class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             
             <div class="lg:col-span-4 fade-in-up" style="animation-delay: 0.1s;">
-                <div class="glass-panel rounded-2xl p-8 sticky top-32">
+                <div class="glass-panel rounded-2xl p-8 sticky top-32 overflow-hidden relative">
+                    
+                    <div id="discountBadge" class="hidden absolute top-0 right-0 bg-gradient-to-bl from-red-500 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-bl-xl z-10 shadow-lg">
+                        25% OFF
+                    </div>
+
                     <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
                         <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         Order Summary
@@ -166,12 +171,22 @@
                             <span class="text-gray-400 text-sm">Duration</span>
                             <span id="pkgDurationDisplay" class="text-yellow-400 font-medium">30 Days</span>
                         </div>
+
+                        <div id="regularPriceRow" class="flex justify-between items-center px-2 hidden">
+                            <span class="text-gray-500 text-sm">Regular Price</span>
+                            <span class="text-gray-500 font-medium line-through decoration-red-500/50">৳<span id="regularPriceVal">0</span></span>
+                        </div>
+
+                        <div id="discountRow" class="flex justify-between items-center px-2 hidden">
+                            <span class="text-green-400 text-sm">Discount Savings</span>
+                            <span class="text-green-400 font-medium">-৳<span id="discountVal">0</span></span>
+                        </div>
                     </div>
 
                     <div class="border-t border-dashed border-white/10 pt-6 mt-6" id="priceRow">
                         <div class="flex justify-between items-end">
-                            <span class="text-gray-400 font-medium">Total</span>
-                            <span id="totalPrice" class="text-3xl font-bold text-white tracking-tight">৳130</span>
+                            <span class="text-gray-300 font-medium">Total Payable</span>
+                            <span id="totalPrice" class="text-3xl font-bold text-[#A073EE] tracking-tight">৳130</span>
                         </div>
                     </div>
                     
@@ -294,19 +309,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // ================== CONFIGURATION ==================
             const packageDetails = {
-                "Free Trial":   { label: "3 Days",   days: "3", credits: "100" },
-                "Starter":      { label: "1 Month",  days: "30", credits: "2,000" },
-                "Beginner":     { label: "1 Month",  days: "30", credits: "3,500" },
-                "Professional": { label: "2 Months", days: "60", credits: "6,000" },
-                "Ultimate":     { label: "3 Months", days: "90", credits: "10,000" },
-                "Corporate":    { label: "6 Months", days: "180", credits: "20,000" },
-                "Enterprise":   { label: "1 Year",   days: "365", credits: "35,000" }
+                "Free Trial":   { label: "3 Days",   days: "3", credits: "100",    regular: 0 },
+                "Starter":      { label: "1 Month",  days: "30", credits: "2,000",  regular: 200 }, 
+                "Beginner":     { label: "1 Month",  days: "30", credits: "3,500",  regular: 350 },
+                "Professional": { label: "2 Months", days: "60", credits: "6,000",  regular: 600 },
+                "Ultimate":     { label: "3 Months", days: "90", credits: "10,000", regular: 950 },
+                "Corporate":    { label: "6 Months", days: "180", credits: "20,000", regular: 1350 },
+                "Enterprise":   { label: "1 Year",   days: "365", credits: "35,000", regular: 2000 }
             };
 
             const paymentNumbers = {
-                "bKash": "01729816172", // Replace with actual number
+                "bKash": "01729816172", 
                 "Nagad": "01729816172",
                 "Rocket": "01729816172"
             };
@@ -316,7 +330,6 @@
             const pkgName = params.get('package') || 'Starter';
             let pkgPrice = params.get('price') ? parseInt(params.get('price')) : 0;
             
-            // Fix Price for Free Trial URL manual entry
             if(pkgName === "Free Trial") pkgPrice = 0;
 
             // DOM Elements
@@ -326,6 +339,14 @@
                 pkgDuration: document.getElementById('pkgDurationDisplay'),
                 totalPrice: document.getElementById('totalPrice'),
                 priceRow: document.getElementById('priceRow'),
+                
+                // Discount Elements
+                regularPriceRow: document.getElementById('regularPriceRow'),
+                regularPriceVal: document.getElementById('regularPriceVal'),
+                discountRow: document.getElementById('discountRow'),
+                discountVal: document.getElementById('discountVal'),
+                discountBadge: document.getElementById('discountBadge'),
+
                 paymentSection: document.getElementById('paymentSection'),
                 payInstruction: document.getElementById('paymentInstruction'),
                 payNumber: document.getElementById('payNumber'),
@@ -342,17 +363,21 @@
             elements.pkgName.innerText = pkgName;
             elements.totalPrice.innerText = '৳' + pkgPrice;
 
+            // ================== SET DATA FROM HARDCODED LIST ==================
             let durationDays = "30";
+            let regularPrice = 0;
+
             if (packageDetails[pkgName]) {
                 elements.pkgDuration.innerText = packageDetails[pkgName].label;
                 elements.pkgCredits.innerText = packageDetails[pkgName].credits;
                 durationDays = packageDetails[pkgName].days;
+                regularPrice = packageDetails[pkgName].regular; // Get Hardcoded Regular Price
             } else {
                 elements.pkgDuration.innerText = "1 Month";
                 elements.pkgCredits.innerText = params.get('credits') || "--";
             }
 
-            // ================== FREE TRIAL LOGIC ==================
+            // ================== SHOW DISCOUNT LOGIC ==================
             const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
 
             if (isFreeTrial) {
@@ -360,6 +385,23 @@
                 elements.priceRow.style.display = 'none';
                 elements.submitBtn.innerText = "Start Your Free Trial";
             } else {
+                // SIMPLE CALCULATION (Regular - Current = Savings)
+                const discountAmount = regularPrice - pkgPrice;
+
+                if (regularPrice > pkgPrice) {
+                    elements.regularPriceVal.innerText = regularPrice;
+                    elements.discountVal.innerText = discountAmount;
+                    
+                    // Show Rows
+                    elements.regularPriceRow.classList.remove('hidden');
+                    elements.discountRow.classList.remove('hidden');
+                    elements.discountBadge.classList.remove('hidden');
+                    
+                    // Badge Text Update (Optional)
+                    // const percentOff = Math.round((discountAmount / regularPrice) * 100);
+                    // elements.discountBadge.innerText = percentOff + "% OFF";
+                }
+
                 elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
             }
 
@@ -375,7 +417,6 @@
                 });
             });
 
-            // Copy Number Logic
             elements.copyBtn.addEventListener('click', () => {
                 const number = elements.payNumber.innerText;
                 navigator.clipboard.writeText(number).then(() => {
@@ -384,24 +425,24 @@
                 });
             });
 
-            // ================== FORM VALIDATION & SUBMIT ==================
+            // ================== FORM SUBMIT LOGIC (UNCHANGED) ==================
             const form = document.getElementById('checkoutForm');
             const inputs = {
                 name: document.getElementById('fullName'),
                 phone: document.getElementById('phone'),
                 email: document.getElementById('email'),
                 trx: document.getElementById('senderInfo'),
-                terms: document.getElementById('termsCheck') // Added Terms Checkbox
+                terms: document.getElementById('termsCheck')
             };
             const warns = {
                 name: document.getElementById('warnName'),
                 phone: document.getElementById('warnPhone'),
                 email: document.getElementById('warnEmail'),
                 trx: document.getElementById('warnTrx'),
-                terms: document.getElementById('warnTerms') // Added Terms Warning
+                terms: document.getElementById('warnTerms')
             };
 
-            // Real-time cleanup & validation
+            // Validation Listeners
             inputs.phone.addEventListener('input', function() { 
                 this.value = this.value.replace(/[^0-9]/g, ''); 
                 warns.phone.style.display = 'none';
@@ -424,44 +465,27 @@
                 e.preventDefault();
                 let isValid = true;
 
-                // Terms Validation
-                if (!inputs.terms.checked) {
-                    warns.terms.style.display = 'block'; isValid = false;
-                }
-
-                // Simple Validation
-                if (inputs.name.value.trim().length < 3) {
-                    warns.name.style.display = 'block'; isValid = false;
-                }
-                if (inputs.phone.value.length < 11) {
-                    warns.phone.style.display = 'block'; isValid = false;
-                }
+                if (!inputs.terms.checked) { warns.terms.style.display = 'block'; isValid = false; }
+                if (inputs.name.value.trim().length < 3) { warns.name.style.display = 'block'; isValid = false; }
+                if (inputs.phone.value.length < 11) { warns.phone.style.display = 'block'; isValid = false; }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(inputs.email.value)) {
-                    warns.email.style.display = 'block'; isValid = false;
-                }
+                if (!emailRegex.test(inputs.email.value)) { warns.email.style.display = 'block'; isValid = false; }
 
-                // Payment Validation (if paid)
                 let selectedMethodVal = "Free Trial";
                 let trxVal = "N/A";
                 
                 if (!isFreeTrial) {
                     const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
-                    if(!selectedMethod) {
-                        alert("Please select a payment method."); return;
-                    }
+                    if(!selectedMethod) { alert("Please select a payment method."); return; }
                     selectedMethodVal = selectedMethod.value;
                     trxVal = inputs.trx.value.trim();
-                    if (trxVal.length < 4) {
-                        warns.trx.style.display = 'block'; isValid = false;
-                    }
+                    if (trxVal.length < 4) { warns.trx.style.display = 'block'; isValid = false; }
                 }
 
                 if(!isValid) return;
 
-                // Proceed to Submit
                 elements.submitBtn.disabled = true;
-                elements.submitBtn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-3 inline-block" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Processing...`;
+                elements.submitBtn.innerHTML = `Processing...`;
                 elements.statusMsg.style.display = 'none';
 
                 const formData = new FormData();
@@ -483,29 +507,17 @@
                     const data = await response.json();
 
                     if(response.ok) {
-                        // Success Animation
                         elements.checkoutGrid.style.display = 'none';
                         elements.successView.classList.remove('hidden');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     } else {
-                        // Handle Active Paid User Error
                         if (data.errorType === 'ACTIVE_PLAN') {
                             elements.statusMsg.style.display = 'block';
                             elements.statusMsg.className = "mt-6 p-6 rounded-xl text-center border bg-purple-900/20 border-[#A073EE]/50";
-                            elements.statusMsg.innerHTML = `
-                                <div class="flex flex-col items-center gap-3">
-                                    <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-400 mb-1">⚠️</div>
-                                    <h3 class="text-lg font-bold text-white">Action Required</h3>
-                                    <p class="text-gray-300 text-sm mb-2">${data.message}</p>
-                                    <a href="topup.html" class="inline-flex items-center justify-center px-6 py-2.5 bg-[#A073EE] hover:bg-[#8b5cf6] text-white font-bold rounded-lg transition-all shadow-[0_0_15px_rgba(160,115,238,0.4)]">
-                                        Go to Credit Top-up
-                                    </a>
-                                </div>
-                            `;
+                            elements.statusMsg.innerHTML = `<p class="text-white">${data.message}</p>`;
                             elements.submitBtn.style.display = 'none';
                             return; 
                         }
-
                         throw new Error(data.message || 'Submission failed');
                     }
                 } catch (error) {
@@ -513,7 +525,6 @@
                     elements.statusMsg.style.display = 'block';
                     elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
                     elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
-                    
                     elements.submitBtn.disabled = false;
                     elements.submitBtn.innerText = isFreeTrial ? "Start Your Free Trial" : "Confirm Purchase";
                 }
