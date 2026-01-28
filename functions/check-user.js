@@ -6,7 +6,7 @@ if (!admin.apps.length) {
         credential: admin.credential.cert({
             projectId: process.env.FIREBASE_PROJECT_ID,
             clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-            // Private Key-এর নিউলাইন (\n) সমস্যা সমাধান করা হলো
+            // Private Key-এর নিউলাইন (\n) সমস্যা সমাধান
             privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
         })
     });
@@ -24,14 +24,13 @@ exports.handler = async (event) => {
         const body = JSON.parse(event.body);
         const phoneNumber = body.phone; // ফ্রন্টএন্ড থেকে আসা ফোন নম্বর
 
-        // ২. ডাটাবেসে ফোন নম্বর খোঁজা
-        // আপনার 'licenseDatabase' কালেকশনে ফোন নম্বরটি যে ফিল্ডে সেভ আছে তার নাম দিন (যেমন: 'Phone Number')
+        // ২. ডাটাবেসে ফোন নম্বর খোঁজা (আপনার অরিজিনাল লজিক)
         const userSnapshot = await db.collection('licenseDatabase')
                                      .where('Phone Number', '==', phoneNumber)
                                      .limit(1)
                                      .get();
 
-        // ৩. ইউজার না পাওয়া গেলে
+        // ৩. ইউজার না পাওয়া গেলে
         if (userSnapshot.empty) {
             return {
                 statusCode: 404,
@@ -39,18 +38,20 @@ exports.handler = async (event) => {
             };
         }
 
-        // ৪. ইউজার পাওয়া গেলে নাম এবং লাইসেন্স কী নেওয়া
+        // ৪. ইউজার পাওয়া গেলে ডাটা নেওয়া
         const userData = userSnapshot.docs[0].data();
-        const licenseKey = userSnapshot.docs[0].id; // লাইসেন্স কী (Document ID)
+        const licenseKey = userSnapshot.docs[0].id;
 
         return {
             statusCode: 200,
             body: JSON.stringify({
                 found: true,
-                name: userData['Customer Name'], // ইউজারের নাম
-				phone: userData['Phone Number'],   // ফোন নম্বর (ডাটাবেস ফিল্ডের নাম)
-                email: userData['Email'] || userData['Email Address'] // ইমেইল (ডাটাবেসে যে নামে আছে)
-                licenseKey: licenseKey // এটি ফ্রন্টএন্ডে লুকিয়ে রাখা হবে পরবর্তী স্টেপের জন্য
+                licenseKey: licenseKey,
+                name: userData['Customer Name'], // নাম
+                
+                // ✅ শুধু এই দুটি লাইন যোগ করা হয়েছে:
+                email: userData['Email'] || userData['Email Address'] || "No Email",
+                phone: userData['Phone Number']
             })
         };
 
