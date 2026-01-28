@@ -48,6 +48,8 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 found: true,
                 name: userData['Customer Name'], // ইউজারের নাম
+				phone: userData['Phone Number'],   // ফোন নম্বর (ডাটাবেস ফিল্ডের নাম)
+                email: userData['Email'] || userData['Email Address'] // ইমেইল (ডাটাবেসে যে নামে আছে)
                 licenseKey: licenseKey // এটি ফ্রন্টএন্ডে লুকিয়ে রাখা হবে পরবর্তী স্টেপের জন্য
             })
         };
