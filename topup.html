@@ -13,121 +13,111 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #fff; }
         
-        /* Glass Panel Styling */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-        }
-        
-        /* Custom Input Field */
-        .custom-input {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff !important; 
-            border-radius: 8px;
-            padding: 12px 16px;
-            width: 100%;
-            outline: none;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-        .custom-input::placeholder { color: rgba(255, 255, 255, 0.5); }
-        .custom-input:focus {
-            border-color: #A073EE;
-            background-color: rgba(255, 255, 255, 0.15) !important;
-        }
-
-        /* Purple Gradient Button Style */
-        .pricing-button-gradient {
-            background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%);
-            color: white;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
+        /* === Homepage Style Card CSS === */
+        .pkg-card {
             transition: all 0.3s ease-in-out;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #13111C; /* Darker bg like homepage */
         }
-        
-        .pricing-button-gradient:hover {
-            box-shadow: 0 0 25px rgba(160, 115, 238, 0.5);
-            transform: translateY(-3px);
+        .pkg-card:hover {
+            box-shadow: 0 0 30px rgba(160, 115, 238, 0.25); 
+            border-color: #A073EE; 
+            transform: translateY(-5px); 
         }
-
-        /* Payment Method Button */
-        .payment-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 60px; /* Fixed height for logos */
-        }
-        .payment-btn.active {
-            border-color: #A073EE;
-            background-color: rgba(160, 115, 238, 0.1);
-            box-shadow: 0 0 15px rgba(160, 115, 238, 0.2);
-        }
-        .payment-btn img {
-            max-height: 40px; /* Logo size control */
-            width: auto;
-            object-fit: contain;
-        }
-
-        /* Ribbon Position */
         .ribbon-img-outside {
             position: absolute; top: -8px; left: -8px; width: 80px; z-index: 50; pointer-events: none;
         }
-
-        /* Credits Box */
         .credits-box {
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; padding: 12px; margin-top: 20px; margin-bottom: 20px;
+            width: 100%; padding: 12px; margin-top: 20px; margin-bottom: 10px;
             background: rgba(255, 255, 255, 0.03); 
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
         }
+        .regular-price {
+            font-size: 0.9em; color: #9ca3af; text-decoration: line-through; font-weight: 500; margin-bottom: 6px;
+        }
+        .pricing-gradient-text {
+            background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pricing-gradient-divider {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+        }
+
+        /* === Modern Glass Steps (Verification & Checkout) === */
+        .glass-panel-modern {
+            background: rgba(19, 17, 28, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 4-Side Glow Effect */
+        .glass-panel-modern::before {
+            content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #A073EE, transparent, #6E25ED, transparent);
+            z-index: -1; border-radius: 26px; opacity: 0.5; filter: blur(10px);
+        }
+
+        /* Inputs */
+        .custom-input {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff !important; border-radius: 12px; padding: 14px 16px;
+            width: 100%; outline: none; transition: all 0.3s ease; font-size: 1rem;
+        }
+        .custom-input:focus {
+            border-color: #A073EE; background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 15px rgba(160, 115, 238, 0.2);
+        }
+
+        /* Buttons */
+        .pricing-button-gradient {
+            background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%);
+            color: white; border: none; position: relative; overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        .pricing-button-gradient:hover {
+            box-shadow: 0 0 25px rgba(160, 115, 238, 0.6); transform: translateY(-2px);
+        }
+
+        /* Payment Selectors */
+        .payment-btn {
+            display: flex; align-items: center; justify-content: center; height: 65px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; transition: all 0.3s;
+        }
+        .payment-btn.active {
+            border-color: #A073EE; background: rgba(160, 115, 238, 0.15);
+            box-shadow: 0 0 20px rgba(160, 115, 238, 0.3);
+        }
+        .payment-btn img { max-height: 35px; width: auto; }
 
         .step-hidden { display: none; }
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Checkbox Custom Style */
-        .checkbox-custom {
-            appearance: none;
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            display: inline-block;
-            position: relative;
-            cursor: pointer;
-        }
-        .checkbox-custom:checked {
-            background-color: #A073EE;
-            border-color: #A073EE;
-        }
-        .checkbox-custom:checked:after {
-            content: '✓';
-            position: absolute;
-            color: white;
-            font-size: 12px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-        }
         
+        /* Checkbox */
+        .checkbox-custom { appearance: none; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; cursor: pointer; }
+        .checkbox-custom:checked { background: #A073EE; border-color: #A073EE; }
+        .checkbox-custom:checked:after { content: '✓'; position: absolute; color: white; font-size: 12px; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
         .warning-message { color: #ff4d4d; font-size: 12px; margin-top: 5px; display: none; }
     </style>
 </head>
 
-<body class="bg-dark text-white relative z-1 overflow-x-hidden">
+<body class="bg-[#0F0A1E] text-white relative z-1 overflow-x-hidden">
 
-    <div class="absolute -z-10 pointer-events-none inset-0 overflow-hidden">
-        <div class="stars"></div>
-        <div class="stars2"></div>
+    <div class="fixed inset-0 pointer-events-none -z-10">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-[128px]"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-900/20 rounded-full blur-[128px]"></div>
     </div>
 
-    <header class="fixed left-0 top-0 w-full z-50 bg-dark/70 backdrop-blur-lg border-b border-white/10 py-4 transition-all duration-300">
+    <header class="fixed left-0 top-0 w-full z-50 bg-[#0F0A1E]/80 backdrop-blur-lg border-b border-white/10 py-4 transition-all duration-300">
         <div class="max-w-[1170px] mx-auto px-6 flex justify-between items-center">
             <a href="index.html" class="flex items-center gap-2.5 group">
                 <img src="./Source_Files/favicon.ico" alt="Meta Injector Logo" class="w-9 h-9 group-hover:scale-110 transition-transform duration-300">
@@ -139,302 +129,310 @@
         </div>
     </header>
 
-    <main class="pt-35 pb-20">
+    <main class="pt-32 pb-20">
         
-        <div id="step-pricing" class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
-            <div class="text-center mb-12">
-                <h1 class="text-3xl md:text-4xl font-bold mb-4">Select Credit Pack</h1>
-                <p class="text-gray-400">Choose a package to add credits to your existing account.</p>
+        <div id="step-pricing" class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 animate-fade-in">
+            <div class="text-center mb-16">
+                <span class="inline-flex items-center gap-2 py-2 px-4.5 rounded-full bg-white/5 border border-white/10 mb-4">
+                    <span class="text-[#A073EE] text-sm font-bold">Top-Up Store</span>
+                </span>
+                <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Select Credit Pack</h1>
+                <p class="text-gray-400 max-w-2xl mx-auto">Choose a package to instantly add credits to your account. Same great value, instant delivery.</p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7.5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 
-                <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
+                <div class="pkg-card rounded-3xl relative pt-12 pb-10 px-8">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
-                    <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
-                    <h3 class="font-semibold text-heading-6 text-white mb-2">Starter</h3>
+                    <span class="absolute right-8 top-8"><img src="./Source_Files/pricing-icon-01.svg" alt="icon" class="w-8"></span>
+                    <h3 class="font-bold text-2xl text-white mb-2">Starter</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳200</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳150</h2>
-                        <p class="font-medium text-gray-400 mb-1.5">/ 1 Month</p>
+                        <span class="regular-price">৳200</span>
+                        <h2 class="font-bold text-4xl pricing-gradient-text leading-none">৳150</h2>
+                        <p class="font-medium text-gray-400 mb-1">/ 1 Month</p>
                     </div>
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">2,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-                    <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
-                    <div class="h-4"></div>
-                    <button onclick="selectPackage('Starter', 150, 2000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
-                        Top-Up Credit
-                    </button>
+                    <p class="text-center text-[#A073EE] text-xs font-medium mb-4">( 1 Credit = 1 Generation )</p>
+                    <div class="mb-6 w-full h-[1px] pricing-gradient-divider"></div>
+                    <ul class="flex flex-col gap-3 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">No Personal API Required</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">High-Ranking Stock SEO</span></li>
+                    </ul>
+                    <button onclick="selectPackage('Starter', 150, 2000)" class="w-full py-3.5 rounded-xl font-bold text-white pricing-button-gradient hover:scale-105 transform transition">Top-Up Credits</button>
                 </div>
 
-                <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
+                <div class="pkg-card rounded-3xl relative pt-12 pb-10 px-8 border-[#A073EE]/50 shadow-[0_0_20px_rgba(160,115,238,0.1)]">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
-                    <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
-                    <h3 class="font-semibold text-heading-6 text-white mb-2">Beginner</h3>
+                    <span class="absolute right-8 top-8"><img src="./Source_Files/pricing-icon-02.svg" alt="icon" class="w-8"></span>
+                    <h3 class="font-bold text-2xl text-white mb-2">Beginner</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳300</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳200</h2>
-                        <p class="font-medium text-gray-400 mb-1.5">/ 1 Month</p>
+                        <span class="regular-price">৳350</span>
+                        <h2 class="font-bold text-4xl pricing-gradient-text leading-none">৳200</h2>
+                        <p class="font-medium text-gray-400 mb-1">/ 1 Month</p>
                     </div>
-                    <div class="credits-box">
+                    <div class="credits-box bg-[#A073EE]/10 border-[#A073EE]/20">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">3,500</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-                    <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
-                    <div class="h-4"></div>
-                    <button onclick="selectPackage('Beginner', 200, 3500)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
-                        Top-Up Credit
-                    </button>
+                    <p class="text-center text-[#A073EE] text-xs font-medium mb-4">( 1 Credit = 1 Generation )</p>
+                    <div class="mb-6 w-full h-[1px] pricing-gradient-divider"></div>
+                    <ul class="flex flex-col gap-3 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">AI Bulk Metadata Generation</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">Smart Image-to-Prompt Tool</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">24/7 Priority Tech Support</span></li>
+                    </ul>
+                    <button onclick="selectPackage('Beginner', 200, 3500)" class="w-full py-3.5 rounded-xl font-bold text-white pricing-button-gradient hover:scale-105 transform transition">Top-Up Credits</button>
                 </div>
 
-                <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
+                <div class="pkg-card rounded-3xl relative pt-12 pb-10 px-8">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
-                    <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
-                    <h3 class="font-semibold text-heading-6 text-white mb-2">Professional</h3>
+                    <span class="absolute right-8 top-8"><img src="./Source_Files/pricing-icon-03.svg" alt="icon" class="w-8"></span>
+                    <h3 class="font-bold text-2xl text-white mb-2">Professional</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳600</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳400</h2>
-                        <p class="font-medium text-gray-400 mb-1.5">/ 2 Months</p>
+                        <span class="regular-price">৳600</span>
+                        <h2 class="font-bold text-4xl pricing-gradient-text leading-none">৳400</h2>
+                        <p class="font-medium text-gray-400 mb-1">/ 2 Months</p>
                     </div>
                     <div class="credits-box">
                         <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">6,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-                    <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
-                    <div class="h-4"></div>
-                    <button onclick="selectPackage('Professional', 400, 6000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
-                        Top-Up Credit
-                    </button>
+                    <p class="text-center text-[#A073EE] text-xs font-medium mb-4">( 1 Credit = 1 Generation )</p>
+                    <div class="mb-6 w-full h-[1px] pricing-gradient-divider"></div>
+                    <ul class="flex flex-col gap-3 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">All Basic Features Included</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    </ul>
+                    <button onclick="selectPackage('Professional', 400, 6000)" class="w-full py-3.5 rounded-xl font-bold text-white pricing-button-gradient hover:scale-105 transform transition">Top-Up Credits</button>
                 </div>
 
-                <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
+                <div class="pkg-card rounded-3xl relative pt-12 pb-10 px-8">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
-                    <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-01.svg" alt="icon"></span>
-                    <h3 class="font-semibold text-heading-6 text-white mb-2">Ultimate</h3>
+                    <span class="absolute right-8 top-8"><img src="./Source_Files/pricing-icon-01.svg" alt="icon" class="w-8"></span>
+                    <h3 class="font-bold text-2xl text-white mb-2">Ultimate</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳1000</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳700</h2>
-                        <p class="font-medium text-gray-400 mb-1.5">/ 3 Months</p>
+                        <span class="regular-price">৳950</span>
+                        <h2 class="font-bold text-4xl pricing-gradient-text leading-none">৳700</h2>
+                        <p class="font-medium text-gray-400 mb-1">/ 3 Months</p>
                     </div>
                     <div class="credits-box">
-                        <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">10,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-                    <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
-                    <div class="h-4"></div>
-                    <button onclick="selectPackage('Ultimate', 700, 10000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
-                        Top-Up Credit
-                    </button>
+                    <p class="text-center text-[#A073EE] text-xs font-medium mb-4">( 1 Credit = 1 Generation )</p>
+                    <div class="mb-6 w-full h-[1px] pricing-gradient-divider"></div>
+                    <ul class="flex flex-col gap-3 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">All Basic Features Included</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    </ul>
+                    <button onclick="selectPackage('Ultimate', 700, 10000)" class="w-full py-3.5 rounded-xl font-bold text-white pricing-button-gradient hover:scale-105 transform transition">Top-Up Credits</button>
                 </div>
 
-                <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
+                <div class="pkg-card rounded-3xl relative pt-12 pb-10 px-8">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
-                    <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-02.svg" alt="icon"></span>
-                    <h3 class="font-semibold text-heading-6 text-white mb-2">Corporate</h3>
+                    <span class="absolute right-8 top-8"><img src="./Source_Files/pricing-icon-02.svg" alt="icon" class="w-8"></span>
+                    <h3 class="font-bold text-2xl text-white mb-2">Corporate</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳1500</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1,000</h2>
-                        <p class="font-medium text-gray-400 mb-1.5">/ 6 Months</p>
+                        <span class="regular-price">৳1350</span>
+                        <h2 class="font-bold text-4xl pricing-gradient-text leading-none">৳1000</h2>
+                        <p class="font-medium text-gray-400 mb-1">/ 6 Months</p>
                     </div>
                     <div class="credits-box">
-                        <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">20,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-                    <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
-                    <div class="h-4"></div>
-                    <button onclick="selectPackage('Corporate', 1000, 20000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
-                        Top-Up Credit
-                    </button>
+                    <p class="text-center text-[#A073EE] text-xs font-medium mb-4">( 1 Credit = 1 Generation )</p>
+                    <div class="mb-6 w-full h-[1px] pricing-gradient-divider"></div>
+                    <ul class="flex flex-col gap-3 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">All Basic Features Included</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    </ul>
+                    <button onclick="selectPackage('Corporate', 1000, 20000)" class="w-full py-3.5 rounded-xl font-bold text-white pricing-button-gradient hover:scale-105 transform transition">Top-Up Credits</button>
                 </div>
 
-                <div class="pkg-card relative rounded-3xl bg-dark z-20 pt-12.5 pb-10 px-8 xl:px-10 pricing-item-border transition-all cursor-default hover:border-purple-500">
+                <div class="pkg-card rounded-3xl relative pt-12 pb-10 px-8">
                     <img src="./Source_Files/corner_ribbon.png" alt="25% Off" class="ribbon-img-outside">
-                    <span class="absolute right-9 top-10"><img src="./Source_Files/pricing-icon-03.svg" alt="icon"></span>
-                    <h3 class="font-semibold text-heading-6 text-white mb-2">Enterprise</h3>
+                    <span class="absolute right-8 top-8"><img src="./Source_Files/pricing-icon-03.svg" alt="icon" class="w-8"></span>
+                    <h3 class="font-bold text-2xl text-white mb-2">Enterprise</h3>
                     <div class="flex items-end gap-2">
-                        <span class="text-gray-400 line-through text-sm mb-1.5">৳2500</span>
-                        <h2 class="font-bold text-custom-1 pricing-gradient-text leading-none">৳1,700</h2>
-                        <p class="font-medium text-gray-400 mb-1.5">/ 1 Year</p>
+                        <span class="regular-price">৳2500</span>
+                        <h2 class="font-bold text-4xl pricing-gradient-text leading-none">৳1700</h2>
+                        <p class="font-medium text-gray-400 mb-1">/ 1 Year</p>
                     </div>
                     <div class="credits-box">
-                        <img src="./Source_Files/pricing-icon-04.svg" alt="icon" class="w-5 h-5 opacity-80">
                         <span class="font-bold text-white text-xl">35,000</span>
                         <span class="text-sm font-medium text-gray-300 uppercase tracking-wide">Credits</span>
                     </div>
-                    <div class="mb-8 w-full h-[1px] pricing-gradient-divider"></div>
-                    <div class="h-4"></div>
-                    <button onclick="selectPackage('Enterprise', 1700, 35000)" class="w-full flex items-center justify-center gap-1.5 font-bold text-white p-3 rounded-lg pricing-button-gradient cursor-pointer">
-                        Top-Up Credit
-                    </button>
+                    <p class="text-center text-[#A073EE] text-xs font-medium mb-4">( 1 Credit = 1 Generation )</p>
+                    <div class="mb-6 w-full h-[1px] pricing-gradient-divider"></div>
+                    <ul class="flex flex-col gap-3 mb-8">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">All Basic Features Included</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">Image-Vector-Video Support</span></li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-[#A073EE]"></i><span class="text-gray-300 text-sm">One-Click Direct Embedding</span></li>
+                    </ul>
+                    <button onclick="selectPackage('Enterprise', 1700, 35000)" class="w-full py-3.5 rounded-xl font-bold text-white pricing-button-gradient hover:scale-105 transform transition">Top-Up Credits</button>
                 </div>
 
             </div>
         </div>
 
         <div id="step-verify" class="step-hidden max-w-[500px] mx-auto px-6 mt-10">
-            <button onclick="backToPricing()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm">← Back to Packages</button>
-            <div class="glass-panel p-10 text-center relative overflow-hidden">
-                <div class="mb-8 border-b border-white/10 pb-4">
-                    <p class="text-gray-400 text-sm">Selected Package</p>
-                    <h3 class="text-2xl font-bold text-white mt-1" id="selected-pkg-name">Starter</h3>
-                    <p class="text-purple font-semibold">৳<span id="selected-pkg-price">150</span></p>
+            <button onclick="backToPricing()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 text-sm transition">
+                <i class="fa-solid fa-arrow-left"></i> Change Package
+            </button>
+            
+            <div class="glass-panel-modern p-10 text-center">
+                <div class="mb-8 border-b border-white/10 pb-6">
+                    <p class="text-gray-400 text-xs uppercase tracking-wider font-bold mb-2">Selected Package</p>
+                    <h3 class="text-3xl font-extrabold text-white" id="selected-pkg-name">Starter</h3>
+                    <div class="text-2xl font-bold text-[#A073EE] mt-1">৳<span id="selected-pkg-price">150</span></div>
                 </div>
-                <h2 class="text-2xl font-bold mb-2">Account Verification</h2>
-                <p class="text-gray-400 mb-6 text-sm">Enter the phone number linked to your license.</p>
-                <input type="text" id="userPhone" placeholder="Enter Phone Number (e.g., 017xxxxxxxx)" class="custom-input mb-4 text-center">
-                <button onclick="checkUser()" id="verifyBtn" class="w-full py-3 rounded-lg font-bold text-white pricing-button-gradient hover:shadow-button transition">Next Step</button>
-                <p id="verify-msg" class="text-sm mt-4 min-h-[20px]"></p>
+
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold text-white mb-2">Verify Account</h2>
+                    <p class="text-gray-400 text-sm">Enter the phone number linked to your Meta Injector license.</p>
+                </div>
+
+                <div class="mb-6 relative">
+                    <input type="text" id="userPhone" placeholder="017xxxxxxxx" class="custom-input text-center text-lg font-mono tracking-widest">
+                </div>
+                
+                <button onclick="checkUser()" id="verifyBtn" class="w-full py-4 rounded-xl font-bold text-white pricing-button-gradient shadow-[0_0_20px_rgba(160,115,238,0.4)] hover:shadow-[0_0_30px_rgba(160,115,238,0.6)] transition">
+                    Verify & Continue
+                </button>
+                
+                <p id="verify-msg" class="text-sm mt-4 min-h-[20px] font-medium"></p>
             </div>
         </div>
 
         <div id="step-payment" class="step-hidden max-w-[550px] mx-auto px-6 mt-10">
-            <div class="glass-panel p-8 text-left">
-                <div class="text-center mb-8">
-    <div class="w-16 h-16 bg-gradient-to-tr from-green-400 to-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-5 text-2xl shadow-[0_0_25px_rgba(52,211,153,0.5)] animate-bounce">
-        <i class="fa-solid fa-check"></i>
-    </div>
-    
-    <h2 class="text-2xl font-bold text-white mb-6">User Verified!</h2>
-    
-    <div class="relative group mx-auto max-w-sm">
-        <div class="absolute -inset-0.5 bg-gradient-to-r from-[#A073EE] to-blue-500 rounded-2xl opacity-60 blur transition duration-200 group-hover:opacity-100"></div>
-        
-        <div class="relative bg-[#151024] rounded-xl p-6 border border-white/10 shadow-2xl">
-            <p class="text-[10px] text-gray-400 uppercase tracking-[0.2em] mb-2 font-bold">Account Holder</p>
-            
-            <h3 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-200 to-white tracking-wide mb-5 drop-shadow-[0_0_10px_rgba(160,115,238,0.5)]" id="display-name">
-                Loading...
-            </h3>
-            
-            <div class="space-y-2">
-                <div class="flex items-center justify-between bg-white/5 py-2 px-3 rounded-lg border border-white/5 hover:border-white/10 transition">
-                    <div class="flex items-center gap-2 text-gray-400 text-xs">
-                        <i class="fa-solid fa-envelope text-[#A073EE]"></i> Email
-                    </div>
-                    <span id="display-email" class="text-sm text-white font-mono">...</span>
-                </div>
+            <div class="glass-panel-modern p-8 md:p-10">
                 
-                <div class="flex items-center justify-between bg-white/5 py-2 px-3 rounded-lg border border-white/5 hover:border-white/10 transition">
-                    <div class="flex items-center gap-2 text-gray-400 text-xs">
-                        <i class="fa-solid fa-phone text-[#A073EE]"></i> Phone
+                <div class="text-center mb-8">
+                    <div class="w-14 h-14 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 text-2xl shadow-[0_0_20px_rgba(74,222,128,0.3)] animate-bounce">
+                        <i class="fa-solid fa-check"></i>
                     </div>
-                    <span id="display-phone" class="text-sm text-white font-mono">...</span>
+                    <h2 class="text-xl font-bold text-white mb-6 tracking-wide">User Verified!</h2>
+                    
+                    <div class="relative group mx-auto max-w-sm">
+                        <div class="absolute -inset-0.5 bg-gradient-to-b from-[#A073EE]/50 to-purple-900/50 rounded-2xl opacity-50 blur transition duration-200"></div>
+                        <div class="relative bg-[#120d21] rounded-xl p-6 border border-white/10 shadow-2xl">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-2 font-bold text-center">Account Holder</p>
+                            <h3 class="text-2xl font-bold text-white text-center mb-6" id="display-name">Loading...</h3>
+                            
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between bg-[#1a1625] py-3 px-4 rounded-lg border border-white/5 hover:border-[#A073EE]/30 transition">
+                                    <div class="flex items-center gap-3 text-gray-400 text-xs font-semibold uppercase"><i class="fa-solid fa-envelope text-[#A073EE]"></i> Email</div>
+                                    <span id="display-email" class="text-sm text-gray-300 font-medium tracking-wide">...</span>
+                                </div>
+                                <div class="flex items-center justify-between bg-[#1a1625] py-3 px-4 rounded-lg border border-white/5 hover:border-[#A073EE]/30 transition">
+                                    <div class="flex items-center gap-3 text-gray-400 text-xs font-semibold uppercase"><i class="fa-solid fa-phone text-[#A073EE]"></i> Phone</div>
+                                    <span id="display-phone" class="text-sm text-gray-300 font-mono tracking-wider">...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="hiddenLicenseKey">
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <input type="hidden" id="hiddenLicenseKey">
-</div>
-
-                <div class="bg-white/5 rounded-lg p-4 mb-6 border border-white/10">
+                <div class="bg-white/5 rounded-2xl p-5 mb-8 border border-white/10">
                     <div class="flex justify-between mb-2">
-                        <span class="text-gray-400 text-sm">Package:</span>
+                        <span class="text-gray-400 text-sm">Package</span>
                         <strong class="text-white" id="conf-pkg-name">Starter</strong>
                     </div>
                     <div class="flex justify-between mb-2">
-                        <span class="text-gray-400 text-sm">Credits:</span>
+                        <span class="text-gray-400 text-sm">Credits</span>
                         <strong class="text-white" id="conf-credits">2,000</strong>
                     </div>
-                    
                     <div class="flex justify-between mb-2">
-                        <span class="text-gray-500 text-sm">Regular Price:</span>
+                        <span class="text-gray-500 text-sm">Regular Price</span>
                         <span class="text-gray-500 line-through font-medium">৳<span id="conf-regular">200</span></span>
                     </div>
-
-                    <div class="flex justify-between mb-2">
-                        <span class="text-green-400 text-sm">You Save:</span>
-                        <span class="text-green-400 font-bold">
-                            -৳<span id="conf-saved">50</span> 
-                            <span class="text-[10px] bg-green-500/10 px-1.5 py-0.5 rounded ml-1 border border-green-500/20" id="conf-percent">25% OFF</span>
-                        </span>
+                    <div class="flex justify-between mb-3">
+                        <span class="text-green-400 text-sm">You Save</span>
+                        <span class="text-green-400 font-bold">-৳<span id="conf-saved">50</span> <span class="text-[10px] bg-green-500/10 px-1.5 py-0.5 rounded ml-1 border border-green-500/20" id="conf-percent">25% OFF</span></span>
                     </div>
-
-                    <div class="flex justify-between border-t border-white/10 pt-2 mt-2">
-                        <span class="text-gray-400 text-sm">Total Payable:</span>
-                        <strong class="text-purple text-lg">৳<span id="conf-amount">150</span></strong>
-                    </div>
-                </div>
-                <label class="block text-sm text-gray-400 mb-3 font-semibold">Select Payment Method</label>
-                <div class="grid grid-cols-3 gap-3 mb-6">
-                    <div onclick="selectPayment('Bkash')" id="btn-Bkash" class="payment-btn bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:border-purple/50 transition">
-                        <img src="./Source_Files/bkash.svg" alt="Bkash">
-                    </div>
-                    <div onclick="selectPayment('Nagad')" id="btn-Nagad" class="payment-btn bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:border-purple/50 transition">
-                        <img src="./Source_Files/nagad.svg" alt="Nagad">
-                    </div>
-                    <div onclick="selectPayment('Rocket')" id="btn-Rocket" class="payment-btn bg-white/5 border border-white/10 rounded-lg cursor-pointer hover:border-purple/50 transition">
-                        <img src="./Source_Files/rocket.svg" alt="Rocket">
+                    <div class="flex justify-between border-t border-white/10 pt-3 mt-2 items-center">
+                        <span class="text-white font-medium">Total Payable</span>
+                        <strong class="text-[#A073EE] text-3xl">৳<span id="conf-amount">150</span></strong>
                     </div>
                 </div>
 
-                <div id="payment-instruction" class="bg-purple/10 border border-purple/30 p-3 rounded-lg mb-6 text-sm text-center text-gray-300 hidden">
-                    Send Money to: <strong class="text-white text-lg" id="pay-number">01729816172</strong> (Personal)
+                <div class="mb-8">
+                    <label class="block text-xs text-gray-400 mb-3 font-bold uppercase tracking-wider">Select Payment Method</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div onclick="selectPayment('Bkash')" id="btn-Bkash" class="payment-btn cursor-pointer"><img src="./Source_Files/bkash.svg" alt="Bkash"></div>
+                        <div onclick="selectPayment('Nagad')" id="btn-Nagad" class="payment-btn cursor-pointer"><img src="./Source_Files/nagad.svg" alt="Nagad"></div>
+                        <div onclick="selectPayment('Rocket')" id="btn-Rocket" class="payment-btn cursor-pointer"><img src="./Source_Files/rocket.svg" alt="Rocket"></div>
+                    </div>
                 </div>
 
-                <div id="payment-inputs" class="hidden space-y-4">
+                <div id="payment-instruction" class="bg-gradient-to-r from-[#241a3e] to-[#150D24] border border-[#A073EE]/30 p-5 rounded-xl mb-6 text-center hidden relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-2 opacity-10 text-white"><i class="fa-solid fa-money-bill-transfer text-4xl"></i></div>
+                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-2 font-bold">Send Money To (Personal)</p>
+                    <strong class="text-white text-2xl font-mono tracking-widest block mb-1" id="pay-number">01729816172</strong>
+                    <p class="text-[10px] text-gray-500">Copy the number and use 'Send Money'</p>
+                </div>
+
+                <div id="payment-inputs" class="hidden space-y-5">
                     <div>
-                        <label class="block text-xs text-gray-400 mb-1.5">Sender Number / Transaction ID</label>
-                        <input type="text" id="paymentDetails" placeholder="Enter Sender Number or TrxID" class="custom-input">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 pl-1">Transaction ID / Sender No</label>
+                        <input type="text" id="paymentDetails" placeholder="Enter TrxID" class="custom-input font-mono text-center tracking-widest uppercase border-purple-500/30 focus:border-purple-500">
                     </div>
 
-                    <div class="mt-4 mb-2">
+                    <div>
                         <label class="flex items-start gap-3 cursor-pointer group select-none">
                             <input type="checkbox" id="termsCheckTopup" class="checkbox-custom w-5 h-5 mt-0.5 flex-shrink-0" onchange="document.getElementById('warnTermsTopup').style.display='none'">
                             <span class="text-sm text-gray-400 group-hover:text-gray-300 transition leading-snug">
-                                I have read and agree to the 
-                                <a href="terms.html" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms and Conditions</a>
-                                and Refund Policy.
+                                I agree to the <a href="terms.html" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms</a> and Refund Policy.
                             </span>
                         </label>
-                        <div class="warning-message" id="warnTermsTopup">You must accept the Terms and Conditions to proceed.</div>
+                        <div class="warning-message" id="warnTermsTopup">You must accept Terms & Conditions.</div>
                     </div>
 
-                    <div class="flex gap-3 mt-4">
-                        <button onclick="location.reload()" class="w-1/3 py-3 rounded-lg border border-white/20 hover:bg-white/10 transition text-sm text-gray-300">Cancel</button>
-                        <button onclick="submitCreditRequest()" id="payBtn" class="w-2/3 pricing-button-gradient py-3 rounded-lg text-white font-bold hover:shadow-button transition">Confirm & Pay</button>
+                    <div class="flex gap-4 pt-2">
+                        <button onclick="location.reload()" class="w-1/3 py-4 rounded-xl border border-white/10 hover:bg-white/5 transition text-sm text-gray-400 font-medium">Cancel</button>
+                        <button onclick="submitCreditRequest()" id="payBtn" class="w-2/3 pricing-button-gradient py-4 rounded-xl text-white font-bold hover:shadow-button transition transform hover:-translate-y-1">
+                            Confirm Payment
+                        </button>
                     </div>
                 </div>
                 
-                <p id="payment-msg" class="text-center mt-4 text-sm"></p>
+                <p id="payment-msg" class="text-center mt-4 text-sm font-medium"></p>
             </div>
         </div>
 
     </main>
 
-    <footer class="text-center py-8 border-t border-white/10 bg-dark text-gray-500 text-sm">
-        &copy; 2025 Meta Injector Pro. All Rights Reserved.
+    <footer class="text-center py-8 border-t border-white/5 bg-[#0F0A1E] text-gray-600 text-sm">
+        &copy; 2026 Meta Injector Pro. All Rights Reserved.
     </footer>
 
     <script>
         let selectedData = {};
         let selectedMethod = "";
-        
         let failedAttempts = 0;
         let isLocked = false;
         let countdownInterval;
 
-        // NEW: Regular Price Configuration
+        // Regular Price Configuration
         const regularPrices = {
-            "Starter": 200,
-            "Beginner": 350,
-            "Professional": 600,
-            "Ultimate": 950,
-            "Corporate": 1350,
-            "Enterprise": 2500
+            "Starter": 200, "Beginner": 350, "Professional": 600,
+            "Ultimate": 950, "Corporate": 1350, "Enterprise": 2500
         };
 
         const paymentNumbers = {
-            "Bkash": "01729816172",
-            "Nagad": "01729816172",
-            "Rocket": "01729816172"
+            "Bkash": "01729816172", "Nagad": "01729816172", "Rocket": "01729816172"
         };
 
         function selectPackage(name, price, credits) {
@@ -444,7 +442,7 @@
             
             document.getElementById('step-pricing').classList.add('step-hidden');
             document.getElementById('step-verify').classList.remove('step-hidden');
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function backToPricing() {
@@ -462,7 +460,7 @@
             const phone = phoneInput.value;
 
             if (phone.length < 11) {
-                msg.innerHTML = "<span class='text-red-400'>Invalid phone number.</span>";
+                msg.innerHTML = "<span class='text-red-400'><i class='fa-solid fa-circle-exclamation mr-1'></i> Invalid phone number.</span>";
                 return;
             }
 
@@ -479,15 +477,12 @@
 
                 if (result.found) {
                     failedAttempts = 0;
-
+                    
                     document.getElementById('display-name').innerText = result.name;
-
-                    document.getElementById('display-email').innerText = result.email || "No Email Found";
-
-                    document.getElementById('display-phone').innerText = result.phone || phone; 
-
+                    document.getElementById('display-email').innerText = result.email || "N/A";
+                    document.getElementById('display-phone').innerText = result.phone || phone;
                     document.getElementById('hiddenLicenseKey').value = result.licenseKey;
-
+                    
                     document.getElementById('conf-pkg-name').innerText = selectedData.name;
                     document.getElementById('conf-credits').innerText = selectedData.credits.toLocaleString();
                     document.getElementById('conf-amount').innerText = selectedData.price;
@@ -515,8 +510,8 @@
             if (failedAttempts >= 3) {
                 startLockdown(60, btn, input, msg);
             } else {
-                msg.innerHTML = `<span class='text-red-400'>${customError} Try ${failedAttempts}/3.</span>`;
-                btn.innerHTML = "Next Step";
+                msg.innerHTML = `<span class='text-red-400'><i class='fa-solid fa-circle-xmark mr-1'></i> ${customError} Try ${failedAttempts}/3.</span>`;
+                btn.innerHTML = "Verify & Continue";
                 btn.disabled = false;
                 input.disabled = false;
             }
@@ -548,7 +543,7 @@
             btn.disabled = false;
             input.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.innerHTML = "Next Step";
+            btn.innerHTML = "Verify & Continue";
             msg.innerHTML = "<span class='text-green-400'>You can try again now.</span>";
         }
 
@@ -568,10 +563,8 @@
             const btn = document.getElementById('payBtn');
             const msg = document.getElementById('payment-msg');
 
-            // --- VALIDATION START ---
             let isValid = true;
 
-            // 1. Terms Check
             if (!termsCheck.checked) {
                 warnTerms.style.display = 'block';
                 isValid = false;
@@ -579,14 +572,12 @@
                 warnTerms.style.display = 'none';
             }
 
-            // 2. TrxID Check
-            if (!paymentDetails) {
-                msg.innerHTML = "<span class='text-red-500'>Please enter Sender Number or TrxID.</span>";
+            if (!paymentDetails || paymentDetails.length < 4) {
+                msg.innerHTML = "<span class='text-red-500'>Please enter valid Sender Number or TrxID.</span>";
                 isValid = false;
             }
 
             if (!isValid) return;
-            // --- VALIDATION END ---
 
             btn.innerHTML = "<span class='spinner'></span> Processing...";
             btn.disabled = true;
@@ -610,39 +601,37 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    // === UPDATED: INFORMATIVE SUCCESS PAGE ===
                     document.getElementById('step-payment').innerHTML = `
-                        <div class="glass-panel p-8 text-center animate-fade-in">
-                            <div class="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-[0_0_20px_rgba(74,222,128,0.2)]">✓</div>
-                            <h2 class="text-2xl font-bold text-white mb-2">Payment Submitted!</h2>
-                            <p class="text-gray-400 text-sm mb-6">Your top-up request is under review.</p>
+                        <div class="glass-panel-modern p-8 text-center animate-fade-in">
+                            <div class="w-20 h-20 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-[0_0_30px_rgba(74,222,128,0.3)]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold text-white mb-2">Request Submitted!</h2>
+                            <p class="text-gray-400 text-sm mb-8">Your top-up request is pending approval.</p>
 
-                            <div class="bg-white/5 rounded-xl p-4 mb-6 border border-white/10 text-left space-y-2">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-xs">Package</span>
-                                    <span class="text-white text-sm font-bold">${selectedData.name}</span>
+                            <div class="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10 text-left space-y-3">
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span class="text-gray-400 text-sm">Package</span>
+                                    <span class="text-white font-bold">${selectedData.name}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span class="text-gray-400 text-sm">Credits</span>
+                                    <span class="text-white font-bold">${selectedData.credits.toLocaleString()}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-gray-400 text-xs">Credits</span>
-                                    <span class="text-white text-sm font-bold">${selectedData.credits.toLocaleString()}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-xs">Amount Paid</span>
-                                    <span class="text-purple-400 text-sm font-bold">৳${selectedData.price}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-xs">TrxID / Number</span>
-                                    <span class="text-white text-sm font-mono break-all">${paymentDetails}</span>
+                                    <span class="text-gray-400 text-sm">TrxID / Number</span>
+                                    <span class="text-[#A073EE] font-mono font-bold">${paymentDetails}</span>
                                 </div>
                             </div>
 
-                            <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6">
-                                <p class="text-xs text-blue-300">
-                                    <i class="fa-solid fa-clock mr-1"></i> Credits will be added automatically after admin verification (10-30 mins).
+                            <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl mb-8 flex gap-3 items-start text-left">
+                                <i class="fa-solid fa-clock text-blue-400 mt-1"></i>
+                                <p class="text-xs text-blue-200 leading-relaxed">
+                                    Credits will be added automatically after admin verification (usually 10-30 mins). You will receive an email confirmation.
                                 </p>
                             </div>
 
-                            <a href="index.html" class="block w-full pricing-button-gradient py-3 rounded-lg text-white font-bold hover:shadow-button transition">
+                            <a href="index.html" class="block w-full pricing-button-gradient py-4 rounded-xl text-white font-bold hover:shadow-button transition transform hover:-translate-y-1">
                                 Back to Home
                             </a>
                         </div>
@@ -654,7 +643,7 @@
                 }
 
             } catch (error) {
-                msg.innerHTML = "<span class='text-red-500'>Network Error.</span>";
+                msg.innerHTML = "<span class='text-red-500'>Network Error. Please try again.</span>";
                 btn.innerHTML = "Confirm & Pay";
                 btn.disabled = false;
             }
