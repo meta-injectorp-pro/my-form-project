@@ -7,8 +7,139 @@
   \*********************************************************************************************************************************************/
 @charset "UTF-8";
 
-
 <style>
+
+/* Container Layout */
+.counters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    margin-top: 100px; 
+
+    margin-bottom: 10px; 
+}
+
+.counter-card {
+
+    position: relative;
+    width: 250px;
+    padding: 20px 15px;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    margin: 15px;
+
+    display: flex; 
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.icon-box svg {
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
+
+.counter-card:hover {
+    transform: translateY(-8px);
+}
+
+/* --- Multi-Color Themes (Same as before) --- */
+
+/* 1. Pink Theme */
+.customer-bg {
+    background: linear-gradient(135deg, rgba(253, 41, 123, 0.15), rgba(253, 41, 123, 0.05));
+    border-color: rgba(253, 41, 123, 0.3);
+}
+.customer-bg:hover {
+    box-shadow: 0 15px 35px rgba(253, 41, 123, 0.2);
+    border-color: rgba(253, 41, 123, 0.6);
+}
+.customer-bg .number { color: #fd297b; }
+
+/* 2. Blue Theme */
+.project-bg {
+    background: linear-gradient(135deg, rgba(39, 96, 220, 0.15), rgba(39, 96, 220, 0.05));
+    border-color: rgba(39, 96, 220, 0.3);
+}
+.project-bg:hover {
+    box-shadow: 0 15px 35px rgba(39, 96, 220, 0.2);
+    border-color: rgba(39, 96, 220, 0.6);
+}
+.project-bg .number { color: #2760dc; }
+
+/* 3. Cyan Theme */
+.employee-bg {
+    background: linear-gradient(135deg, rgba(88, 192, 207, 0.15), rgba(88, 192, 207, 0.05));
+    border-color: rgba(88, 192, 207, 0.3);
+}
+.employee-bg:hover {
+    box-shadow: 0 15px 35px rgba(88, 192, 207, 0.2);
+    border-color: rgba(88, 192, 207, 0.6);
+}
+.employee-bg .number { color: #58c0cf; }
+
+/* 4. Purple Theme */
+.award-bg {
+    background: linear-gradient(135deg, rgba(166, 103, 248, 0.15), rgba(166, 103, 248, 0.05));
+    border-color: rgba(166, 103, 248, 0.3);
+}
+.award-bg:hover {
+    box-shadow: 0 15px 35px rgba(166, 103, 248, 0.2);
+    border-color: rgba(166, 103, 248, 0.6);
+}
+.award-bg .number { color: #a667f8; }
+
+/* --- Text & Icon Styles --- */
+
+.counter-card .number {
+    position: relative;
+    z-index: 2;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.counter-card .detail {
+    position: relative;
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.bg-icon {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.12;
+    z-index: 1;
+    filter: brightness(0) invert(1);
+}
+
+.customer-bg .bg-icon { background-image: url('assets/counter_icon01.png'); }
+.project-bg .bg-icon { background-image: url('assets/counter_icon02.png'); }
+.employee-bg .bg-icon { background-image: url('assets/counter_icon03.png'); }
+.award-bg .bg-icon { background-image: url('assets/counter_icon04.png'); }
+
+
+
+
+
 
 /* Hero Container Setup */
 .hero-container {
@@ -39,7 +170,6 @@
     );
 }
 
-/* মাউস হোভার করলে গ্লো দৃশ্যমান হবে */
 .hero-container:hover::before {
     opacity: 1;
 }
@@ -4752,14 +4882,41 @@ body{
   transform: translateY(-1px);
 }
 
+/* Button Pulse Animation */
 .hero-btn-glow {
-  transition: all 0.3s ease-out;
+    /* আগের শ্যাডো রিপ্লেস করে নতুন শক্তিশালী শ্যাডো */
+    box-shadow: 0 0 20px rgba(160, 115, 238, 0.5); 
+    animation: pulse-purple 2s infinite;
 }
 
-.hero-btn-glow:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px -5px rgba(160, 115, 238, 0.6);
-  filter: brightness(1.15);
+@keyframes pulse-purple {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(160, 115, 238, 0.7);
+    }
+    70% {
+        transform: scale(1.05); /* বাটনটি একটু বড় হবে */
+        box-shadow: 0 0 0 15px rgba(160, 115, 238, 0); /* গ্লো ছড়িয়ে যাবে */
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(160, 115, 238, 0);
+    }
+}
+
+.hero-button-gradient {
+    /* একটি উজ্জ্বল মাল্টি-কালার গ্রেডিয়েন্ট */
+    background: linear-gradient(45deg, #A073EE, #fd297b, #2760dc, #A073EE);
+    background-size: 300% 300%;
+    animation: gradientMove 4s ease infinite;
+    font-weight: 700; /* ফন্ট আরও মোটা করা হয়েছে */
+    letter-spacing: 0.5px;
+}
+
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 
