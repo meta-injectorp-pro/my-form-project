@@ -411,7 +411,7 @@
                         <label class="flex items-start gap-3 cursor-pointer group select-none">
                             <input type="checkbox" id="termsCheckTopup" class="checkbox-custom w-5 h-5 mt-0.5 flex-shrink-0" onchange="document.getElementById('warnTermsTopup').style.display='none'">
                             <span class="text-sm text-gray-400 group-hover:text-gray-300 transition leading-snug">
-                                I agree to the <a href="terms.html" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms</a> and Refund Policy.
+                                I agree to the <a href="terms.html" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms and Conditions</a> and Refund Policy.
                             </span>
                         </label>
                         <div class="warning-message" id="warnTermsTopup">You must accept Terms & Conditions.</div>
@@ -618,46 +618,64 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('step-payment').innerHTML = `
-                        <div class="glass-panel-modern p-8 text-center animate-fade-in">
-                            <div class="w-20 h-20 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-[0_0_30px_rgba(74,222,128,0.3)]">
-                                <i class="fa-solid fa-check"></i>
-                            </div>
-                            <h2 class="text-3xl font-bold text-white mb-2">Request Submitted!</h2>
-                            <p class="text-gray-400 text-sm mb-8">Your top-up request is pending approval.</p>
+					document.getElementById('step-payment').innerHTML = `
+						<div class="w-full max-w-lg mx-auto text-center pt-10 pb-20 animate-fade-in">
+							
+							<div class="glass-panel p-8 sm:p-12 rounded-3xl border border-[#A073EE]/30 shadow-[0_0_60px_rgba(160,115,238,0.15)] relative overflow-hidden">
+								
+								<div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#A073EE] blur-[20px]"></div>
 
-                            <div class="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10 text-left space-y-3">
-                                <div class="flex justify-between border-b border-white/5 pb-2">
-                                    <span class="text-gray-400 text-sm">Package</span>
-                                    <span class="text-white font-bold">${selectedData.name}</span>
-                                </div>
-                                <div class="flex justify-between border-b border-white/5 pb-2">
-                                    <span class="text-gray-400 text-sm">Credits</span>
-                                    <span class="text-white font-bold">${selectedData.credits.toLocaleString()}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-400 text-sm">TrxID / Number</span>
-                                    <span class="text-[#A073EE] font-mono font-bold">${paymentDetails}</span>
-                                </div>
-                            </div>
+								<div class="w-20 h-20 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+									<svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+									</svg>
+								</div>
 
-                            <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl mb-8 flex gap-3 items-start text-left">
-                                <i class="fa-solid fa-clock text-blue-400 mt-1"></i>
-                                <p class="text-xs text-blue-200 leading-relaxed">
-                                    Credits will be added automatically after admin verification (usually 10-30 mins). You will receive an email confirmation.
-                                </p>
-                            </div>
+								<h2 class="text-3xl font-bold text-white mb-2">Request Submitted!</h2>
+								<p class="text-gray-400 mb-8">Your top-up request has been received.</p>
 
-                            <a href="index.html" class="block w-full pricing-button-gradient py-4 rounded-xl text-white font-bold hover:shadow-button transition transform hover:-translate-y-1">
-                                Back to Home
-                            </a>
-                        </div>
-                    `;
-                } else {
-                    msg.innerHTML = `<span class='text-red-500'>Failed: ${result.message}</span>`;
-                    btn.innerHTML = "Confirm & Pay";
-                    btn.disabled = false;
-                }
+								<div class="bg-white/5 rounded-xl p-4 mb-6 text-sm border border-white/10">
+									<div class="flex justify-between mb-2">
+										<span class="text-gray-400">Package:</span>
+										<span class="font-bold text-[#A073EE]">${selectedData.name}</span>
+									</div>
+									<div class="flex justify-between">
+										<span class="text-gray-400">Credits:</span>
+										<span class="font-bold text-white">${selectedData.credits.toLocaleString()}</span>
+									</div>
+								</div>
+
+								<div class="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-6 mb-8 relative overflow-hidden">
+									
+									<div class="mb-3 flex justify-center">
+										<div class="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center animate-pulse">
+											<svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+											</svg>
+										</div>
+									</div>
+
+									<h3 class="text-lg font-bold text-white mb-1">Processing Time</h3>
+									
+									<p class="text-gray-300 text-sm leading-relaxed">
+										It may take <span class="text-blue-400 font-bold bg-blue-500/10 px-1.5 py-0.5 rounded border border-blue-500/20">5-10 minutes</span> <br class="hidden sm:block"> 
+										for the credits to appear in your account.
+									</p>
+								</div>
+
+								<a href="index.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#A073EE] hover:bg-[#8b5bdc] text-white font-bold transition-all duration-300 shadow-lg shadow-[#A073EE]/25 hover:shadow-[#A073EE]/40 hover:-translate-y-1">
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+									Return to Dashboard
+								</a>
+
+							</div>
+						</div>
+					`;
+				} else {
+					msg.innerHTML = `<span class='text-red-500'>Failed: ${result.message}</span>`;
+					btn.innerHTML = "Confirm & Pay";
+					btn.disabled = false;
+				}
 
             } catch (error) {
                 msg.innerHTML = "<span class='text-red-500'>Network Error. Please try again.</span>";

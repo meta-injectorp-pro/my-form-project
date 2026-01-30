@@ -119,27 +119,55 @@
 
     <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex flex-col items-center justify-center">
         
-        <div id="success-view" class="hidden max-w-2xl w-full text-center fade-in-up">
-            <div class="glass-panel rounded-3xl p-12 shadow-2xl relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent opacity-50"></div>
+        <div id="success-view" class="hidden w-full max-w-lg mx-auto text-center pt-10 pb-20">
+        
+        <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-[#A073EE]/30 shadow-[0_0_60px_rgba(160,115,238,0.15)] relative overflow-hidden">
+            
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#A073EE] blur-[20px]"></div>
+
+            <div class="w-20 h-20 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+                <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white mb-2">Congratulations!</h2>
+            <p class="text-gray-400 mb-8">Your package order has been submited successfully.</p>
+
+            <div class="bg-[#A073EE]/5 border border-[#A073EE]/20 rounded-2xl p-6 mb-8 relative">
                 
-                <div class="relative z-10">
-                    <div class="mb-8 flex justify-center">
-                        <div class="h-24 w-24 bg-gradient-to-tr from-purple-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/30 animate-pulse">
-                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
+                <div class="mb-4 flex justify-center">
+                    <div class="relative">
+                        <svg class="w-12 h-12 text-[#A073EE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                        </span>
                     </div>
-                    <h2 class="text-4xl font-bold text-white mb-4">Success!</h2>
-                    <p class="text-gray-300 text-lg mb-8 max-w-lg mx-auto leading-relaxed">
-                        Your request has been submitted securely. Please check your email inbox for further instructions and license activation.
-                    </p>
-                    <a href="index.html" class="inline-flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 font-bold py-4 px-10 rounded-xl transition duration-300 transform hover:scale-105">
-                        Back to Home
-                    </a>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Check Your Email Now</h3>
+                
+                <p class="text-gray-300 text-sm leading-relaxed mb-3">
+                    We have sent the <span class="text-[#A073EE] font-bold bg-[#A073EE]/10 px-1 rounded">Software Download Link</span> <br class="hidden sm:block"> 
+                    and your <span class="text-[#A073EE] font-bold bg-[#A073EE]/10 px-1 rounded">Activation Key</span> to your email.
+                </p>
+
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 bg-black/20 py-2 rounded-lg">
+                    <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <span>If not found, please check your <b>Spam/Junk</b> folder.</span>
                 </div>
             </div>
+
+            <a href="index.html" class="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 hover:border-white/20 transition-all duration-300 group">
+                <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Return to Home
+            </a>
+
+        </div>
+    </div>
         </div>
 
         <div id="checkout-grid" class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
@@ -211,19 +239,19 @@
                             <div>
                                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Full Name</label>
                                 <input type="text" id="fullName" name="FullName" class="custom-input" placeholder="e.g. Rahim Ahmed">
-                                <div class="warning-message" id="warnName">Please enter full name (letters only).</div>
+                                <div class="warning-message" id="warnName">Please enter your full name (letters only).</div>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Phone Number</label>
                                 <input type="tel" id="phone" name="Phone" class="custom-input" placeholder="017XXXXXXXX" maxlength="11">
-                                <div class="warning-message" id="warnPhone">Please enter valid numeric phone number.</div>
+                                <div class="warning-message" id="warnPhone">Please enter your valid phone number.</div>
                             </div>
                         </div>
 
                         <div class="mb-10">
                             <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Email Address</label>
                             <input type="email" id="email" name="Email" class="custom-input" placeholder="name@example.com">
-                            <div class="warning-message" id="warnEmail">Please enter a valid email address.</div>
+                            <div class="warning-message" id="warnEmail">Please enter your valid email address.</div>
                         </div>
 
                         <div id="paymentSection">
