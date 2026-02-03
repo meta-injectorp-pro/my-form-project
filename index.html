@@ -122,12 +122,21 @@
         <a href="topup.html" class="purple-glass-btn text-sm py-1.5 px-4">
           Credits Top-up
         </a>
-      </li>
+      </li>	  
+	  <li class="nav__menu lg:py-7" :class="{ 'lg:!py-4' : stickyMenu }">
+    <a href="affiliate.html" 
+       class="purple-glass-btn text-sm py-0.8 px-4 inline-flex items-center gap-1"
+       style="background: linear-gradient(to right, #FF512F, #DD2476);">       
+       <span class="font-bold text-lg leading-none">৳</span>       
+       Refer & Earn
+    </a>
+</li>
+	  </li>	  
     </ul>
   </nav>
 
   <div class="flex items-center gap-4 mt-7 lg:mt-0">
-    <span class="text-white/90 text-sm font-medium hidden sm:block">Connect with us:</span>
+    
 
     <a href="https://www.facebook.com/metainjector" target="_blank" class="transition-all duration-300 hover:scale-110">
         <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -1680,7 +1689,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 <!-- ================= CHATBOT UI END ================= -->
 
-
+<!-- ================= CURRENCY CONVERT START ================= -->
 document.addEventListener('DOMContentLoaded', () => {
     const currencyToggle = document.getElementById('currency-toggle');
     const labelBdt = document.getElementById('label-bdt');
@@ -1730,7 +1739,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
 // Counter
       document.addEventListener('DOMContentLoaded', () => {
     let allValues = document.querySelectorAll(".value");
@@ -1752,7 +1760,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }, counterInterval);
     });
 });
+<!-- ================= CURRENCY CONVERT END ================= -->
 
+</script>
+
+<script>
+  // ১. ইউআরএল থেকে রেফারেল কোড চেক করা
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+
+  if (refCode) {
+    // ২. যদি কোড থাকে, ব্রাউজারে সেভ করে রাখা (৩০ দিন মেয়াদ)
+    const now = new Date();
+    const item = {
+      value: refCode,
+      expiry: now.getTime() + 30 * 24 * 60 * 60 * 1000, // ৩০ দিন
+    };
+    localStorage.setItem("affiliate_ref", JSON.stringify(item));
+    console.log("Referral Code Saved:", refCode);
+  }
 </script>
 	  
 </body></html>

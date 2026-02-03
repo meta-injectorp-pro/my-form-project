@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Meta Injector Pro</title>
+  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+  
+  <link href="./Source_Files/style.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { background-color: #0F0A1E; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+    .glass-form {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body x-data="{ stickyMenu: false }" class="antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+      <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#A073EE] opacity-20 blur-[150px] rounded-full"></div>
+      <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#FF512F] opacity-10 blur-[150px] rounded-full"></div>
+  </div>
+
+  <header class="fixed left-0 top-0 w-full z-50 py-6">
+    <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 flex items-center justify-between">
+      <a href="index.html">
+        <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" style="height: 40px; width: auto;">
+      </a>
+      <a href="index.html" class="text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to Home
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center pt-24 pb-12 px-4">
+      <div class="w-full max-w-md">
+          
+          <div class="glass-form rounded-3xl p-8 sm:p-10 relative overflow-hidden">
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[#A073EE] to-transparent opacity-50"></div>
+
+              <div class="text-center mb-8">
+                  <h2 class="text-3xl font-bold mb-2">Welcome Back</h2>
+                  <p class="text-gray-400 text-sm">Login to your dashboard to manage earnings.</p>
+              </div>
+
+              <form action="#" method="POST" class="space-y-5">
+                  
+                  <div>
+                      <label class="block text-sm font-medium text-gray-300 mb-1.5">Email Address</label>
+                      <input type="email" placeholder="Enter your email" required 
+                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#A073EE] focus:ring-1 focus:ring-[#A073EE] transition-all">
+                  </div>
+
+                  <div>
+                      <div class="flex justify-between items-center mb-1.5">
+                          <label class="block text-sm font-medium text-gray-300">Password</label>
+                          <a href="#" class="text-xs text-[#A073EE] hover:text-[#fd297b] transition-colors">Forgot Password?</a>
+                      </div>
+                      <input type="password" placeholder="Enter your password" required 
+                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#A073EE] focus:ring-1 focus:ring-[#A073EE] transition-all">
+                  </div>
+
+                  <button type="submit" 
+                          class="w-full py-3.5 px-6 rounded-lg font-bold text-white shadow-lg transition-all transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(160,115,238,0.4)]"
+                          style="background: linear-gradient(to right, #A073EE, #7c3aed);">
+                      Login Account
+                  </button>
+
+              </form>
+
+              <div class="mt-8 text-center">
+                  <p class="text-sm text-gray-400">Don't have an account? 
+                      <a href="signup.html" class="text-white font-bold hover:underline decoration-[#A073EE]">Create Account</a>
+                  </p>
+              </div>
+
+          </div>
+          
+          <p class="text-center text-xs text-gray-600 mt-6">
+              &copy; 2026 Meta Injector Pro. Secure Login.
+          </p>
+
+      </div>
+  </main>
+
+</body>
+</html>
