@@ -8,12 +8,10 @@ exports.handler = async (event, context) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    // ✅ Change: Fetching from Affiliate_Data
+    // ⚠️ পরিবর্তন: Affiliate_Data থেকে ডাটা আনা
     const userDoc = await db.collection("Affiliate_Data").doc(uid).get();
     
-    if (!userDoc.exists) {
-        return { statusCode: 404, body: "User data not found" };
-    }
+    if (!userDoc.exists) return { statusCode: 404, body: "User data not found" };
 
     const userData = userDoc.data();
 

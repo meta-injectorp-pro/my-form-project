@@ -8,7 +8,7 @@ exports.handler = async (event, context) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    // ✅ Change: Fetching from sub-collection
+    // ⚠️ পরিবর্তন: সাব-কালেকশন থেকে ডাটা আনা
     const earningsSnapshot = await db.collection("Affiliate_Data")
       .doc(uid)
       .collection("Earnings")
@@ -16,9 +16,7 @@ exports.handler = async (event, context) => {
       .get();
 
     const earnings = [];
-    earningsSnapshot.forEach(doc => {
-      earnings.push({ id: doc.id, ...doc.data() });
-    });
+    earningsSnapshot.forEach(doc => earnings.push({ id: doc.id, ...doc.data() }));
 
     return { statusCode: 200, body: JSON.stringify(earnings) };
 

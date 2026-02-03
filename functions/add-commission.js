@@ -5,9 +5,7 @@ exports.handler = async (event, context) => {
 
   const { refCode, amount, orderId, packageType } = JSON.parse(event.body);
 
-  if (!refCode || !amount || !packageType) {
-    return { statusCode: 400, body: "Missing Data" };
-  }
+  if (!refCode || !amount || !packageType) return { statusCode: 400, body: "Missing Data" };
 
   let commissionRate = 0;
   if (packageType === 'Starter') commissionRate = 0.33;
@@ -15,13 +13,11 @@ exports.handler = async (event, context) => {
   else return { statusCode: 200, body: JSON.stringify({ message: "No commission for this package" }) };
 
   try {
-    // ✅ Change: Searching in Affiliate_Data
+    // ⚠️ পরিবর্তন: users এর বদলে Affiliate_Data
     const usersRef = db.collection("Affiliate_Data");
     const snapshot = await usersRef.where("affiliateCode", "==", refCode).limit(1).get();
 
-    if (snapshot.empty) {
-      return { statusCode: 404, body: "Affiliate not found" };
-    }
+    if (snapshot.empty) return { statusCode: 404, body: "Affiliate not found" };
 
     const affiliateDoc = snapshot.docs[0];
     const affiliateId = affiliateDoc.id;
@@ -34,14 +30,13 @@ exports.handler = async (event, context) => {
           const currentBalance = doc.data().balance || 0;
           const currentEarnings = doc.data().totalEarnings || 0;
 
-          // ব্যালেন্স আপডেট
           t.update(userRef, { 
             balance: currentBalance + commission,
             totalEarnings: currentEarnings + commission
           });
 
-          // ✅ Change: Saving history inside the user's sub-collection 'Earnings'
-          const historyRef = userRef.collection("Earnings").doc(); 
+          // ⚠️ পরিবর্তন: সাব-কালেকশন Earnings এ ডাটা রাখা
+          const historyRef = userRef.collection("Earnings").doc();
           t.set(historyRef, {
             amount: commission,
             orderId: orderId,
