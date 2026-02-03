@@ -92,5 +92,48 @@
       </div>
   </main>
 
+<script>
+  const loginForm = document.querySelector('form');
+  const submitBtn = document.querySelector('button[type="submit"]');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // বাটন লোডিং স্ট্যাটাস
+    const originalText = submitBtn.innerText;
+    submitBtn.innerText = "Verifying...";
+    submitBtn.disabled = true;
+
+    const email = document.querySelector('input[type="email"]').value;
+    const password = document.querySelector('input[type="password"]').value;
+
+    try {
+      // আমাদের সিকিউর ব্যাকএন্ডে রিকোয়েস্ট পাঠানো
+      const res = await fetch('/.netlify/functions/login-user', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // টোকেন ব্রাউজারে সেভ করা (Login Session)
+        localStorage.setItem('authToken', data.idToken);
+        
+        // ড্যাশবোর্ডে রিডাইরেক্ট
+        window.location.href = "dashboard.html";
+      } else {
+        alert("Login Failed: " + (data.error || "Unknown error"));
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Network Error. Please try again.");
+    } finally {
+      submitBtn.innerText = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
 </body>
 </html>

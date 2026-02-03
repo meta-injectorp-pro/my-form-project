@@ -337,68 +337,58 @@
     </div>
   </main>
   
-  <script type="module">
-  // শুধুমাত্র অথেনটিকেশন ইমপোর্ট করছি, ডেটাবেস নয়
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  <script>
+  // ১. পেজ লোড হওয়ার সাথে সাথে টোকেন চেক
+  const token = localStorage.getItem('authToken');
 
-  // ⚠️ আপনার অ্যাপের পাবলিক কনফিগ (অবশ্যই আপনার Firebase Console থেকে কপি করে বসাবেন)
-  const firebaseConfig = {
-    apiKey: "YOUR_PUBLIC_API_KEY", 
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // ১. ইউজার অথেনটিকেশন এবং ডেটা লোড
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      try {
-        const token = await user.getIdToken();
-
-        // ক) ড্যাশবোর্ড ডেটা (ব্যালেন্স, নাম, কোড) আনা
-        const res = await fetch('/.netlify/functions/get-dashboard', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (res.ok) {
-            const data = await res.json();
-            
-            // UI আপডেট: ব্যালেন্স
-            document.querySelectorAll('h3.text-3xl.font-bold.text-white')[0].innerText = `৳ ${data.balance}`;
-            const withdrawBalance = document.querySelector('.balance-display');
-            if(withdrawBalance) withdrawBalance.innerText = `৳ ${data.balance}`;
-
-            // UI আপডেট: টোটাল আর্নিং
-            document.querySelectorAll('h3.text-3xl.font-bold.text-white')[1].innerText = `৳ ${data.totalEarnings}`;
-            
-            // UI আপডেট: নাম এবং আইডি
-            const profileName = document.querySelector('.flex-1.min-w-0 p.font-bold');
-            if(profileName) profileName.innerText = data.name;
-            
-            const profileId = document.querySelector('.flex-1.min-w-0 p.text-xs');
-            if(profileId) profileId.innerText = `ID: ${data.affiliateCode}`;
-            
-            // UI আপডেট: রেফারেল লিংক
-            const refInput = document.querySelector('input[readonly]');
-            if(refInput) refInput.value = `https://metainjector.pro/?ref=${data.affiliateCode}`;
-
-            // খ) আর্নিং হিস্টোরি ডেটা লোড করা (এখন সক্রিয়)
-            loadEarningsHistory(token); 
-        }
-      } catch (error) {
-        console.error("Dashboard Load Error", error);
-      }
-    } else {
-      // ইউজার লগইন না থাকলে লগইন পেজে পাঠান
+  if (!token) {
+      // টোকেন না থাকলে লগইন পেজে লাথি
       window.location.href = "login.html";
-    }
-  });
+  } else {
+      // টোকেন থাকলে ডেটা লোড শুরু
+      loadDashboardData();
+  }
 
-  // ২. আর্নিং হিস্টোরি লোড করার ফাংশন
-  async function loadEarningsHistory(token) {
+  // ২. ড্যাশবোর্ড ডেটা লোড ফাংশন
+  async function loadDashboardData() {
+      try {
+          const res = await fetch('/.netlify/functions/get-dashboard', {
+              headers: { 'Authorization': `Bearer ${token}` }
+          });
+
+          if (res.ok) {
+              const data = await res.json();
+              
+              // UI আপডেট
+              document.querySelectorAll('h3.text-3xl.font-bold.text-white')[0].innerText = `৳ ${data.balance}`;
+              
+              const withdrawBalance = document.querySelector('.balance-display');
+              if(withdrawBalance) withdrawBalance.innerText = `৳ ${data.balance}`;
+
+              document.querySelectorAll('h3.text-3xl.font-bold.text-white')[1].innerText = `৳ ${data.totalEarnings}`;
+              
+              const profileName = document.querySelector('.flex-1.min-w-0 p.font-bold');
+              if(profileName) profileName.innerText = data.name;
+              
+              const profileId = document.querySelector('.flex-1.min-w-0 p.text-xs');
+              if(profileId) profileId.innerText = `ID: ${data.affiliateCode}`;
+              
+              const refInput = document.querySelector('input[readonly]');
+              if(refInput) refInput.value = `https://metainjector.pro/?ref=${data.affiliateCode}`;
+
+              // আর্নিং লোড করা
+              loadEarningsHistory();
+          } else {
+              // টোকেন মেয়াদোত্তীর্ণ হলে লগআউট
+              logout();
+          }
+      } catch (error) {
+          console.error("Error loading dashboard:", error);
+      }
+  }
+
+  // ৩. আর্নিং হিস্টোরি লোড
+  async function loadEarningsHistory() {
       const tableBody = document.getElementById('earnings-list');
       if(!tableBody) return;
 
@@ -409,94 +399,75 @@
           
           if (res.ok) {
               const data = await res.json();
-              
               if (data.length === 0) {
-                  tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">No earnings yet. Start sharing your link!</td></tr>';
+                  tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">No earnings yet.</td></tr>';
                   return;
               }
-
               let html = '';
               data.forEach(item => {
-                  const dateObj = new Date(item.date);
-                  const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                  
+                  const dateStr = new Date(item.date).toLocaleDateString();
                   html += `
-                      <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                      <tr class="border-b border-white/5 hover:bg-white/[0.02]">
                           <td class="p-4 text-gray-300">${dateStr}</td>
-                          <td class="p-4"><span class="px-2 py-1 rounded bg-purple-500/20 text-purple-300 text-xs">${item.packageType || 'Package'}</span></td>
-                          <td class="p-4 text-gray-400">৳ ${item.packagePrice}</td>
+                          <td class="p-4">${item.packageType || 'N/A'}</td>
+                          <td class="p-4">৳ ${item.packagePrice}</td>
                           <td class="p-4 text-xs text-gray-500">${item.commissionRate || '20%'}</td>
                           <td class="p-4 text-right text-green-400 font-bold">+৳ ${item.amount}</td>
-                      </tr>
-                  `;
+                      </tr>`;
               });
               tableBody.innerHTML = html;
           }
-      } catch (error) {
-          console.error("Earnings Load Error", error);
-          tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-red-400 text-xs">Failed to load data. Please refresh.</td></tr>';
+      } catch (e) { console.error(e); }
+  }
+
+  // ৪. টাকা তোলার রিকোয়েস্ট (Withdraw)
+  window.handleWithdraw = async function() {
+      const amount = document.querySelector('input[type="number"]').value;
+      const accountNumber = document.querySelector('input[placeholder="017xxxxxxxx"]').value;
+      const methodElement = document.querySelector('input[name="payment_method"]:checked');
+      const method = methodElement ? methodElement.value : null;
+
+      if(!amount || !accountNumber || !method) {
+          alert("Please fill all fields!");
+          return;
+      }
+
+      const btn = document.querySelector('.lg\\:col-span-2 button');
+      btn.innerText = "Processing...";
+      btn.disabled = true;
+
+      try {
+          const res = await fetch('/.netlify/functions/request-withdraw', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({ amount, method, accountNumber })
+          });
+          
+          const result = await res.json();
+          if(res.ok) {
+              alert("Withdrawal Request Submitted!");
+              window.location.reload();
+          } else {
+              alert("Error: " + result.error);
+          }
+      } catch (err) {
+          alert("Network Error");
+      } finally {
+          btn.innerText = "Submit Withdraw Request";
+          btn.disabled = false;
       }
   }
 
-  // ৩. টাকা তোলার (Withdraw) ফাংশন
-  window.handleWithdraw = async function() {
-    const user = auth.currentUser;
-    if(!user) return;
-
-    const amount = document.querySelector('input[type="number"]').value;
-    const accountNumber = document.querySelector('input[placeholder="017xxxxxxxx"]').value;
-    const methodElement = document.querySelector('input[name="payment_method"]:checked');
-    const method = methodElement ? methodElement.value : null;
-
-    if(!amount || !accountNumber || !method) {
-        alert("Please fill all fields!");
-        return;
-    }
-
-    const token = await user.getIdToken();
-    const btn = document.querySelector('.lg\\:col-span-2 button');
-    const originalText = btn.innerText;
-    
-    btn.innerText = "Processing...";
-    btn.disabled = true;
-
-    try {
-        const res = await fetch('/.netlify/functions/request-withdraw', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({ amount, method, accountNumber })
-        });
-        
-        const result = await res.json();
-        if(res.ok) {
-            alert("Withdrawal Request Submitted Successfully!");
-            window.location.reload();
-        } else {
-            alert("Error: " + (result.error || "Something went wrong"));
-        }
-    } catch (err) {
-        alert("Network Error. Please try again.");
-    } finally {
-        btn.innerText = originalText;
-        btn.disabled = false;
-    }
-  }
-
-  // ৪. লগআউট ফাংশন
+  // ৫. লগআউট ফাংশন
   window.logout = function() {
-    signOut(auth).then(() => {
-        window.location.href = "login.html";
-    }).catch((error) => {
-        console.error("Logout Error:", error);
-    });
+      localStorage.removeItem('authToken'); // টোকেন ডিলিট
+      window.location.href = "login.html";
   }
 
-  // ৫. ইভেন্ট লিসেনার বাইন্ডিং
+  // Event Listeners
   document.addEventListener('DOMContentLoaded', () => {
       const withdrawBtn = document.querySelector('.lg\\:col-span-2 button');
-      if(withdrawBtn) {
-          withdrawBtn.addEventListener('click', window.handleWithdraw);
-      }
+      if(withdrawBtn) withdrawBtn.addEventListener('click', window.handleWithdraw);
   });
 </script>
   
