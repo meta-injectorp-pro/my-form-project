@@ -1,4 +1,4 @@
-// functions/login-user.js (Debug Version)
+// functions/login-user.js (আগের সঠিক ভার্সন)
 const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
@@ -8,28 +8,20 @@ exports.handler = async (event, context) => {
   const apiKey = process.env.FIREBASE_WEB_API_KEY;
 
   try {
-    // functions/login-user.js এর fetch অংশটি এভাবে আপডেট করুন:
-
-    const response = await fetch(`https://securetoken.googleapis.com/v1/token?key=${apiKey}`, {
+    // 👇 আবার আগের URL-এ ফিরে আসলাম
+    const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        grant_type: "password", // এটি নতুন
-        username: email,        // এখানে email কে username বলা হয়
-        password: password
-      })
+      body: JSON.stringify({ email, password, returnSecureToken: true })
     });
 
     const data = await response.json();
 
-    // 🔴 ডিবাগিং: আসল এরর দেখা
     if (data.error) {
-      console.log("Detailed Error:", JSON.stringify(data.error));
+      console.log("Login Error:", data.error.message);
       return { 
         statusCode: 400, 
-        body: JSON.stringify({ 
-          error: `GOOGLE SAYS: ${data.error.message}` 
-        }) 
+        body: JSON.stringify({ error: data.error.message }) 
       };
     }
 
@@ -43,7 +35,6 @@ exports.handler = async (event, context) => {
     };
 
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ error: `SYSTEM ERROR: ${error.message}` }) };
+    return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
 };
-
