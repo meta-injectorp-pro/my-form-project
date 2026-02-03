@@ -4,10 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Affiliate Dashboard - Meta Injector Pro</title>
-  
-  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
-  <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -99,9 +95,7 @@
   <main class="flex-1 h-screen overflow-y-auto relative">
     
     <div class="lg:hidden p-4 flex justify-between items-center glass-panel sticky top-0 z-40">
-        <a href="index.html">
-            <img src="./Source_Files/logo.svg" class="h-6">
-        </a>
+        <img src="./Source_Files/logo.svg" class="h-6">
         <button @click="mobileMenu = !mobileMenu" class="text-white p-2">
             <i class="fa-solid fa-bars text-xl"></i>
         </button>
@@ -112,7 +106,7 @@
         <div x-show="currentTab === 'dashboard'" x-transition.opacity>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold">Welcome back, <span class="text-[#A073EE] profile-name-only">User</span>! 👋</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold">Welcome back, <span class="text-[#A073EE] profile-name-only">User</span>!</h1>
                     <p class="text-gray-400 text-sm mt-1">Here's what's happening with your affiliate account.</p>
                 </div>
                 <div class="bg-white/5 px-4 py-2 rounded-full border border-white/10 text-xs font-mono text-gray-300">
@@ -201,7 +195,6 @@
                 </div>
             </div>
         </div>
-        
         <div x-show="currentTab === 'withdraw'" style="display: none;">
             <h1 class="text-3xl font-bold mb-2">Withdraw Funds</h1>
             <p class="text-gray-400 mb-8">Transfer your earnings to your preferred account.</p>
@@ -224,21 +217,21 @@
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="bkash" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/bkash.svg" class="h-8 w-auto transition-all" alt="Bkash">
+                                    <img src="./Source_Files/bkash.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Bkash">
                                     <span class="text-xs font-bold mt-2">Bkash</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="nagad" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/nagad.svg" class="h-8 w-auto transition-all" alt="Nagad">
+                                    <img src="./Source_Files/nagad.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Nagad">
                                     <span class="text-xs font-bold mt-2">Nagad</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="rocket" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/rocket.svg" class="h-8 w-auto transition-all" alt="Rocket">
+                                    <img src="./Source_Files/rocket.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Rocket">
                                     <span class="text-xs font-bold mt-2">Rocket</span>
                                 </div>
                             </label>
@@ -248,7 +241,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Amount (৳)</label>
-                            <input type="number" id="withdrawAmount" placeholder="Withdraw Amount" class="w-full bg-[#0F0A1E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#fd297b] outline-none transition-colors">
+                            <input type="number" id="withdrawAmount" placeholder="Widthdraw Amount" class="w-full bg-[#0F0A1E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#fd297b] outline-none transition-colors">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Account Number</label>
@@ -268,29 +261,26 @@
                 <div class="flex border-b border-white/10 bg-white/5" x-data="{ subTab: 'earn' }">
                     <button @click="subTab = 'earn'" class="flex-1 py-4 font-bold text-sm hover:bg-white/5 transition-colors" :class="subTab === 'earn' ? 'text-[#A073EE] border-b-2 border-[#A073EE]' : 'text-gray-400'">Earnings</button>
                     <button @click="subTab = 'pay'" class="flex-1 py-4 font-bold text-sm hover:bg-white/5 transition-colors" :class="subTab === 'pay' ? 'text-[#fd297b] border-b-2 border-[#fd297b]' : 'text-gray-400'">Withdrawals</button>
-                </div>
+                    
+                    </div>
 
                 <div class="p-4">
-                    <div x-show="subTab === 'earn'">
+                    <div id="earnings-container">
                          <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">All Earnings</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
                                 <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Package</th><th class="p-3">Price</th><th class="p-3">Rate</th><th class="p-3 text-right">Commission</th><th class="p-3 text-center">Status</th></tr></thead>
-                                <tbody id="earnings-list">
-                                    <tr><td colspan="6" class="p-8 text-center text-gray-500">Loading history...</td></tr>
-                                </tbody>
+                                <tbody id="earnings-list"></tbody>
                             </table>
                          </div>
                     </div>
                     
-                    <div x-show="subTab === 'pay'">
+                    <div id="payments-container" class="mt-8">
                         <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">Withdrawals</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
                                 <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Method</th><th class="p-3">Account</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Status</th></tr></thead>
-                                <tbody id="payment-list">
-                                    <tr><td colspan="5" class="p-8 text-center text-gray-500">Loading history...</td></tr>
-                                </tbody>
+                                <tbody id="payment-list"></tbody>
                             </table>
                          </div>
                     </div>
