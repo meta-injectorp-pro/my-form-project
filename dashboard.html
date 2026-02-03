@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Affiliate Dashboard - Meta Injector Pro</title>
+  
   <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
   <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -274,7 +276,9 @@
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
                                 <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Package</th><th class="p-3">Price</th><th class="p-3">Rate</th><th class="p-3 text-right">Commission</th><th class="p-3 text-center">Status</th></tr></thead>
-                                <tbody id="earnings-list"></tbody>
+                                <tbody id="earnings-list">
+                                    <tr><td colspan="6" class="p-8 text-center text-gray-500">Loading history...</td></tr>
+                                </tbody>
                             </table>
                          </div>
                     </div>
@@ -284,7 +288,9 @@
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
                                 <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Method</th><th class="p-3">Account</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Status</th></tr></thead>
-                                <tbody id="payment-list"></tbody>
+                                <tbody id="payment-list">
+                                    <tr><td colspan="5" class="p-8 text-center text-gray-500">Loading history...</td></tr>
+                                </tbody>
                             </table>
                          </div>
                     </div>
@@ -505,4 +511,5 @@
     window.logout = () => { localStorage.removeItem('authToken'); window.location.href="login.html"; }
   </script>
 </body>
+
 </html>
