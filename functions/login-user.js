@@ -8,10 +8,16 @@ exports.handler = async (event, context) => {
   const apiKey = process.env.FIREBASE_WEB_API_KEY;
 
   try {
-    const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
+    // functions/login-user.js এর fetch অংশটি এভাবে আপডেট করুন:
+
+    const response = await fetch(`https://securetoken.googleapis.com/v1/token?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, returnSecureToken: true })
+      body: JSON.stringify({
+        grant_type: "password", // এটি নতুন
+        username: email,        // এখানে email কে username বলা হয়
+        password: password
+      })
     });
 
     const data = await response.json();
@@ -40,3 +46,4 @@ exports.handler = async (event, context) => {
     return { statusCode: 500, body: JSON.stringify({ error: `SYSTEM ERROR: ${error.message}` }) };
   }
 };
+
