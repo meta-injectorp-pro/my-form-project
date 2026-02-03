@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affiliate Registration - Meta Injector Pro</title>
+    
+    <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+    <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -11,6 +15,8 @@
         .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; }
         .input-field:focus { border-color: #A073EE; outline: none; }
+        /* Error Input Style */
+        .input-error { border-color: #ef4444 !important; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 relative">
@@ -29,9 +35,17 @@
     </div>
 
     <div class="glass-panel w-full max-w-lg p-8 rounded-2xl shadow-2xl my-10">
-        <div class="text-center mb-8">
-            <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto mb-4">
-            <h2 class="text-2xl font-bold">Create Affiliate Account</h2>
+        
+        <div class="mb-8 relative">
+            <a href="affiliate.html" class="absolute left-0 top-2 text-gray-400 hover:text-[#A073EE] transition-colors p-1" title="Back to Home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <div class="text-center">
+                <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto mb-4">
+                <h2 class="text-2xl font-bold">Create Affiliate Account</h2>
+            </div>
         </div>
 
         <form id="signupForm" class="space-y-4">
@@ -94,17 +108,50 @@
     </div>
 
     <script>
+        // === 1. Input Constraints (Validation) ===
+        
+        // Name: Only Letters allowed
+        ['firstName', 'lastName'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+        });
+
+        // Phone: Only Numbers allowed
+        document.getElementById('phone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        // Live Password Match Check
+        const passInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirmPassword');
+        const errorMsg = document.getElementById('passError');
+
+        function checkPasswords() {
+            const p1 = passInput.value;
+            const p2 = confirmInput.value;
+            
+            if (p2 && p1 !== p2) {
+                errorMsg.classList.remove('hidden');
+                confirmInput.classList.add('input-error');
+            } else {
+                errorMsg.classList.add('hidden');
+                confirmInput.classList.remove('input-error');
+            }
+        }
+
+        passInput.addEventListener('input', checkPasswords);
+        confirmInput.addEventListener('input', checkPasswords);
+
         // Password Show/Hide Function
         function togglePass(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
             if(input.type === "password") {
                 input.type = "text";
-                // Open Eye Icon
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
             } else {
                 input.type = "password";
-                // Closed Eye Icon
                 icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
             }
         }
@@ -116,20 +163,25 @@
             else metaDetails.classList.add('hidden');
         });
 
-        // Signup Logic with Password Validation
+        // Form Submit
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const pass = document.getElementById('password').value;
-            const confirmPass = document.getElementById('confirmPassword').value;
-            const passError = document.getElementById('passError');
+            const pass = passInput.value;
+            const confirmPass = confirmInput.value;
+            const email = document.getElementById('email').value.trim();
 
-            // ⚠️ CHECK: Password match validation
+            // Final Password Check
             if(pass !== confirmPass) {
-                passError.classList.remove('hidden'); // Show warning
-                return; // Stop here
-            } else {
-                passError.classList.add('hidden'); // Hide warning
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // Simple Email Regex Validation (Browser handles most, but extra safety)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
             }
 
             const btn = e.target.querySelector('button');
@@ -139,7 +191,6 @@
 
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
-            const email = document.getElementById('email').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const isMetaUser = metaCheckbox.checked;
             const metaUserDetail = document.getElementById('metaUserDetail').value.trim();

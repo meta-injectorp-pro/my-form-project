@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Affiliate Dashboard - Meta Injector Pro</title>
+  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+  <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -48,7 +50,9 @@
       
       <div class="h-full flex flex-col">
         <div class="p-8 border-b border-white/10 flex items-center gap-3">
-            <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" class="h-8">
+            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+                <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" class="h-8">
+            </a>
         </div>
 
         <nav class="flex-1 p-6 space-y-2">
@@ -57,19 +61,19 @@
             <button @click="currentTab = 'dashboard'; mobileMenu = false" 
                 class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200" 
                 :class="currentTab === 'dashboard' ? 'bg-gradient-to-r from-[#A073EE]/20 to-transparent text-[#A073EE] border-l-4 border-[#A073EE]' : 'text-gray-400 hover:bg-white/5 hover:text-white'">
-                <i class="fa-solid fa-grid-2"></i> Dashboard
+                <i class="fa-solid fa-border-all w-5"></i> Dashboard
             </button>
 
             <button @click="currentTab = 'withdraw'; mobileMenu = false" 
                 class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200" 
                 :class="currentTab === 'withdraw' ? 'bg-gradient-to-r from-[#fd297b]/20 to-transparent text-[#fd297b] border-l-4 border-[#fd297b]' : 'text-gray-400 hover:bg-white/5 hover:text-white'">
-                <i class="fa-solid fa-money-bill-transfer"></i> Withdraw
+                <i class="fa-solid fa-money-bill-transfer w-5"></i> Withdraw
             </button>
 
             <button @click="currentTab = 'history'; mobileMenu = false" 
                 class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200" 
                 :class="currentTab === 'history' ? 'bg-gradient-to-r from-[#A073EE]/20 to-transparent text-[#A073EE] border-l-4 border-[#A073EE]' : 'text-gray-400 hover:bg-white/5 hover:text-white'">
-                <i class="fa-solid fa-clock-rotate-left"></i> Full History
+                <i class="fa-solid fa-clock-rotate-left w-5"></i> Full History
             </button>
         </nav>
 
@@ -93,7 +97,9 @@
   <main class="flex-1 h-screen overflow-y-auto relative">
     
     <div class="lg:hidden p-4 flex justify-between items-center glass-panel sticky top-0 z-40">
-        <img src="./Source_Files/logo.svg" class="h-6">
+        <a href="index.html">
+            <img src="./Source_Files/logo.svg" class="h-6">
+        </a>
         <button @click="mobileMenu = !mobileMenu" class="text-white p-2">
             <i class="fa-solid fa-bars text-xl"></i>
         </button>
@@ -193,6 +199,7 @@
                 </div>
             </div>
         </div>
+        
         <div x-show="currentTab === 'withdraw'" style="display: none;">
             <h1 class="text-3xl font-bold mb-2">Withdraw Funds</h1>
             <p class="text-gray-400 mb-8">Transfer your earnings to your preferred account.</p>
@@ -215,21 +222,21 @@
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="bkash" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/bkash.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Bkash">
+                                    <img src="./Source_Files/bkash.svg" class="h-8 w-auto transition-all" alt="Bkash">
                                     <span class="text-xs font-bold mt-2">Bkash</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="nagad" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/nagad.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Nagad">
+                                    <img src="./Source_Files/nagad.svg" class="h-8 w-auto transition-all" alt="Nagad">
                                     <span class="text-xs font-bold mt-2">Nagad</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="rocket" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/rocket.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Rocket">
+                                    <img src="./Source_Files/rocket.svg" class="h-8 w-auto transition-all" alt="Rocket">
                                     <span class="text-xs font-bold mt-2">Rocket</span>
                                 </div>
                             </label>
@@ -239,7 +246,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Amount (৳)</label>
-                            <input type="number" id="withdrawAmount" placeholder="Min 500" class="w-full bg-[#0F0A1E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#fd297b] outline-none transition-colors">
+                            <input type="number" id="withdrawAmount" placeholder="Withdraw Amount" class="w-full bg-[#0F0A1E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#fd297b] outline-none transition-colors">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Account Number</label>
@@ -259,11 +266,10 @@
                 <div class="flex border-b border-white/10 bg-white/5" x-data="{ subTab: 'earn' }">
                     <button @click="subTab = 'earn'" class="flex-1 py-4 font-bold text-sm hover:bg-white/5 transition-colors" :class="subTab === 'earn' ? 'text-[#A073EE] border-b-2 border-[#A073EE]' : 'text-gray-400'">Earnings</button>
                     <button @click="subTab = 'pay'" class="flex-1 py-4 font-bold text-sm hover:bg-white/5 transition-colors" :class="subTab === 'pay' ? 'text-[#fd297b] border-b-2 border-[#fd297b]' : 'text-gray-400'">Withdrawals</button>
-                    
-                    </div>
+                </div>
 
                 <div class="p-4">
-                    <div id="earnings-container">
+                    <div x-show="subTab === 'earn'">
                          <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">All Earnings</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
@@ -273,7 +279,7 @@
                          </div>
                     </div>
                     
-                    <div id="payments-container" class="mt-8">
+                    <div x-show="subTab === 'pay'">
                         <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">Withdrawals</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
