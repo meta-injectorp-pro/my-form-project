@@ -1,139 +1,133 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Meta Injector Pro</title>
-  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
-  
-  <link href="./Source_Files/style.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    body { background-color: #0F0A1E; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
-    .glass-form {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Login - Meta Injector Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0F0A1E; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; }
+        .input-field:focus { border-color: #A073EE; outline: none; }
+    </style>
 </head>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-<body x-data="{ stickyMenu: false }" class="antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+    <div class="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl">
+        <div class="text-center mb-8">
+            <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto mb-4">
+            <h2 class="text-2xl font-bold">Affiliate Login</h2>
+        </div>
 
-  <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-      <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#A073EE] opacity-20 blur-[150px] rounded-full"></div>
-      <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#FF512F] opacity-10 blur-[150px] rounded-full"></div>
-  </div>
+        <form class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
+                <input type="email" required class="w-full px-4 py-3 rounded-lg input-field" placeholder="Enter your email">
+            </div>
+            
+            <div class="relative">
+                <label class="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                <input type="password" id="passwordInput" required class="w-full px-4 py-3 rounded-lg input-field pr-10" placeholder="••••••••">
+                <button type="button" onclick="togglePassword()" class="absolute right-3 top-[38px] text-gray-400 hover:text-white">
+                    <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                </button>
+            </div>
 
-  <header class="fixed left-0 top-0 w-full z-50 py-6">
-    <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 flex items-center justify-between">
-      <a href="index.html">
-        <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" style="height: 40px; width: auto;">
-      </a>
-      <a href="index.html" class="text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        Back to Home
-      </a>
+            <div class="flex justify-end">
+                <button type="button" onclick="forgotPassword()" class="text-sm text-[#A073EE] hover:underline">Forgot Password?</button>
+            </div>
+
+            <button type="submit" class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-opacity">
+                Login
+            </button>
+        </form>
+
+        <p class="text-center text-gray-400 text-sm mt-6">
+            Don't have an account? <a href="signup.html" class="text-[#A073EE] hover:underline">Register Now</a>
+        </p>
     </div>
-  </header>
 
-  <main class="flex-grow flex items-center justify-center pt-24 pb-12 px-4">
-      <div class="w-full max-w-md">
-          
-          <div class="glass-form rounded-3xl p-8 sm:p-10 relative overflow-hidden">
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-[#A073EE] to-transparent opacity-50"></div>
+    <script type="module">
+        // Firebase Auth Import for Password Reset
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-              <div class="text-center mb-8">
-                  <h2 class="text-3xl font-bold mb-2">Welcome Back</h2>
-                  <p class="text-gray-400 text-sm">Login to your dashboard to manage earnings.</p>
-              </div>
+        // ⚠️ আপনার পাবলিক কনফিগ বসান
+        const firebaseConfig = {
+            apiKey: "YOUR_PUBLIC_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID"
+        };
 
-              <form action="#" method="POST" class="space-y-5">
-                  
-                  <div>
-                      <label class="block text-sm font-medium text-gray-300 mb-1.5">Email Address</label>
-                      <input type="email" placeholder="Enter your email" required 
-                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#A073EE] focus:ring-1 focus:ring-[#A073EE] transition-all">
-                  </div>
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-                  <div>
-                      <div class="flex justify-between items-center mb-1.5">
-                          <label class="block text-sm font-medium text-gray-300">Password</label>
-                          <a href="#" class="text-xs text-[#A073EE] hover:text-[#fd297b] transition-colors">Forgot Password?</a>
-                      </div>
-                      <input type="password" placeholder="Enter your password" required 
-                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#A073EE] focus:ring-1 focus:ring-[#A073EE] transition-all">
-                  </div>
+        // Forgot Password Logic
+        window.forgotPassword = async () => {
+            const email = document.querySelector('input[type="email"]').value;
+            if(!email) {
+                alert("Please enter your email address first!");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert("Password reset link sent to: " + email);
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        };
+    </script>
 
-                  <button type="submit" 
-                          class="w-full py-3.5 px-6 rounded-lg font-bold text-white shadow-lg transition-all transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(160,115,238,0.4)]"
-                          style="background: linear-gradient(to right, #A073EE, #7c3aed);">
-                      Login Account
-                  </button>
+    <script>
+        // Password Show/Hide
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const icon = document.getElementById('eyeIcon');
+            if(input.type === "password") {
+                input.type = "text";
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
+            } else {
+                input.type = "password";
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
+            }
+        }
 
-              </form>
+        // Login Logic (Server-side)
+        const loginForm = document.querySelector('form');
+        const submitBtn = document.querySelector('button[type="submit"]');
 
-              <div class="mt-8 text-center">
-                  <p class="text-sm text-gray-400">Don't have an account? 
-                      <a href="signup.html" class="text-white font-bold hover:underline decoration-[#A073EE]">Create Account</a>
-                  </p>
-              </div>
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Verifying...";
+            submitBtn.disabled = true;
 
-          </div>
-          
-          <p class="text-center text-xs text-gray-600 mt-6">
-              &copy; 2026 Meta Injector Pro. Secure Login.
-          </p>
+            const email = document.querySelector('input[type="email"]').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
 
-      </div>
-  </main>
+            try {
+                const res = await fetch('/.netlify/functions/login-user', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password })
+                });
 
-<script>
-  const loginForm = document.querySelector('form');
-  const submitBtn = document.querySelector('button[type="submit"]');
+                const data = await res.json();
 
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // বাটন লোডিং স্ট্যাটাস
-    const originalText = submitBtn.innerText;
-    submitBtn.innerText = "Verifying...";
-    submitBtn.disabled = true;
-
-    const email = document.querySelector('input[type="email"]').value;
-    const password = document.querySelector('input[type="password"]').value;
-
-    try {
-      // আমাদের সিকিউর ব্যাকএন্ডে রিকোয়েস্ট পাঠানো
-      const res = await fetch('/.netlify/functions/login-user', {
-        method: 'POST',
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        // টোকেন ব্রাউজারে সেভ করা (Login Session)
-        localStorage.setItem('authToken', data.idToken);
-        
-        // ড্যাশবোর্ডে রিডাইরেক্ট
-        window.location.href = "dashboard.html";
-      } else {
-        alert("Login Failed: " + (data.error || "Unknown error"));
-      }
-    } catch (error) {
-      console.error(error);
-      alert("Network Error. Please try again.");
-    } finally {
-      submitBtn.innerText = originalText;
-      submitBtn.disabled = false;
-    }
-  });
-</script>
-
+                if (res.ok) {
+                    localStorage.setItem('authToken', data.idToken);
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert("Login Failed: " + (data.error || "Unknown error"));
+                }
+            } catch (error) {
+                alert("Network Error. Please try again.");
+            } finally {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
