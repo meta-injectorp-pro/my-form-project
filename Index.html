@@ -1760,24 +1760,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }, counterInterval);
     });
 });
+</script>
 <!-- ================= CURRENCY CONVERT END ================= -->
 
-</script>
-
+<!-- ================= BROWSER COOKIE SAVE ================= -->
 <script>
-  // ১. ইউআরএল থেকে রেফারেল কোড চেক করা
   const urlParams = new URLSearchParams(window.location.search);
   const refCode = urlParams.get('ref');
 
   if (refCode) {
-    // ২. যদি কোড থাকে, ব্রাউজারে সেভ করে রাখা (৩০ দিন মেয়াদ)
-    const now = new Date();
-    const item = {
-      value: refCode,
-      expiry: now.getTime() + 30 * 24 * 60 * 60 * 1000, // ৩০ দিন
-    };
-    localStorage.setItem("affiliate_ref", JSON.stringify(item));
-    console.log("Referral Code Saved:", refCode);
+      function setCookie(name, value, days) {
+          let expires = "";
+          if (days) {
+              const date = new Date();
+              date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+              expires = "; expires=" + date.toUTCString();
+          }
+          document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+
+      setCookie("affiliate_ref", refCode, 7);
+      console.log("Referral Code Saved:", refCode);
   }
 </script>
 	  
