@@ -336,42 +336,50 @@
     </footer>
 
     <script>
-		// ================== আপডেটেড ফাংশন ==================
-    async function onPaymentSuccess(orderAmount, orderId, packageType) {
-        console.log("Processing Referral for Order:", orderId);
+    // ================== আপডেটেড কমিশন ফাংশন (License Key সহ) ==================
+    async function onPaymentSuccess(orderAmount, orderId, packageType, licenseKey) {
+        console.log("Processing Referral...", { orderAmount, orderId, packageType, licenseKey });
 
-        // ১. প্যাকেজ চেক করা (শুধুমাত্র Starter এবং Beginner এর জন্য কাজ করবে)
+        // ১. প্যাকেজ চেক (শুধুমাত্র Starter এবং Beginner এর জন্য কাজ করবে)
         const allowedPackages = ['Starter', 'Beginner'];
         if (!allowedPackages.includes(packageType)) {
-            console.log("No referral bonus for this package:", packageType);
-            return; // ফাংশন এখানেই থেমে যাবে
+            console.log("No commission for package:", packageType);
+            return; 
         }
         
         // ২. কুকি থেকে রেফারেল কোড বের করা
-        const refData = localStorage.getItem("affiliate_ref");
-        
-        if (refData) {
-            try {
+        let refCode = null;
+        try {
+            const refData = localStorage.getItem("affiliate_ref");
+            if (refData) {
                 const item = JSON.parse(refData);
                 const now = new Date();
 
+                // মেয়াদ চেক
                 if (now.getTime() < item.expiry) {
-                    const refCode = item.value;
-
-                    // ৩. ব্যাকএন্ডে ডাটা পাঠানো (প্যাকেজ টাইপ সহ)
-                    await fetch('/.netlify/functions/add-commission', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            refCode: refCode,
-                            amount: orderAmount,
-                            orderId: orderId,
-                            packageType: packageType // নতুন: প্যাকেজের নাম পাঠানো হচ্ছে
-                        })
-                    });
-
-                    console.log("Commission request sent for:", refCode);
+                    refCode = item.value;
+                } else {
+                    localStorage.removeItem("affiliate_ref"); // মেয়াদ শেষ
                 }
+            }
+        } catch (e) { console.error("Cookie Error:", e); }
+        
+        if (refCode) {
+            // ৩. ব্যাকএন্ডে ডাটা পাঠানো (License Key সহ)
+            try {
+                await fetch('/.netlify/functions/add-commission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        refCode: refCode,
+                        amount: orderAmount,
+                        orderId: orderId,
+                        packageType: packageType,
+                        licenseKey: licenseKey // 🔑 এটি যুক্ত করা হলো (Backend এ দরকার)
+                    })
+                });
+
+                console.log("✅ Commission Request Sent for:", refCode);
             } catch (err) {
                 console.error("Referral Error:", err);
             }
@@ -574,41 +582,42 @@
                 formData.append('AmountSent', pkgPrice); 
 
                 try {
-                    const response = await fetch('/.netlify/functions/submit-form', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await response.json();
+                const response = await fetch('/.netlify/functions/submit-form', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
 
-                    if(response.ok) {
-						const orderId = inputs.trx.value || 'ORD-' + Date.now();
-						
-						// আপডেটেড কল: pkgName পাঠানো হচ্ছে
-						await onPaymentSuccess(pkgPrice, orderId, pkgName); 
+                if(response.ok) {
+                    // Success!
+                    const orderId = inputs.trx.value || 'ORD-' + Date.now();
+                    const licenseKey = data.licenseKey;
 
-						elements.checkoutGrid.style.display = 'none';
-						elements.successView.classList.remove('hidden');
-						window.scrollTo({ top: 0, behavior: 'smooth' });
-					} else {
-                        if (data.errorType === 'ACTIVE_PLAN') {
-                            elements.statusMsg.style.display = 'block';
-                            elements.statusMsg.className = "mt-6 p-6 rounded-xl text-center border bg-purple-900/20 border-[#A073EE]/50";
-                            elements.statusMsg.innerHTML = `<p class="text-white">${data.message}</p>`;
-                            elements.submitBtn.style.display = 'none';
-                            return; 
-                        }
-                        throw new Error(data.message || 'Submission failed');
+                    await onPaymentSuccess(pkgPrice, orderId, pkgName, licenseKey); 
+
+                    elements.checkoutGrid.style.display = 'none';
+                    elements.successView.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    if (data.errorType === 'ACTIVE_PLAN') {
+                        elements.statusMsg.style.display = 'block';
+                        elements.statusMsg.className = "mt-6 p-6 rounded-xl text-center border bg-purple-900/20 border-[#A073EE]/50";
+                        elements.statusMsg.innerHTML = `<p class="text-white">${data.message}</p>`;
+                        elements.submitBtn.style.display = 'none';
+                        return; 
                     }
-                } catch (error) {
-                    console.error(error);
-                    elements.statusMsg.style.display = 'block';
-                    elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
-                    elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
-                    elements.submitBtn.disabled = false;
-                    elements.submitBtn.innerText = isFreeTrial ? "Start Your Free Trial" : "Confirm Purchase";
+                    throw new Error(data.message || 'Submission failed');
                 }
-            });
+            } catch (error) {
+                console.error(error);
+                elements.statusMsg.style.display = 'block';
+                elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
+                elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                elements.submitBtn.disabled = false;
+                elements.submitBtn.innerText = isFreeTrial ? "Start Your Free Trial" : "Confirm Purchase";
+            }
         });
-    </script>
+    });
+</script>
 </body>
 </html>
