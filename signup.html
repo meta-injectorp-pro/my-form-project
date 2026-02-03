@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Affiliate Account - Meta Injector Pro</title>
+  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+  
+  <link href="./Source_Files/style.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { background-color: #0F0A1E; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+    .glass-form {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body x-data="{ stickyMenu: false }" class="antialiased min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+      <div class="absolute top-[-10%] right-[20%] w-[600px] h-[600px] bg-[#FF512F] opacity-10 blur-[150px] rounded-full"></div>
+      <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#DD2476] opacity-10 blur-[150px] rounded-full"></div>
+  </div>
+
+  <header class="fixed left-0 top-0 w-full z-50 py-6">
+    <div class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 flex items-center justify-between">
+      <a href="index.html">
+        <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" style="height: 40px; width: auto;">
+      </a>
+      <a href="index.html" class="text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Back to Home
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center pt-28 pb-12 px-4">
+      <div class="w-full max-w-lg">
+          
+          <div class="glass-form rounded-3xl p-8 sm:p-12 relative overflow-hidden">
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-1 bg-gradient-to-r from-transparent via-[#FF512F] to-transparent opacity-80"></div>
+
+              <div class="text-center mb-8">
+                  <span class="inline-block py-1 px-3 rounded-full bg-[#FF512F]/10 border border-[#FF512F]/20 text-[#FF512F] text-xs font-bold tracking-wider mb-3">PARTNER PROGRAM</span>
+                  <h2 class="text-3xl font-bold mb-2">Create Account</h2>
+                  <p class="text-gray-400 text-sm">Join the affiliate program & start earning today.</p>
+              </div>
+
+              <form action="#" method="POST" class="space-y-4">
+                  
+                  <div>
+                      <label class="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
+                      <input type="text" placeholder="Your full name" required 
+                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#FF512F] focus:ring-1 focus:ring-[#FF512F] transition-all">
+                  </div>
+
+                  <div>
+                      <label class="block text-sm font-medium text-gray-300 mb-1.5">Email Address</label>
+                      <input type="email" placeholder="name@example.com" required 
+                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#FF512F] focus:ring-1 focus:ring-[#FF512F] transition-all">
+                  </div>
+
+                  <div>
+                      <label class="block text-sm font-medium text-gray-300 mb-1.5">Password</label>
+                      <input type="password" placeholder="Create a password" required 
+                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#FF512F] focus:ring-1 focus:ring-[#FF512F] transition-all">
+                  </div>
+
+                  <div>
+                      <label class="block text-sm font-medium text-gray-300 mb-1.5">Confirm Password</label>
+                      <input type="password" placeholder="Confirm password" required 
+                             class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#FF512F] focus:ring-1 focus:ring-[#FF512F] transition-all">
+                  </div>
+
+                  <div class="flex items-start gap-2 pt-2">
+                      <input type="checkbox" id="terms" required class="mt-1 w-4 h-4 rounded bg-[#1A1625] border-white/10 text-[#FF512F] focus:ring-0">
+                      <label for="terms" class="text-sm text-gray-400">
+                          I agree to the <a href="terms.html" class="text-white underline hover:text-[#FF512F]">Terms & Conditions</a> and <a href="#" class="text-white underline hover:text-[#FF512F]">Privacy Policy</a>.
+                      </label>
+                  </div>
+
+                  <button type="submit" 
+                          class="w-full py-3.5 px-6 rounded-lg font-bold text-white shadow-lg transition-all transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(255,81,47,0.4)] mt-2"
+                          style="background: linear-gradient(to right, #FF512F, #DD2476);">
+                      Join & Start Earning
+                  </button>
+
+              </form>
+
+              <div class="mt-8 text-center">
+                  <p class="text-sm text-gray-400">Already have an account? 
+                      <a href="login.html" class="text-white font-bold hover:underline decoration-[#FF512F]">Login Here</a>
+                  </p>
+              </div>
+
+          </div>
+          
+          <p class="text-center text-xs text-gray-600 mt-6">
+              &copy; 2026 Meta Injector Pro. All rights reserved.
+          </p>
+
+      </div>
+  </main>
+
+<script>
+  document.querySelector('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // বাটন লোডিং স্ট্যাটাস
+    const btn = document.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+    btn.innerText = "Creating Account...";
+    btn.disabled = true;
+
+    const name = document.querySelector('input[type="text"]').value;
+    const email = document.querySelector('input[type="email"]').value;
+    const password = document.querySelector('input[type="password"]').value;
+    const confirmPass = document.querySelectorAll('input[type="password"]')[1].value;
+
+    if(password !== confirmPass) {
+        alert("Passwords do not match");
+        btn.innerText = originalText;
+        btn.disabled = false;
+        return;
+    }
+
+    try {
+        // আমাদের সিকিউর Netlify Function কল করা হচ্ছে
+        const response = await fetch('/.netlify/functions/create-affiliate', {
+            method: 'POST',
+            body: JSON.stringify({ name, email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert("Account Created Successfully! Please Login.");
+            window.location.href = "login.html";
+        } else {
+            alert("Error: " + result.error);
+        }
+    } catch (err) {
+        alert("Something went wrong!");
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
