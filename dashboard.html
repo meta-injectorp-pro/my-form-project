@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affiliate Dashboard - Meta Injector Pro</title>
+  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+  
+  <link href="./Source_Files/style.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { background-color: #0F0A1E; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
+    
+    /* Glass Effect Classes */
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+        background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+        border-color: rgba(160, 115, 238, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Gradient Text */
+    .text-gradient {
+        background: linear-gradient(to right, #A073EE, #fd297b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* Payment Method Selection Style */
+    .payment-radio:checked + div {
+        border-color: #fd297b;
+        background: rgba(253, 41, 123, 0.1);
+        box-shadow: 0 0 15px rgba(253, 41, 123, 0.2);
+    }
+    .payment-radio:checked + div .check-icon {
+        opacity: 1;
+        transform: scale(1);
+    }
+  </style>
+</head>
+
+<body x-data="{ currentTab: 'dashboard', mobileMenu: false }" class="antialiased min-h-screen flex overflow-hidden">
+
+  <aside class="fixed lg:static inset-y-0 left-0 z-50 w-64 glass-panel border-r border-white/10 transition-transform duration-300 transform lg:translate-x-0"
+         :class="mobileMenu ? 'translate-x-0' : '-translate-x-full'">
+    
+    <div class="h-full flex flex-col">
+      <div class="p-6 border-b border-white/10 flex justify-between items-center">
+        <a href="index.html">
+          <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" class="h-8">
+        </a>
+        <button @click="mobileMenu = false" class="lg:hidden text-gray-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+        
+        <button @click="currentTab = 'dashboard'; mobileMenu = false" 
+                :class="currentTab === 'dashboard' ? 'bg-[#A073EE]/20 text-[#A073EE] border-[#A073EE]/30' : 'text-gray-400 hover:bg-white/5 border-transparent'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg border transition-all font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            Overview
+        </button>
+
+        <button @click="currentTab = 'withdraw'; mobileMenu = false" 
+                :class="currentTab === 'withdraw' ? 'bg-[#fd297b]/20 text-[#fd297b] border-[#fd297b]/30' : 'text-gray-400 hover:bg-white/5 border-transparent'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg border transition-all font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            Withdraw Money
+        </button>
+
+        <button @click="currentTab = 'history'; mobileMenu = false" 
+                :class="currentTab === 'history' ? 'bg-[#A073EE]/20 text-[#A073EE] border-[#A073EE]/30' : 'text-gray-400 hover:bg-white/5 border-transparent'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg border transition-all font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Payment History
+        </button>
+        
+        <button @click="currentTab = 'earnings'; mobileMenu = false" 
+                :class="currentTab === 'earnings' ? 'bg-[#A073EE]/20 text-[#A073EE] border-[#A073EE]/30' : 'text-gray-400 hover:bg-white/5 border-transparent'"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-lg border transition-all font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Earnings History
+        </button>
+
+      </nav>
+
+      <div class="px-4 pb-2">
+        <button onclick="window.logout()" class="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-lg transition-all font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+            Logout
+        </button>
+      </div>
+
+      <div class="p-4 border-t border-white/10">
+        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#A073EE] to-[#fd297b] p-[2px]">
+                <img src="./Source_Files/user-01.png" alt="User" class="w-full h-full rounded-full object-cover border-2 border-[#0F0A1E]">
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-white truncate">Loading...</p>
+                <p class="text-xs text-gray-400 truncate">ID: ...</p>
+            </div>
+            <a href="index.html" class="text-gray-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+            </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <main class="flex-1 h-screen overflow-y-auto relative">
+    
+    <div class="lg:hidden p-4 glass-panel sticky top-0 z-40 flex items-center justify-between">
+        <a href="index.html"><img src="./Source_Files/logo.svg" alt="Logo" class="h-8"></a>
+        <button @click="mobileMenu = true" class="text-white">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+    </div>
+
+    <div class="p-6 lg:p-10 max-w-7xl mx-auto pb-20">
+
+        <div x-show="currentTab === 'dashboard'" x-transition.opacity.duration.500ms>
+            
+            <h1 class="text-3xl font-bold mb-1">Dashboard Overview</h1>
+            <p class="text-gray-400 text-sm mb-8">Welcome back! Track your earnings and performance.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="glass-card p-6 rounded-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><svg class="w-16 h-16 text-[#A073EE]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.15-1.46-3.27-3.4h1.96c.1 1.05 1.18 1.91 2.53 1.91 1.38 0 2.29-.75 2.29-1.87 0-1.05-.72-1.43-2.32-1.76-1.61-.33-3.23-.71-3.23-2.55 0-1.67 1.25-2.73 2.92-3.13V5h2.67v1.93c1.71.36 2.94 1.51 3.02 3.12h-1.92c-.07-.77-.81-1.57-2.3-1.57-1.39 0-2.1.88-2.1 1.86 0 .97.8 1.45 2.51 1.81 1.76.36 3.04.83 3.04 2.51 0 1.91-1.54 2.87-3.13 3.16z"/></svg></div>
+                    <p class="text-gray-400 text-sm font-medium mb-1">Available Balance</p>
+                    <h3 class="text-3xl font-bold text-white">৳ 0</h3>
+                    <p class="text-green-400 text-xs mt-2 flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        Ready to withdraw
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm font-medium mb-1">Total Earnings</p>
+                    <h3 class="text-3xl font-bold text-white">৳ 0</h3>
+                    <p class="text-gray-500 text-xs mt-2">Lifetime earnings</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm font-medium mb-1">Total Clicks</p>
+                    <h3 class="text-3xl font-bold text-white">0</h3>
+                    <p class="text-gray-500 text-xs mt-2">Unique visitors</p>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="text-gray-400 text-sm font-medium mb-1">Conversion Rate</p>
+                    <h3 class="text-3xl font-bold text-white">0%</h3>
+                    <p class="text-green-400 text-xs mt-2">+0% this week</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 rounded-2xl mb-10 border border-[#A073EE]/30 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-[#A073EE] opacity-10 blur-[80px] rounded-full"></div>
+                
+                <h3 class="text-xl font-bold mb-4">Your Unique Referral Link</h3>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1 bg-[#0F0A1E] border border-white/10 rounded-lg flex items-center px-4 py-3">
+                        <span class="text-gray-400 text-sm mr-2">🔗</span>
+                        <input type="text" value="Loading..." readonly class="bg-transparent border-none text-gray-200 w-full outline-none font-mono text-sm">
+                    </div>
+                    <button class="bg-[#A073EE] hover:bg-[#8b5cf6] text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                        Copy Link
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="currentTab === 'withdraw'" x-transition.opacity.duration.500ms style="display: none;">
+            <h1 class="text-3xl font-bold mb-1">Withdraw Money</h1>
+            <p class="text-gray-400 text-sm mb-8">Request a payout to your preferred mobile banking account.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="glass-card p-6 rounded-2xl flex justify-between items-center bg-gradient-to-r from-[#A073EE]/10 to-[#fd297b]/10 border border-[#A073EE]/30">
+                        <div>
+                            <p class="text-gray-300 text-sm mb-1">Available to Withdraw</p>
+                            <h2 class="text-4xl font-bold text-white balance-display">৳ 0</h2>
+                        </div>
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold mb-4">Select Payment Method</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <label class="cursor-pointer relative group">
+                                <input type="radio" name="payment_method" value="bkash" class="peer sr-only payment-radio">
+                                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-3 h-32 hover:bg-white/5 transition-all">
+                                    <div class="absolute top-3 right-3 opacity-0 check-icon transition-all text-[#fd297b]">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    </div>
+                                    <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="100" height="100" rx="10" fill="#E2136E"/>
+                                        <path d="M78.5 28.5L54.5 48.5L78.5 70" stroke="white" stroke-width="5" stroke-linecap="round"/>
+                                        <path d="M21.5 70L45.5 50L21.5 28.5" stroke="white" stroke-width="5" stroke-linecap="round"/>
+                                        <circle cx="50" cy="50" r="10" fill="white"/>
+                                    </svg>
+                                    <span class="font-bold text-sm">Bkash</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative group">
+                                <input type="radio" name="payment_method" value="nagad" class="peer sr-only payment-radio">
+                                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-3 h-32 hover:bg-white/5 transition-all">
+                                    <div class="absolute top-3 right-3 opacity-0 check-icon transition-all text-[#fd297b]">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    </div>
+                                    <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="100" height="100" rx="10" fill="#F7941D"/>
+                                        <circle cx="35" cy="50" r="15" fill="white"/>
+                                        <circle cx="65" cy="50" r="15" fill="white"/>
+                                    </svg>
+                                    <span class="font-bold text-sm">Nagad</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer relative group">
+                                <input type="radio" name="payment_method" value="rocket" class="peer sr-only payment-radio">
+                                <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-3 h-32 hover:bg-white/5 transition-all">
+                                    <div class="absolute top-3 right-3 opacity-0 check-icon transition-all text-[#fd297b]">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    </div>
+                                    <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="100" height="100" rx="10" fill="#8C3494"/>
+                                        <path d="M50 20L30 80H70L50 20Z" fill="white"/>
+                                    </svg>
+                                    <span class="font-bold text-sm">Rocket</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Withdrawal Amount (৳)</label>
+                            <input type="number" placeholder="Min: 500" class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#fd297b] transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Account Number (Personal)</label>
+                            <input type="text" placeholder="017xxxxxxxx" class="w-full bg-[#1A1625] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#fd297b] transition-colors">
+                        </div>
+                    </div>
+
+                    <button class="w-full py-4 rounded-xl font-bold text-white shadow-lg shadow-pink-500/20 transform hover:-translate-y-1 transition-all"
+                            style="background: linear-gradient(to right, #fd297b, #A073EE);">
+                        Submit Withdraw Request
+                    </button>
+                </div>
+
+                <div class="glass-panel p-6 rounded-2xl h-fit">
+                    <h3 class="font-bold mb-4 text-white">Withdrawal Rules</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex gap-2">
+                            <span class="text-[#fd297b]">•</span> Minimum withdrawal amount is ৳500.
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="text-[#fd297b]">•</span> Payments are processed within 24-48 hours.
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="text-[#fd297b]">•</span> Only Personal accounts are accepted for Bkash/Nagad.
+                        </li>
+                        <li class="flex gap-2">
+                            <span class="text-[#fd297b]">•</span> 2% charge may apply on Rocket withdrawals.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="currentTab === 'history'" x-transition.opacity.duration.500ms style="display: none;">
+            <h1 class="text-3xl font-bold mb-1">Payment History</h1>
+            <p class="text-gray-400 text-sm mb-8">All your past withdrawals and their status.</p>
+
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-400 text-sm border-b border-white/5 bg-white/[0.02]">
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Method</th>
+                                <th class="p-4">Account No</th>
+                                <th class="p-4">Amount</th>
+                                <th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+                                <td class="p-4 text-gray-500" colspan="5" align="center">Loading history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div x-show="currentTab === 'earnings'" x-transition.opacity.duration.500ms style="display: none;">
+            <h1 class="text-3xl font-bold mb-1">Earnings History</h1>
+            <p class="text-gray-400 text-sm mb-8">Track every commission you earned from sales.</p>
+
+            <div class="glass-panel rounded-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-gray-400 text-sm border-b border-white/5 bg-white/[0.02]">
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Package</th>
+                                <th class="p-4">Sale Amount</th>
+                                <th class="p-4">Commission</th>
+                                <th class="p-4 text-right">You Earned</th>
+                            </tr>
+                        </thead>
+                        <tbody id="earnings-list" class="text-sm text-gray-300">
+                            <tr><td colspan="5" class="p-4 text-center text-gray-500">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+  </main>
+  
+  <script type="module">
+  // শুধুমাত্র অথেনটিকেশন ইমপোর্ট করছি, ডেটাবেস নয়
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+  // ⚠️ আপনার অ্যাপের পাবলিক কনফিগ (অবশ্যই আপনার Firebase Console থেকে কপি করে বসাবেন)
+  const firebaseConfig = {
+    apiKey: "YOUR_PUBLIC_API_KEY", 
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // ১. ইউজার অথেনটিকেশন এবং ডেটা লোড
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      try {
+        const token = await user.getIdToken();
+
+        // ক) ড্যাশবোর্ড ডেটা (ব্যালেন্স, নাম, কোড) আনা
+        const res = await fetch('/.netlify/functions/get-dashboard', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            
+            // UI আপডেট: ব্যালেন্স
+            document.querySelectorAll('h3.text-3xl.font-bold.text-white')[0].innerText = `৳ ${data.balance}`;
+            const withdrawBalance = document.querySelector('.balance-display');
+            if(withdrawBalance) withdrawBalance.innerText = `৳ ${data.balance}`;
+
+            // UI আপডেট: টোটাল আর্নিং
+            document.querySelectorAll('h3.text-3xl.font-bold.text-white')[1].innerText = `৳ ${data.totalEarnings}`;
+            
+            // UI আপডেট: নাম এবং আইডি
+            const profileName = document.querySelector('.flex-1.min-w-0 p.font-bold');
+            if(profileName) profileName.innerText = data.name;
+            
+            const profileId = document.querySelector('.flex-1.min-w-0 p.text-xs');
+            if(profileId) profileId.innerText = `ID: ${data.affiliateCode}`;
+            
+            // UI আপডেট: রেফারেল লিংক
+            const refInput = document.querySelector('input[readonly]');
+            if(refInput) refInput.value = `https://metainjector.pro/?ref=${data.affiliateCode}`;
+
+            // খ) আর্নিং হিস্টোরি ডেটা লোড করা (এখন সক্রিয়)
+            loadEarningsHistory(token); 
+        }
+      } catch (error) {
+        console.error("Dashboard Load Error", error);
+      }
+    } else {
+      // ইউজার লগইন না থাকলে লগইন পেজে পাঠান
+      window.location.href = "login.html";
+    }
+  });
+
+  // ২. আর্নিং হিস্টোরি লোড করার ফাংশন
+  async function loadEarningsHistory(token) {
+      const tableBody = document.getElementById('earnings-list');
+      if(!tableBody) return;
+
+      try {
+          const res = await fetch('/.netlify/functions/get-earnings', {
+              headers: { 'Authorization': `Bearer ${token}` }
+          });
+          
+          if (res.ok) {
+              const data = await res.json();
+              
+              if (data.length === 0) {
+                  tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">No earnings yet. Start sharing your link!</td></tr>';
+                  return;
+              }
+
+              let html = '';
+              data.forEach(item => {
+                  const dateObj = new Date(item.date);
+                  const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                  
+                  html += `
+                      <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                          <td class="p-4 text-gray-300">${dateStr}</td>
+                          <td class="p-4"><span class="px-2 py-1 rounded bg-purple-500/20 text-purple-300 text-xs">${item.packageType || 'Package'}</span></td>
+                          <td class="p-4 text-gray-400">৳ ${item.packagePrice}</td>
+                          <td class="p-4 text-xs text-gray-500">${item.commissionRate || '20%'}</td>
+                          <td class="p-4 text-right text-green-400 font-bold">+৳ ${item.amount}</td>
+                      </tr>
+                  `;
+              });
+              tableBody.innerHTML = html;
+          }
+      } catch (error) {
+          console.error("Earnings Load Error", error);
+          tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-red-400 text-xs">Failed to load data. Please refresh.</td></tr>';
+      }
+  }
+
+  // ৩. টাকা তোলার (Withdraw) ফাংশন
+  window.handleWithdraw = async function() {
+    const user = auth.currentUser;
+    if(!user) return;
+
+    const amount = document.querySelector('input[type="number"]').value;
+    const accountNumber = document.querySelector('input[placeholder="017xxxxxxxx"]').value;
+    const methodElement = document.querySelector('input[name="payment_method"]:checked');
+    const method = methodElement ? methodElement.value : null;
+
+    if(!amount || !accountNumber || !method) {
+        alert("Please fill all fields!");
+        return;
+    }
+
+    const token = await user.getIdToken();
+    const btn = document.querySelector('.lg\\:col-span-2 button');
+    const originalText = btn.innerText;
+    
+    btn.innerText = "Processing...";
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/.netlify/functions/request-withdraw', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ amount, method, accountNumber })
+        });
+        
+        const result = await res.json();
+        if(res.ok) {
+            alert("Withdrawal Request Submitted Successfully!");
+            window.location.reload();
+        } else {
+            alert("Error: " + (result.error || "Something went wrong"));
+        }
+    } catch (err) {
+        alert("Network Error. Please try again.");
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+  }
+
+  // ৪. লগআউট ফাংশন
+  window.logout = function() {
+    signOut(auth).then(() => {
+        window.location.href = "login.html";
+    }).catch((error) => {
+        console.error("Logout Error:", error);
+    });
+  }
+
+  // ৫. ইভেন্ট লিসেনার বাইন্ডিং
+  document.addEventListener('DOMContentLoaded', () => {
+      const withdrawBtn = document.querySelector('.lg\\:col-span-2 button');
+      if(withdrawBtn) {
+          withdrawBtn.addEventListener('click', window.handleWithdraw);
+      }
+  });
+</script>
+  
+  </body>
+</html>

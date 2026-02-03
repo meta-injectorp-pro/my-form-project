@@ -336,6 +336,52 @@
     </footer>
 
     <script>
+		// ================== আপডেটেড ফাংশন ==================
+    async function onPaymentSuccess(orderAmount, orderId, packageType) {
+        console.log("Processing Referral for Order:", orderId);
+
+        // ১. প্যাকেজ চেক করা (শুধুমাত্র Starter এবং Beginner এর জন্য কাজ করবে)
+        const allowedPackages = ['Starter', 'Beginner'];
+        if (!allowedPackages.includes(packageType)) {
+            console.log("No referral bonus for this package:", packageType);
+            return; // ফাংশন এখানেই থেমে যাবে
+        }
+        
+        // ২. কুকি থেকে রেফারেল কোড বের করা
+        const refData = localStorage.getItem("affiliate_ref");
+        
+        if (refData) {
+            try {
+                const item = JSON.parse(refData);
+                const now = new Date();
+
+                if (now.getTime() < item.expiry) {
+                    const refCode = item.value;
+
+                    // ৩. ব্যাকএন্ডে ডাটা পাঠানো (প্যাকেজ টাইপ সহ)
+                    await fetch('/.netlify/functions/add-commission', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            refCode: refCode,
+                            amount: orderAmount,
+                            orderId: orderId,
+                            packageType: packageType // নতুন: প্যাকেজের নাম পাঠানো হচ্ছে
+                        })
+                    });
+
+                    console.log("Commission request sent for:", refCode);
+                }
+            } catch (err) {
+                console.error("Referral Error:", err);
+            }
+            
+            // কাজ শেষে কুকি ডিলিট
+            localStorage.removeItem("affiliate_ref");
+        }
+    }
+    // =======================================================
+	
         document.addEventListener('DOMContentLoaded', () => {
             const packageDetails = {
                 "Free Trial":   { label: "3 Days",   days: "3", credits: "100",    regular: 0 },
@@ -535,10 +581,15 @@
                     const data = await response.json();
 
                     if(response.ok) {
-                        elements.checkoutGrid.style.display = 'none';
-                        elements.successView.classList.remove('hidden');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    } else {
+						const orderId = inputs.trx.value || 'ORD-' + Date.now();
+						
+						// আপডেটেড কল: pkgName পাঠানো হচ্ছে
+						await onPaymentSuccess(pkgPrice, orderId, pkgName); 
+
+						elements.checkoutGrid.style.display = 'none';
+						elements.successView.classList.remove('hidden');
+						window.scrollTo({ top: 0, behavior: 'smooth' });
+					} else {
                         if (data.errorType === 'ACTIVE_PLAN') {
                             elements.statusMsg.style.display = 'block';
                             elements.statusMsg.className = "mt-6 p-6 rounded-xl text-center border bg-purple-900/20 border-[#A073EE]/50";
