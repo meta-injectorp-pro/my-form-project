@@ -338,7 +338,11 @@ Check Admin Panel to Approve.`;
 
     return { 
         statusCode: 200, 
-        body: JSON.stringify({ status: "success", message: "Purchase request submitted! Check your email." }) 
+        body: JSON.stringify({ 
+            status: "success", 
+            message: "Purchase request submitted! Check your email.",
+            licenseKey: licenseKeyToUpdate
+        }) 
     };
 
   } catch (error) {

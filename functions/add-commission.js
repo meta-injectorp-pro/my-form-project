@@ -3,9 +3,12 @@ const { admin, db } = require("./firebase-admin");
 exports.handler = async (event, context) => {
   if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
-  const { refCode, amount, orderId, packageType } = JSON.parse(event.body);
+  const { refCode, amount, orderId, packageType, licenseKey } = JSON.parse(event.body);
 
-  if (!refCode || !amount || !packageType) return { statusCode: 400, body: "Missing Data" };
+  // লাইসেন্স কি ছাড়া ডাটা সেভ হবে না
+  if (!refCode || !amount || !packageType || !licenseKey) {
+      return { statusCode: 400, body: "Missing Data" };
+  }
 
   let commissionRate = 0;
   if (packageType === 'Starter') commissionRate = 0.33;
@@ -13,42 +16,34 @@ exports.handler = async (event, context) => {
   else return { statusCode: 200, body: JSON.stringify({ message: "No commission for this package" }) };
 
   try {
-    // ⚠️ পরিবর্তন: users এর বদলে Affiliate_Data
     const usersRef = db.collection("Affiliate_Data");
     const snapshot = await usersRef.where("affiliateCode", "==", refCode).limit(1).get();
 
     if (snapshot.empty) return { statusCode: 404, body: "Affiliate not found" };
 
     const affiliateDoc = snapshot.docs[0];
-    const affiliateId = affiliateDoc.id;
+    // ইউজারের ID টা নেওয়া হলো যাতে তার সাব-কালেকশনে রাখা যায়
+    const userRef = db.collection("Affiliate_Data").doc(affiliateDoc.id);
+
     const commission = Math.floor(amount * commissionRate);
 
     if (commission > 0) {
-        await db.runTransaction(async (t) => {
-          const userRef = db.collection("Affiliate_Data").doc(affiliateId);
-          const doc = await t.get(userRef);
-          const currentBalance = doc.data().balance || 0;
-          const currentEarnings = doc.data().totalEarnings || 0;
-
-          t.update(userRef, { 
-            balance: currentBalance + commission,
-            totalEarnings: currentEarnings + commission
-          });
-
-          // ⚠️ পরিবর্তন: সাব-কালেকশন Earnings এ ডাটা রাখা
-          const historyRef = userRef.collection("Earnings").doc();
-          t.set(historyRef, {
+        // ⚠️ পরিবর্তন: এখন আর ব্যালেন্স আপডেট হচ্ছে না, শুধু রেকর্ড রাখা হচ্ছে
+        const historyRef = userRef.collection("Earnings").doc();
+        
+        await historyRef.set({
             amount: commission,
-            orderId: orderId,
+            orderId: orderId,         // ট্রানজেকশন আইডি বা ফোন নম্বর
+            licenseKey: licenseKey,   // 🔑 এই লাইসেন্স কি দিয়ে আপনি ট্র্যাক করবেন
             packageType: packageType,
             packagePrice: amount,
             commissionRate: (commissionRate * 100) + "%",
+            status: "Pending",        // ⚠️ স্ট্যাটাস পেন্ডিং থাকবে
             date: new Date().toISOString()
-          });
         });
     }
 
-    return { statusCode: 200, body: JSON.stringify({ message: "Commission Added", commission }) };
+    return { statusCode: 200, body: JSON.stringify({ message: "Commission Recorded as Pending" }) };
 
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
