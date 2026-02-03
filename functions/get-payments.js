@@ -8,19 +8,17 @@ exports.handler = async (event, context) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    // ✅ Change: Fetching from sub-collection
-    const earningsSnapshot = await db.collection("Affiliate_Data")
+    // ✅ Change: Fetching from sub-collection Withdrawals
+    const snapshot = await db.collection("Affiliate_Data")
       .doc(uid)
-      .collection("Earnings")
-      .orderBy("date", "desc")
+      .collection("Withdrawals")
+      .orderBy("requestDate", "desc")
       .get();
 
-    const earnings = [];
-    earningsSnapshot.forEach(doc => {
-      earnings.push({ id: doc.id, ...doc.data() });
-    });
+    const payments = [];
+    snapshot.forEach(doc => payments.push({ id: doc.id, ...doc.data() }));
 
-    return { statusCode: 200, body: JSON.stringify(earnings) };
+    return { statusCode: 200, body: JSON.stringify(payments) };
 
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: error.message }) };

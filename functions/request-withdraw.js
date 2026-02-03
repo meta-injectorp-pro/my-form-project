@@ -12,9 +12,8 @@ exports.handler = async (event, context) => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
-    const userRef = db.collection("users").doc(uid);
+    const userRef = db.collection("Affiliate_Data").doc(uid);
 
-    // ১. ট্রানজ্যাকশন শুরু (যাতে একই সময়ে দুইবার টাকা তুলতে না পারে)
     await db.runTransaction(async (t) => {
       const doc = await t.get(userRef);
       const currentBalance = doc.data().balance || 0;
@@ -23,13 +22,10 @@ exports.handler = async (event, context) => {
         throw new Error("Insufficient Balance");
       }
 
-      // ব্যালেন্স কমানো
       t.update(userRef, { balance: currentBalance - withdrawAmount });
 
-      // উইথড্র রিকোয়েস্ট তৈরি
-      const withdrawRef = db.collection("withdrawals").doc();
+      const withdrawRef = userRef.collection("Withdrawals").doc();
       t.set(withdrawRef, {
-        uid: uid,
         amount: withdrawAmount,
         method: method,
         accountNumber: accountNumber,
