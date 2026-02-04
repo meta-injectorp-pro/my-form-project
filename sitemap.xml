@@ -2,13 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://www.metainjector.pro/</loc>
-      <lastmod>2026-01-06</lastmod>
+      <lastmod>2026-02-04</lastmod>
       <priority>1.00</priority>
    </url>
    <url>
       <loc>https://www.metainjector.pro/index.html</loc>
       <priority>0.80</priority>
    </url>
+   <url>
+      <loc>https://www.metainjector.pro/features-details.html</loc>
+      <priority>0.70</priority>
+   </url>
+   
+   <url>
+      <loc>https://www.metainjector.pro/affiliate.html</loc>
+      <priority>0.90</priority>
+   </url>
+   <url>
+      <loc>https://www.metainjector.pro/signup.html</loc>
+      <priority>0.70</priority>
+   </url>
+   <url>
+      <loc>https://www.metainjector.pro/login.html</loc>
+      <priority>0.60</priority>
+   </url>
+
    <url>
       <loc>https://www.metainjector.pro/topup.html</loc>
       <priority>0.80</priority>
@@ -17,10 +35,7 @@
       <loc>https://www.metainjector.pro/checkout.html</loc>
       <priority>0.80</priority>
    </url>
-   <url>
-      <loc>https://www.metainjector.pro/features-details.html</loc>
-      <priority>0.70</priority>
-   </url>
+
    <url>
       <loc>https://www.metainjector.pro/terms.html</loc>
       <priority>0.50</priority>

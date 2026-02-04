@@ -1,4 +1,3 @@
-// functions/login-user.js (আগের সঠিক ভার্সন)
 const fetch = require('node-fetch');
 
 exports.handler = async (event, context) => {
@@ -8,7 +7,6 @@ exports.handler = async (event, context) => {
   const apiKey = process.env.FIREBASE_WEB_API_KEY;
 
   try {
-    // 👇 আবার আগের URL-এ ফিরে আসলাম
     const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

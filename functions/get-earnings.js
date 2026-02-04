@@ -8,7 +8,6 @@ exports.handler = async (event, context) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    // ⚠️ পরিবর্তন: সাব-কালেকশন থেকে ডাটা আনা
     const earningsSnapshot = await db.collection("Affiliate_Data")
       .doc(uid)
       .collection("Earnings")

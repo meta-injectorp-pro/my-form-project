@@ -16,7 +16,6 @@ exports.handler = async (event, context) => {
   const fullName = `${firstName} ${lastName}`;
 
   try {
-    // ১. অথেনটিকেশনে ইউজার তৈরি
     const userRecord = await admin.auth().createUser({
       email: email,
       password: password,
@@ -25,7 +24,6 @@ exports.handler = async (event, context) => {
 
     const uniqueCode = "META" + Math.floor(1000 + Math.random() * 9000);
 
-    // ২. Affiliate_Data কালেকশনে ডাটা সেভ
     await db.collection("Affiliate_Data").doc(userRecord.uid).set({
       uid: userRecord.uid,
       firstName: firstName,
@@ -41,7 +39,6 @@ exports.handler = async (event, context) => {
       createdAt: new Date().toISOString()
     });
 
-    // ৩. ওয়েলকাম ইমেইল
     const mailOptions = {
         from: `"Meta Injector Pro" <${process.env.SMTP_EMAIL}>`,
         to: email,

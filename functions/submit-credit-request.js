@@ -1,7 +1,6 @@
 const admin = require('firebase-admin');
-const fetch = require('node-fetch'); // Ensure node-fetch is installed/available
+const fetch = require('node-fetch');
 
-// Firebase Config
 if (!admin.apps.length) {
     try {
         admin.initializeApp({
@@ -18,7 +17,6 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-// Package Duration Map (For Credits)
 const packageDurations = {
     "Starter": 30,
     "Beginner": 30,
@@ -36,12 +34,10 @@ exports.handler = async (event) => {
     try {
         const data = JSON.parse(event.body);
 
-        // 1. Validation
         if (!data.licenseKey || !data.amount || !data.trxId) {
             return { statusCode: 400, body: JSON.stringify({ message: "Missing required fields" }) };
         }
 
-        // 2. Pending Check
         const pendingCheck = await db.collection('Credits_Purchase')
             .where('License Key', '==', data.licenseKey)
             .where('Status', '==', 'Pending')
@@ -54,11 +50,8 @@ exports.handler = async (event) => {
             };
         }
 
-        // 3. Determine Duration
-        // Frontend should send 'packageName', if not, default to 0 or manual check
         const duration = packageDurations[data.packageName] || 0; 
 
-        // 4. Save to Database (Updated Fields)
         const creditRequest = {
             "Customer Name": data.name,
             "Phone Number": data.phone,
@@ -70,15 +63,13 @@ exports.handler = async (event) => {
             "Status": "Pending",
             "Request Date": new Date(),
             "Type": "Credit Top-up",
-            
-            // NEW FIELDS ADDED
+
             "Package Type": data.packageName || "Custom Credit Pack",
             "Package Duration": duration
         };
 
         await db.collection('Credits_Purchase').add(creditRequest);
 
-        // 5. Telegram Notification
         try {
             const botToken = process.env.TELEGRAM_BOT_TOKEN;
             const chatId = process.env.TELEGRAM_CHAT_ID;

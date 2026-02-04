@@ -195,6 +195,7 @@
                 </div>
             </div>
         </div>
+        
         <div x-show="currentTab === 'withdraw'" style="display: none;">
             <h1 class="text-3xl font-bold mb-2">Withdraw Funds</h1>
             <p class="text-gray-400 mb-8">Transfer your earnings to your preferred account.</p>
@@ -217,21 +218,21 @@
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="bkash" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/bkash.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Bkash">
+                                    <img src="./Source_Files/bkash.svg" class="h-8 w-auto transition-all" alt="Bkash">
                                     <span class="text-xs font-bold mt-2">Bkash</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="nagad" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/nagad.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Nagad">
+                                    <img src="./Source_Files/nagad.svg" class="h-8 w-auto transition-all" alt="Nagad">
                                     <span class="text-xs font-bold mt-2">Nagad</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer relative group">
                                 <input type="radio" name="payment_method" value="rocket" class="peer sr-only payment-radio">
                                 <div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center gap-2 h-28 hover:bg-white/5 transition-all border border-transparent">
-                                    <img src="./Source_Files/rocket.svg" class="h-8 w-auto grayscale group-hover:grayscale-0 peer-checked:grayscale-0 transition-all" alt="Rocket">
+                                    <img src="./Source_Files/rocket.svg" class="h-8 w-auto transition-all" alt="Rocket">
                                     <span class="text-xs font-bold mt-2">Rocket</span>
                                 </div>
                             </label>
@@ -269,7 +270,7 @@
                          <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">All Earnings</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
-                                <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Package</th><th class="p-3">Price</th><th class="p-3">Rate</th><th class="p-3 text-right">Commission</th><th class="p-3 text-center">Status</th></tr></thead>
+                                <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Order ID</th> <th class="p-3">Package</th><th class="p-3">Package</th><th class="p-3">Price</th><th class="p-3">Rate</th><th class="p-3 text-right">Commission</th><th class="p-3 text-center">Status</th></tr></thead>
                                 <tbody id="earnings-list"></tbody>
                             </table>
                          </div>
@@ -374,6 +375,7 @@
                     fullHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-400 text-xs font-mono">${dateStr}</td>
+							<td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
                             <td class="p-4 font-medium text-white">${item.packageType || 'N/A'}</td>
                             <td class="p-4 text-gray-400">৳${item.packagePrice}</td>
                             <td class="p-4 text-xs text-gray-500">${item.commissionRate}</td>
@@ -388,6 +390,7 @@
                     recentHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-300 text-sm">${dateStr}</td>
+							<td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
                             <td class="p-4 text-white font-medium">${item.packageType}</td>
                             <td class="p-4 font-bold text-[#A073EE]">+ ৳${item.amount}</td>
                             <td class="p-4 text-center">${getBadge(item.status)}</td>
@@ -439,7 +442,6 @@
         if(!document.getElementById('earningsChart')) return;
         
         const ctx = document.getElementById('earningsChart').getContext('2d');
-        // Destroy old if exists (to avoid overlap)
         if(window.myChart) window.myChart.destroy();
 
         window.myChart = new Chart(ctx, {
@@ -465,8 +467,7 @@
     // 5. COPY LINK (FIXED: NO BLUE HIGHLIGHT)
     function copyLink() {
         const copyText = document.getElementById("refLink");
-        
-        // Use modern clipboard API directly (Avoids text selection blue background)
+
         navigator.clipboard.writeText(copyText.value).then(() => {
             const btn = document.querySelector('button[onclick="copyLink()"]');
             const original = btn.innerText;

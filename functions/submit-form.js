@@ -1,9 +1,8 @@
 const admin = require('firebase-admin');
 const Busboy = require('busboy');
 const nodemailer = require('nodemailer');
-const fetch = require('node-fetch'); // Ensure node-fetch is available
+const fetch = require('node-fetch');
 
-// Firebase Config
 try {
   if (!admin.apps.length) {
     admin.initializeApp({
@@ -18,13 +17,11 @@ try {
 
 const db = admin.firestore();
 
-// Email Transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: { user: process.env.SMTP_EMAIL, pass: process.env.SMTP_PASSWORD }
 });
 
-// Helper: Parse Form
 function parseMultipartForm(event) {
     return new Promise((resolve) => {
         const fields = {};
@@ -35,18 +32,16 @@ function parseMultipartForm(event) {
     });
 }
 
-// Helper: Date Formatter (dd-mm-yyyy HH:MM:SS)
 function formatCustomDate(date) {
     const d = new Date(date);
     const pad = (n) => n.toString().padStart(2, '0');
     return `${pad(d.getDate())}-${pad(d.getMonth()+1)}-${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-// Helper: Get Bangladesh Time (UTC+6)
 function getBDTime() {
     const now = new Date();
     const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-    return new Date(utc + (3600000 * 6)); // Add 6 hours for BD Time
+    return new Date(utc + (3600000 * 6));
 }
 
 const packageRules = {
@@ -66,7 +61,6 @@ exports.handler = async (event) => {
     const { fields } = await parseMultipartForm(event);
     const data = fields;
 
-    // 1. User Check
     const userSnapshot = await db.collection('licenseDatabase')
                                  .where('Email', '==', data.Email)
                                  .limit(1).get();
@@ -81,7 +75,6 @@ exports.handler = async (event) => {
         userData = userDoc.data();
         licenseKeyToUpdate = userDoc.id;
 
-        // RESTRICTION: Paid users cannot buy another plan
         if (userData.Package && userData.Package !== "Free Trial" && userData.Package !== "N/A") {
              return {
                  statusCode: 409, 
@@ -93,7 +86,7 @@ exports.handler = async (event) => {
              };
         }
     } else {
-        // New User: Get Free License Slot
+
         const freeLicenseSnapshot = await db.collection('licenseDatabase')
                                             .where('Email', 'in', ["", null])
                                             .limit(1).get();     
@@ -104,8 +97,7 @@ exports.handler = async (event) => {
     }
 
     const selectedPkg = packageRules[data.Package] || { credits: 0, duration: 0, price: 0 };
-    
-    // Prevent existing user from taking Free Trial again
+
     if (!isNewUser && data.Package === 'Free Trial') {
         return { statusCode: 400, body: JSON.stringify({ message: "You have already used the Free Trial or have an active plan." }) };
     }

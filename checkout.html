@@ -336,18 +336,22 @@
     </footer>
 
     <script>
-    // ================== আপডেটেড কমিশন ফাংশন (License Key সহ) ==================
     async function onPaymentSuccess(orderAmount, orderId, packageType, licenseKey) {
         console.log("Processing Referral...", { orderAmount, orderId, packageType, licenseKey });
 
-        // ১. প্যাকেজ চেক (শুধুমাত্র Starter এবং Beginner এর জন্য কাজ করবে)
-        const allowedPackages = ['Starter', 'Beginner'];
+        const allowedPackages = [
+            'Starter', 
+            'Beginner', 
+            'Professional', 
+            'Ultimate', 
+            'Corporate', 
+            'Enterprise'
+        ];
         if (!allowedPackages.includes(packageType)) {
             console.log("No commission for package:", packageType);
             return; 
         }
-        
-        // ২. কুকি থেকে রেফারেল কোড বের করা
+
         let refCode = null;
         try {
             const refData = localStorage.getItem("affiliate_ref");
@@ -355,17 +359,15 @@
                 const item = JSON.parse(refData);
                 const now = new Date();
 
-                // মেয়াদ চেক
                 if (now.getTime() < item.expiry) {
                     refCode = item.value;
                 } else {
-                    localStorage.removeItem("affiliate_ref"); // মেয়াদ শেষ
+                    localStorage.removeItem("affiliate_ref");
                 }
             }
         } catch (e) { console.error("Cookie Error:", e); }
         
         if (refCode) {
-            // ৩. ব্যাকএন্ডে ডাটা পাঠানো (License Key সহ)
             try {
                 await fetch('/.netlify/functions/add-commission', {
                     method: 'POST',
@@ -375,7 +377,7 @@
                         amount: orderAmount,
                         orderId: orderId,
                         packageType: packageType,
-                        licenseKey: licenseKey // 🔑 এটি যুক্ত করা হলো (Backend এ দরকার)
+                        licenseKey: licenseKey
                     })
                 });
 
@@ -383,8 +385,7 @@
             } catch (err) {
                 console.error("Referral Error:", err);
             }
-            
-            // কাজ শেষে কুকি ডিলিট
+
             localStorage.removeItem("affiliate_ref");
         }
     }
@@ -414,15 +415,13 @@
             
             if(pkgName === "Free Trial") pkgPrice = 0;
 
-            // DOM Elements
             const elements = {
                 pkgName: document.getElementById('pkgName'),
                 pkgCredits: document.getElementById('pkgCredits'),
                 pkgDuration: document.getElementById('pkgDurationDisplay'),
                 totalPrice: document.getElementById('totalPrice'),
                 priceRow: document.getElementById('priceRow'),
-                
-                // Discount Elements
+
                 regularPriceRow: document.getElementById('regularPriceRow'),
                 regularPriceVal: document.getElementById('regularPriceVal'),
                 discountRow: document.getElementById('discountRow'),
@@ -441,7 +440,6 @@
                 copyTooltip: document.getElementById('copyTooltip')
             };
 
-            // Setup UI Data
             elements.pkgName.innerText = pkgName;
             elements.totalPrice.innerText = '৳' + pkgPrice;
 
@@ -453,7 +451,7 @@
                 elements.pkgDuration.innerText = packageDetails[pkgName].label;
                 elements.pkgCredits.innerText = packageDetails[pkgName].credits;
                 durationDays = packageDetails[pkgName].days;
-                regularPrice = packageDetails[pkgName].regular; // Get Hardcoded Regular Price
+                regularPrice = packageDetails[pkgName].regular;
             } else {
                 elements.pkgDuration.innerText = "1 Month";
                 elements.pkgCredits.innerText = params.get('credits') || "--";
@@ -467,21 +465,17 @@
                 elements.priceRow.style.display = 'none';
                 elements.submitBtn.innerText = "Start Your Free Trial";
             } else {
-                // SIMPLE CALCULATION (Regular - Current = Savings)
+
                 const discountAmount = regularPrice - pkgPrice;
 
                 if (regularPrice > pkgPrice) {
                     elements.regularPriceVal.innerText = regularPrice;
                     elements.discountVal.innerText = discountAmount;
-                    
-                    // Show Rows
+
                     elements.regularPriceRow.classList.remove('hidden');
                     elements.discountRow.classList.remove('hidden');
                     elements.discountBadge.classList.remove('hidden');
-                    
-                    // Badge Text Update (Optional)
-                    // const percentOff = Math.round((discountAmount / regularPrice) * 100);
-                    // elements.discountBadge.innerText = percentOff + "% OFF";
+
                 }
 
                 elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;

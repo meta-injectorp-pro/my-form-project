@@ -8,7 +8,6 @@ exports.handler = async (event, context) => {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
 
-    // ✅ Change: Fetching from sub-collection Withdrawals
     const snapshot = await db.collection("Affiliate_Data")
       .doc(uid)
       .collection("Withdrawals")

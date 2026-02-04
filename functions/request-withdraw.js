@@ -12,8 +12,7 @@ exports.handler = async (event, context) => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
-    
-    // ⚠️ পরিবর্তন: Affiliate_Data টার্গেট করা
+
     const userRef = db.collection("Affiliate_Data").doc(uid);
 
     await db.runTransaction(async (t) => {
@@ -24,7 +23,6 @@ exports.handler = async (event, context) => {
 
       t.update(userRef, { balance: currentBalance - withdrawAmount });
 
-      // সাব-কালেকশনে রিকোয়েস্ট সেভ করা
       const withdrawRef = userRef.collection("Withdrawals").doc();
       t.set(withdrawRef, {
         amount: withdrawAmount,
