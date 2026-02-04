@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Affiliate Dashboard - Meta Injector Pro</title>
+  
+  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+  <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -95,7 +99,7 @@
   <main class="flex-1 h-screen overflow-y-auto relative">
     
     <div class="lg:hidden p-4 flex justify-between items-center glass-panel sticky top-0 z-40">
-        <img src="./Source_Files/logo.svg" class="h-6">
+        <a href="index.html"><img src="./Source_Files/logo.svg" class="h-6"></a>
         <button @click="mobileMenu = !mobileMenu" class="text-white p-2">
             <i class="fa-solid fa-bars text-xl"></i>
         </button>
@@ -106,7 +110,7 @@
         <div x-show="currentTab === 'dashboard'" x-transition.opacity>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold">Welcome back, <span class="text-[#A073EE] profile-name-only">User</span>!</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold">Welcome back, <span class="text-[#A073EE] profile-name-only">User</span>! 👋</h1>
                     <p class="text-gray-400 text-sm mt-1">Here's what's happening with your affiliate account.</p>
                 </div>
                 <div class="bg-white/5 px-4 py-2 rounded-full border border-white/10 text-xs font-mono text-gray-300">
@@ -181,15 +185,16 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-xs uppercase font-bold text-gray-300">
-							<tr>
-								<th class="p-4">Date</th>
-								<th class="p-4">Order ID</th> <th class="p-4">Package</th>
-								<th class="p-4">Amount</th>
-								<th class="p-4 text-center">Status</th>
-							</tr>
-						</thead>
+                            <tr>
+                                <th class="p-4">Date</th>
+                                <th class="p-4">Order ID</th>
+                                <th class="p-4">Package</th>
+                                <th class="p-4">Amount</th>
+                                <th class="p-4 text-center">Status</th>
+                            </tr>
+                        </thead>
                         <tbody id="recent-logs-body" class="divide-y divide-white/5">
-                            <tr><td colspan="4" class="p-8 text-center text-gray-500">Loading recent activity...</td></tr>
+                            <tr><td colspan="5" class="p-8 text-center text-gray-500">Loading recent activity...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -242,7 +247,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Amount (৳)</label>
-                            <input type="number" id="withdrawAmount" placeholder="Widthdraw Amount" class="w-full bg-[#0F0A1E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#fd297b] outline-none transition-colors">
+                            <input type="number" id="withdrawAmount" placeholder="Withdraw Amount" class="w-full bg-[#0F0A1E] border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#fd297b] outline-none transition-colors">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Account Number</label>
@@ -262,42 +267,46 @@
                 <div class="flex border-b border-white/10 bg-white/5" x-data="{ subTab: 'earn' }">
                     <button @click="subTab = 'earn'" class="flex-1 py-4 font-bold text-sm hover:bg-white/5 transition-colors" :class="subTab === 'earn' ? 'text-[#A073EE] border-b-2 border-[#A073EE]' : 'text-gray-400'">Earnings</button>
                     <button @click="subTab = 'pay'" class="flex-1 py-4 font-bold text-sm hover:bg-white/5 transition-colors" :class="subTab === 'pay' ? 'text-[#fd297b] border-b-2 border-[#fd297b]' : 'text-gray-400'">Withdrawals</button>
-                    
-                    </div>
+                </div>
 
                 <div class="p-4">
-                    <div id="earnings-container">
+                    <div x-show="subTab === 'earn'">
                          <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">All Earnings</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
                                 <thead class="bg-white/5 text-xs uppercase">
-									<tr>
-										<th class="p-3">Date</th>
-										<th class="p-3">Order ID</th>
-										<th class="p-3">Package</th> <th class="p-3">Price</th>
-										<th class="p-3">Rate</th>
-										<th class="p-3 text-right">Commission</th>
-										<th class="p-3 text-center">Status</th>
-									</tr>
-								</thead>
-                                <tbody id="earnings-list"></tbody>
+                                    <tr>
+                                        <th class="p-3">Date</th>
+                                        <th class="p-3">Order ID</th>
+                                        <th class="p-3">Package</th>
+                                        <th class="p-3">Price</th>
+                                        <th class="p-3">Rate</th>
+                                        <th class="p-3 text-right">Commission</th>
+                                        <th class="p-3 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="earnings-list">
+                                    <tr><td colspan="7" class="p-8 text-center text-gray-500">Loading history...</td></tr>
+                                </tbody>
                             </table>
                          </div>
                     </div>
                     
-                    <div id="payments-container" class="mt-8">
+                    <div x-show="subTab === 'pay'">
                         <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">Withdrawals</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
                                 <thead class="bg-white/5 text-xs uppercase font-bold text-gray-300">
-									<tr>
-										<th class="p-4">Date</th>
-										<th class="p-4">Method</th>
-										<th class="p-4">Account</th>
-										<th class="p-4 text-right">Amount</th> <th class="p-4 text-center">Status</th>
-									</tr>
-								</thead>
-                                <tbody id="payment-list"></tbody>
+                                    <tr>
+                                        <th class="p-4">Date</th>
+                                        <th class="p-4">Method</th>
+                                        <th class="p-4">Account</th>
+                                        <th class="p-4 text-right">Amount</th> <th class="p-4 text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payment-list">
+                                    <tr><td colspan="5" class="p-8 text-center text-gray-500">Loading history...</td></tr>
+                                </tbody>
                             </table>
                          </div>
                     </div>
@@ -307,6 +316,21 @@
 
     </div>
   </main>
+
+  <div id="successModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel p-8 rounded-2xl max-w-sm w-full text-center transform scale-90 transition-transform duration-300" id="successModalContent">
+        <div class="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/30">
+            <i class="fa-solid fa-check text-3xl text-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-3">Request Submitted!</h3>
+        <p class="text-gray-300 mb-8 leading-relaxed text-sm">
+            Withdrawal request successfully submitted. Funds will be added to your account within 24 hours.
+        </p>
+        <button onclick="closeModal()" class="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-all shadow-lg shadow-[#A073EE]/20">
+            Okay, Got it
+        </button>
+    </div>
+  </div>
 
   <script>
     const token = localStorage.getItem('authToken');
@@ -320,26 +344,24 @@
             if (res.ok) {
                 const data = await res.json();
                 
-                // Update Texts
                 document.querySelectorAll('.balance-display').forEach(el => el.innerText = `৳ ${data.balance}`);
                 document.querySelector('.earning-display').innerText = `৳ ${data.totalEarnings}`;
                 document.querySelector('.profile-name').innerText = data.name;
-                document.querySelector('.profile-name-only').innerText = data.name.split(' ')[0]; // First name
+                document.querySelector('.profile-name-only').innerText = data.name.split(' ')[0]; 
                 document.querySelector('.profile-id').innerText = `ID: ${data.affiliateCode}`;
                 document.getElementById('refLink').value = `https://metainjector.pro/?ref=${data.affiliateCode}`;
                 
-                // Avatar
                 document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${data.name}&background=A073EE&color=fff&bold=true`;
 
-                // Load Logs (Both for History Tab and Recent Activity Widget)
                 await loadEarningsHistory(data.balance, data.totalEarnings);
                 loadPaymentHistory();
-
+            } else {
+                console.error("Dashboard API Error");
             }
         } catch (e) { console.error(e); }
     }
 
-    // 2. LOAD EARNINGS & POPULATE RECENT ACTIVITY
+    // 2. LOAD EARNINGS
     async function loadEarningsHistory(balance, totalEarnings) {
         const tableBody = document.getElementById('earnings-list');
         const recentLogBody = document.getElementById('recent-logs-body');
@@ -353,32 +375,25 @@
             if (res.ok) {
                 const data = await res.json();
                 
-                // Calculate Pending Amount
                 let pendingTotal = 0;
                 data.forEach(item => {
                     if(item.status === 'Pending') pendingTotal += item.amount;
                 });
                 if(pendingDisplay) pendingDisplay.innerText = `৳ ${pendingTotal}`;
 
-                // Update Chart Data
                 updateChart(balance, pendingTotal, totalEarnings);
 
-                // Populate Tables
                 if (data.length === 0) {
-                    const emptyMsg = '<tr><td colspan="6" class="p-4 text-center text-gray-500">No earnings yet.</td></tr>';
+                    const emptyMsg = '<tr><td colspan="7" class="p-8 text-center text-gray-500">No earnings found yet.</td></tr>';
                     if(tableBody) tableBody.innerHTML = emptyMsg;
-                    if(recentLogBody) recentLogBody.innerHTML = emptyMsg;
+                    if(recentLogBody) recentLogBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-gray-500">No earnings found yet.</td></tr>';
                     return;
                 }
 
-                // Generate Rows
                 let fullHtml = '';
                 let recentHtml = '';
-                
-                // Show only first 5 for dashboard overview
                 const recentItems = data.slice(0, 5);
 
-                // Helper to create badge
                 const getBadge = (status) => {
                     if(status === 'Pending') return '<span class="px-2 py-1 rounded bg-yellow-500/10 text-yellow-400 text-xs border border-yellow-500/20 font-bold"><i class="fa-solid fa-clock mr-1"></i>Pending</span>';
                     if(status === 'Approved') return '<span class="px-2 py-1 rounded bg-green-500/10 text-green-400 text-xs border border-green-500/20 font-bold"><i class="fa-solid fa-check mr-1"></i>Approved</span>';
@@ -391,7 +406,7 @@
                     fullHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-400 text-xs font-mono">${dateStr}</td>
-							<td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
+                            <td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
                             <td class="p-4 font-medium text-white">${item.packageType || 'N/A'}</td>
                             <td class="p-4 text-gray-400">৳${item.packagePrice}</td>
                             <td class="p-4 text-xs text-gray-500">${item.commissionRate}</td>
@@ -400,13 +415,13 @@
                         </tr>`;
                 });
 
-                // Recent Activity (Short Version)
+                // Recent Activity
                 recentItems.forEach(item => {
                     const dateStr = new Date(item.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
                     recentHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-300 text-sm">${dateStr}</td>
-							<td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
+                            <td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
                             <td class="p-4 text-white font-medium">${item.packageType}</td>
                             <td class="p-4 font-bold text-[#A073EE]">+ ৳${item.amount}</td>
                             <td class="p-4 text-center">${getBadge(item.status)}</td>
@@ -416,10 +431,12 @@
                 if(tableBody) tableBody.innerHTML = fullHtml;
                 if(recentLogBody) recentLogBody.innerHTML = recentHtml;
             }
-        } catch (e) { console.error(e); }
+        } catch (e) { 
+            console.error("Earnings Error:", e);
+        }
     }
 
-    // 3. WITHDRAW HISTORY (Fixed Alignment)
+    // 3. WITHDRAW HISTORY (FIXED ALIGNMENT)
     async function loadPaymentHistory() {
         const tableBody = document.getElementById('payment-list');
         if (!tableBody) return;
@@ -442,11 +459,10 @@
                     html += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-300 font-mono text-xs">${dateStr}</td>
-                            <td class="p-4 capitalize flex items-center gap-2 text-white">
-                                ${item.method}
-                            </td>
+                            <td class="p-4 capitalize flex items-center gap-2 text-white">${item.method}</td>
                             <td class="p-4 font-mono text-gray-400">${item.accountNumber}</td>
-                            <td class="p-4 text-right text-white font-bold">৳ ${item.amount}</td> <td class="p-4 text-center"><span class="px-2 py-1 rounded border ${statusColor} text-xs font-bold">${item.status}</span></td>
+                            <td class="p-4 text-right text-white font-bold">৳ ${item.amount}</td>
+                            <td class="p-4 text-center"><span class="px-2 py-1 rounded border ${statusColor} text-xs font-bold">${item.status}</span></td>
                         </tr>`;
                 });
                 tableBody.innerHTML = html;
@@ -454,13 +470,11 @@
         } catch (e) { console.error(e); }
     }
 
-    // 4. CHART FUNCTION
+    // 4. CHART
     function updateChart(balance, pending, total) {
         if(!document.getElementById('earningsChart')) return;
-        
         const ctx = document.getElementById('earningsChart').getContext('2d');
         if(window.myChart) window.myChart.destroy();
-
         window.myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -472,19 +486,13 @@
                     hoverOffset: 4
                 }]
             },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: { legend: { display: false } } 
-            }
+            options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { display: false } } }
         });
     }
 
-    // 5. COPY LINK (FIXED: NO BLUE HIGHLIGHT)
+    // 5. COPY LINK
     function copyLink() {
         const copyText = document.getElementById("refLink");
-
         navigator.clipboard.writeText(copyText.value).then(() => {
             const btn = document.querySelector('button[onclick="copyLink()"]');
             const original = btn.innerText;
@@ -494,29 +502,62 @@
                 btn.innerText = original; 
                 btn.classList.remove('bg-green-500');
             }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
-        });
+        }).catch(err => { console.error('Failed to copy: ', err); });
     }
 
-    // 6. WITHDRAW
+    // 6. WITHDRAW (WITH POPUP)
     async function handleWithdraw() {
         const amount = document.getElementById('withdrawAmount').value;
         const account = document.getElementById('accountNumber').value;
         const method = document.querySelector('input[name="payment_method"]:checked')?.value;
+        
         if(!amount || !account || !method) return alert("Please fill all fields");
+        
         const btn = document.querySelector('button[onclick="handleWithdraw()"]');
+        const originalText = btn.innerText;
         btn.innerText = "Processing...";
+        btn.disabled = true;
+
         try {
             const res = await fetch('/.netlify/functions/request-withdraw', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ amount, method, accountNumber: account })
             });
-            if(res.ok) { alert("Request Submitted!"); window.location.reload(); }
-            else { const r = await res.json(); alert("Error: " + r.error); }
-        } catch(e) { alert("Network Error"); }
-        btn.innerText = "Submit Request";
+
+            if(res.ok) {
+                showSuccessModal(); // ✅ Show Popup
+            } else { 
+                const r = await res.json(); 
+                alert("Error: " + r.error); 
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        } catch(e) { 
+            alert("Network Error");
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
+
+    // POPUP FUNCTIONS
+    function showSuccessModal() {
+        const modal = document.getElementById('successModal');
+        const content = document.getElementById('successModalContent');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            content.classList.remove('scale-90');
+            content.classList.add('scale-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('successModal');
+        modal.classList.add('opacity-0');
+        setTimeout(() => {
+            window.location.reload();
+        }, 300);
     }
 
     window.logout = () => { localStorage.removeItem('authToken'); window.location.href="login.html"; }
