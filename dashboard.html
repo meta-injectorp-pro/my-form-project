@@ -181,13 +181,13 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-gray-400">
                         <thead class="bg-white/5 text-xs uppercase font-bold text-gray-300">
-                            <tr>
-                                <th class="p-4">Date</th>
-                                <th class="p-4">Package</th>
-                                <th class="p-4">Amount</th>
-                                <th class="p-4 text-center">Status</th>
-                            </tr>
-                        </thead>
+							<tr>
+								<th class="p-4">Date</th>
+								<th class="p-4">Order ID</th> <th class="p-4">Package</th>
+								<th class="p-4">Amount</th>
+								<th class="p-4 text-center">Status</th>
+							</tr>
+						</thead>
                         <tbody id="recent-logs-body" class="divide-y divide-white/5">
                             <tr><td colspan="4" class="p-8 text-center text-gray-500">Loading recent activity...</td></tr>
                         </tbody>
@@ -270,7 +270,16 @@
                          <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">All Earnings</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
-                                <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Order ID</th> <th class="p-3">Package</th><th class="p-3">Package</th><th class="p-3">Price</th><th class="p-3">Rate</th><th class="p-3 text-right">Commission</th><th class="p-3 text-center">Status</th></tr></thead>
+                                <thead class="bg-white/5 text-xs uppercase">
+									<tr>
+										<th class="p-3">Date</th>
+										<th class="p-3">Order ID</th>
+										<th class="p-3">Package</th> <th class="p-3">Price</th>
+										<th class="p-3">Rate</th>
+										<th class="p-3 text-right">Commission</th>
+										<th class="p-3 text-center">Status</th>
+									</tr>
+								</thead>
                                 <tbody id="earnings-list"></tbody>
                             </table>
                          </div>
@@ -280,7 +289,14 @@
                         <h3 class="text-sm font-bold text-gray-500 mb-4 uppercase">Withdrawals</h3>
                          <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-gray-400">
-                                <thead class="bg-white/5 text-xs uppercase"><tr><th class="p-3">Date</th><th class="p-3">Method</th><th class="p-3">Account</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Status</th></tr></thead>
+                                <thead class="bg-white/5 text-xs uppercase font-bold text-gray-300">
+									<tr>
+										<th class="p-4">Date</th>
+										<th class="p-4">Method</th>
+										<th class="p-4">Account</th>
+										<th class="p-4 text-right">Amount</th> <th class="p-4 text-center">Status</th>
+									</tr>
+								</thead>
                                 <tbody id="payment-list"></tbody>
                             </table>
                          </div>
@@ -403,7 +419,7 @@
         } catch (e) { console.error(e); }
     }
 
-    // 3. WITHDRAW HISTORY
+    // 3. WITHDRAW HISTORY (Fixed Alignment)
     async function loadPaymentHistory() {
         const tableBody = document.getElementById('payment-list');
         if (!tableBody) return;
@@ -413,7 +429,7 @@
             if (res.ok) {
                 const data = await res.json();
                 if (data.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-gray-500">No withdrawal history.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-gray-500">No withdrawal history.</td></tr>';
                     return;
                 }
                 let html = '';
@@ -424,12 +440,13 @@
                     if(item.status === 'Rejected') statusColor = "text-red-400 bg-red-500/10 border-red-500/20";
 
                     html += `
-                        <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+                        <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-300 font-mono text-xs">${dateStr}</td>
-                            <td class="p-4 capitalize flex items-center gap-2 text-white">${item.method}</td>
+                            <td class="p-4 capitalize flex items-center gap-2 text-white">
+                                ${item.method}
+                            </td>
                             <td class="p-4 font-mono text-gray-400">${item.accountNumber}</td>
-                            <td class="p-4 text-white font-bold">৳ ${item.amount}</td>
-                            <td class="p-4 text-center"><span class="px-2 py-1 rounded border ${statusColor} text-xs font-bold">${item.status}</span></td>
+                            <td class="p-4 text-right text-white font-bold">৳ ${item.amount}</td> <td class="p-4 text-center"><span class="px-2 py-1 rounded border ${statusColor} text-xs font-bold">${item.status}</span></td>
                         </tr>`;
                 });
                 tableBody.innerHTML = html;
