@@ -9,6 +9,22 @@
 
 <style>
 
+/* Floating Animation for Gift Icon */
+.floating-animation {
+    animation: floatGift 4s ease-in-out infinite;
+}
+
+@keyframes floatGift {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Input Focus Border Remove */
+#referralInput:focus {
+    outline: none;
+}
+
 /* Container Layout */
 .counters {
     display: flex;
@@ -4882,9 +4898,9 @@ body{
   transform: translateY(-1px);
 }
 
-/* Button Pulse Animation */
+
 .hero-btn-glow {
-    /* আগের শ্যাডো রিপ্লেস করে নতুন শক্তিশালী শ্যাডো */
+
     box-shadow: 0 0 20px rgba(160, 115, 238, 0.5); 
     animation: pulse-purple 2s infinite;
 }
@@ -4895,8 +4911,8 @@ body{
         box-shadow: 0 0 0 0 rgba(160, 115, 238, 0.7);
     }
     70% {
-        transform: scale(1.05); /* বাটনটি একটু বড় হবে */
-        box-shadow: 0 0 0 15px rgba(160, 115, 238, 0); /* গ্লো ছড়িয়ে যাবে */
+        transform: scale(1.05);
+        box-shadow: 0 0 0 15px rgba(160, 115, 238, 0);
     }
     100% {
         transform: scale(1);
@@ -4905,11 +4921,10 @@ body{
 }
 
 .hero-button-gradient {
-    /* একটি উজ্জ্বল মাল্টি-কালার গ্রেডিয়েন্ট */
     background: linear-gradient(45deg, #A073EE, #fd297b, #2760dc, #A073EE);
     background-size: 300% 300%;
     animation: gradientMove 4s ease infinite;
-    font-weight: 700; /* ফন্ট আরও মোটা করা হয়েছে */
+    font-weight: 700;
     letter-spacing: 0.5px;
 }
 
