@@ -1784,40 +1784,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- ================= BROWSER COOKIE SAVE ================= -->
 <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const refCode = urlParams.get('ref');
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const refParam = params.get('ref');
 
-  if (refCode) {
+        if (refParam) {
+            // ১. রেফারেল কোড লোকাল স্টোরেজে সেভ করা (আপনার আগের কোড)
+            const item = {
+                value: refParam,
+                expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000) // ৭ দিনের মেয়াদ
+            };
+            localStorage.setItem("affiliate_ref", JSON.stringify(item));
+            console.log("✅ Referral Code Saved:", refParam);
 
-      function setCookie(name, value, days) {
-          let expires = "";
-          if (days) {
-              const date = new Date();
-              date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-              expires = "; expires=" + date.toUTCString();
-          }
-          document.cookie = name + "=" + (value || "") + expires + "; path=/";
-      }
-
-      setCookie("affiliate_ref", refCode, 7);
-      console.log("Referral Code Saved locally:", refCode);
-
-      fetch('/.netlify/functions/track-click', { 
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ ref: refCode })
-      })
-      .then(response => {
-          if (response.ok) {
-              console.log("Click tracked successfully in database.");
-          } else {
-              console.warn("Tracking failed. Check if 'track-click' function is deployed.");
-          }
-      })
-      .catch(error => console.error("Tracking connection error:", error));
-  }
+            // ২. [NEW] ডাটাবেসে ক্লিক কাউন্ট আপডেট করা
+            fetch('/.netlify/functions/track-click', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ref: refParam })
+            })
+            .then(res => {
+                if(res.ok) console.log("✅ Click tracked in database");
+                else console.warn("⚠️ Tracking failed");
+            })
+            .catch(err => console.error("❌ Tracking Error:", err));
+            
+            // ৩. URL থেকে ref সরিয়ে ফেলা (Clean URL)
+            const newUrl = window.location.href.split('?')[0];
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    })();
 </script>
 	  
 </body></html>
