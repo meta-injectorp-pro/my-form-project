@@ -106,26 +106,39 @@
   
   <nav>
     <ul class="flex lg:items-center flex-col lg:flex-row gap-5 lg:gap-2">
+      
       <li class="nav__menu lg:py-7" :class="{ 'lg:!py-4' : stickyMenu }">
-        <a href="#home" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient !text-white nav-gradient">Home</a>
+        <button onclick="scrollToSection('home')" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient !text-white nav-gradient cursor-pointer bg-transparent">
+            Home
+        </button>
       </li>
+
       <li class="nav__menu lg:py-7" :class="{ 'lg:!py-4' : stickyMenu }">
-        <a href="#pricing" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient">Pricing</a>
+        <button onclick="scrollToSection('pricing')" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient cursor-pointer bg-transparent">
+            Pricing
+        </button>
       </li>
+
       <li class="nav__menu lg:py-7" :class="{ 'lg:!py-4' : stickyMenu }">
-        <a href="#features" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient">Features</a>
+        <button onclick="scrollToSection('features')" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient cursor-pointer bg-transparent">
+            Features
+        </button>
       </li>              
+      
       <li class="nav__menu lg:py-7" :class="{ 'lg:!py-4' : stickyMenu }">
-        <a href="#support" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient">Support</a>
+        <button onclick="scrollToSection('support')" class="relative text-white/80 text-sm py-1.5 px-4 border border-transparent hover:text-white hover:nav-gradient cursor-pointer bg-transparent">
+            Support
+        </button>
       </li>             
+      
       <li class="nav__menu lg:py-7" :class="{ 'lg:!py-4' : stickyMenu }">
-        <a href="topup.html" class="purple-glass-btn text-sm py-1.5 px-4">
+        <a href="/topup" class="purple-glass-btn text-sm py-1.5 px-4">
           Credits Top-up
         </a>
-      </li>  	  		
-	  </li>	  
+      </li> 
+               
     </ul>
-  </nav>
+</nav>
 
   <div class="flex items-center gap-4 mt-7 lg:mt-0">    
 
@@ -1812,5 +1825,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })();
 </script>
+
+<!--------Scroll Logic---------->	 
+<script>
+  function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = "/#" + sectionId;
+    }
+  }
+</script>	  
 	  
 </body></html>
