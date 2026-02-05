@@ -25,6 +25,21 @@
             border-color: #A073EE;
             outline: none;
         }
+        /* Lockout Animation */
+        .shake { animation: shake 0.5s; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
@@ -32,64 +47,191 @@
     <div class="absolute top-0 left-0 w-96 h-96 bg-[#A073EE] opacity-20 blur-[150px] -z-10 rounded-full"></div>
     <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#fd297b] opacity-20 blur-[150px] -z-10 rounded-full"></div>
 
-    <div class="glass-panel p-8 md:p-10 rounded-3xl w-full max-w-md relative z-10">
-        <div class="text-center mb-8">
-            <a href="index.html" class="inline-block mb-6">
-                <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto">
+    <div class="glass-panel p-8 md:p-10 rounded-3xl w-full max-w-md relative z-10" id="mainCard">
+        
+        <div class="relative flex items-center justify-center mb-8">
+            <a href="affiliate.html" class="absolute left-0 top-1 p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/5" title="Back to Affiliate Page">
+                <i class="fa-solid fa-arrow-left text-xl"></i>
             </a>
-            <h2 class="text-2xl font-bold">Welcome Back! 👋</h2>
-            <p class="text-gray-400 text-sm mt-2">Login to access your affiliate dashboard.</p>
+            
+            <div class="text-center">
+                <a href="index.html" class="inline-block mb-4">
+                    <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto">
+                </a>
+                <h2 class="text-2xl font-bold" id="formTitle">Welcome Back! 👋</h2>
+                <p class="text-gray-400 text-sm mt-2" id="formDesc">Login to access your affiliate dashboard.</p>
+            </div>
         </div>
 
-        <form id="loginForm" class="space-y-5">
+        <div id="loginContainer">
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Email Address</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="email" id="email" required placeholder="Enter your email" 
+                            class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-xs font-bold text-gray-400 uppercase">Password</label>
+                        <button type="button" onclick="toggleResetView(true)" class="text-xs text-[#A073EE] hover:text-[#fd297b] transition-colors font-medium">
+                            Forgot Password?
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                        <input type="password" id="password" required placeholder="••••••••" 
+                            class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all">
+                    </div>
+                </div>
+
+                <div id="errorMsg" class="hidden bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg text-center"></div>
+
+                <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-all shadow-lg shadow-[#A073EE]/20 mt-4">
+                    Login Dashboard
+                </button>
+            </form>
+
+            <p class="text-center text-gray-500 text-sm mt-6">
+                Don't have an account? <a href="signup.html" class="text-[#A073EE] hover:underline font-bold">Sign Up</a>
+            </p>
+        </div>
+
+        <div id="resetContainer" class="hidden space-y-5">
             <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Email Address</label>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Recovery Email</label>
                 <div class="relative">
                     <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="email" id="email" required placeholder="Enter your email" 
+                    <input type="email" id="resetEmail" placeholder="e.g. yourname@email.com" 
                         class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all">
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Password</label>
-                <div class="relative">
-                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="password" id="password" required placeholder="••••••••" 
-                        class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all">
-                </div>
-            </div>
+            <div id="resetMsg" class="hidden p-3 rounded-lg text-center text-xs border"></div>
 
-            <div id="errorMsg" class="hidden bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg text-center"></div>
-
-            <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-all shadow-lg shadow-[#A073EE]/20 mt-4">
-                Login Dashboard
+            <button type="button" id="resetBtn" onclick="handleResetSubmit()" class="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-all shadow-lg shadow-[#A073EE]/20">
+                Send Reset Link
             </button>
-        </form>
+            
+            <button type="button" onclick="toggleResetView(false)" class="w-full py-3.5 rounded-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                Cancel & Go Back
+            </button>
+        </div>
 
-        <p class="text-center text-gray-500 text-sm mt-6">
-            Don't have an account? <a href="signup.html" class="text-[#A073EE] hover:underline font-bold">Sign Up</a>
-        </p>
     </div>
 
     <script>
+        // UI Elements
+        const loginContainer = document.getElementById('loginContainer');
+        const resetContainer = document.getElementById('resetContainer');
+        const formTitle = document.getElementById('formTitle');
+        const formDesc = document.getElementById('formDesc');
+        const errorMsg = document.getElementById('errorMsg');
+        const resetMsg = document.getElementById('resetMsg');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('submitBtn');
-            const errorMsg = document.getElementById('errorMsg');
+        // Security Variables
+        let failedAttempts = 0;
+        let isLocked = false;
+        let resetCooldown = false;
 
-            // Reset UI
+        // ✅ Toggle between Login and Reset views
+        function toggleResetView(showReset) {
             errorMsg.classList.add('hidden');
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-            btn.classList.add('opacity-50');
+            resetMsg.classList.add('hidden');
+            
+            if(showReset) {
+                loginContainer.classList.add('hidden');
+                resetContainer.classList.remove('hidden');
+                formTitle.innerText = "Reset Password 🔒";
+                formDesc.innerText = "We'll send a recovery link to your email.";
+                document.getElementById('resetEmail').value = document.getElementById('email').value; // Autofill
+            } else {
+                resetContainer.classList.add('hidden');
+                loginContainer.classList.remove('hidden');
+                formTitle.innerText = "Welcome Back! 👋";
+                formDesc.innerText = "Login to access your affiliate dashboard.";
+            }
+        }
+
+        // ✅ HANDLE RESET PASSWORD (With 1 Minute Cool-down)
+        async function handleResetSubmit() {
+            if(resetCooldown) return; // Prevent spam
+
+            const email = document.getElementById('resetEmail').value;
+            
+            if(!email) return showResetMsg("Please enter your email address.", true);
+
+            resetBtn.innerText = "Sending...";
+            resetBtn.disabled = true;
+            resetMsg.classList.add('hidden');
 
             try {
+                // Call backend function
+                const response = await fetch('/.netlify/functions/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await response.json();
 
+                if (response.ok) {
+                    showResetMsg("✅ Email Sent! Check your inbox.", false);
+                    startResetCooldown(60); // 1 Minute Block
+                } else {
+                    showResetMsg("❌ " + (data.error || "Failed to send link."), true);
+                    resetBtn.innerText = "Send Reset Link";
+                    resetBtn.disabled = false;
+                }
+            } catch (error) {
+                showResetMsg("❌ Network error. Please try again.", true);
+                resetBtn.innerText = "Send Reset Link";
+                resetBtn.disabled = false;
+            }
+        }
+
+        function startResetCooldown(seconds) {
+            resetCooldown = true;
+            let counter = seconds;
+            resetBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            const interval = setInterval(() => {
+                resetBtn.innerText = `Wait ${counter}s to resend`;
+                counter--;
+                if(counter < 0) {
+                    clearInterval(interval);
+                    resetCooldown = false;
+                    resetBtn.innerText = "Send Reset Link";
+                    resetBtn.disabled = false;
+                    resetBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }, 1000);
+        }
+
+        function showResetMsg(msg, isError) {
+            resetMsg.innerText = msg;
+            resetMsg.className = isError ? "bg-red-500/10 border-red-500/20 text-red-400 text-xs p-3 rounded-lg text-center border mb-4" : "bg-green-500/10 border-green-500/20 text-green-400 text-xs p-3 rounded-lg text-center border mb-4";
+            resetMsg.classList.remove('hidden');
+        }
+
+        // ✅ HANDLE LOGIN (With 3 Wrong Attempts Lockout)
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(isLocked) return;
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            errorMsg.classList.add('hidden');
+            submitBtn.innerText = "Processing...";
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50');
+
+            try {
                 const response = await fetch('/.netlify/functions/login-user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -99,23 +241,59 @@
                 const data = await response.json();
 
                 if (response.ok) {
-
+                    failedAttempts = 0; // Reset counter on success
                     localStorage.setItem('authToken', data.token);
                     window.location.href = "dashboard.html";
                 } else {
-                    throw new Error(data.error || "Login failed");
+                    // Wrong Password Logic
+                    failedAttempts++;
+                    handleLoginError(data.error || "Login failed");
                 }
-
             } catch (error) {
-                console.error("Login Error:", error);
-                errorMsg.innerText = error.message;
-                errorMsg.classList.remove('hidden');
-                
-                btn.innerText = "Login Dashboard";
-                btn.disabled = false;
-                btn.classList.remove('opacity-50');
+                handleLoginError(error.message);
             }
         });
+
+        function handleLoginError(msg) {
+            errorMsg.innerText = msg;
+            errorMsg.classList.remove('hidden');
+            
+            // Apply Shake Effect
+            document.getElementById('mainCard').classList.add('shake');
+            setTimeout(() => document.getElementById('mainCard').classList.remove('shake'), 500);
+
+            if(failedAttempts >= 3) {
+                startLoginLockout(60); // Lock for 1 Minute
+            } else {
+                submitBtn.innerText = "Login Dashboard";
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50');
+            }
+        }
+
+        function startLoginLockout(seconds) {
+            isLocked = true;
+            let counter = seconds;
+            errorMsg.innerText = `Too many failed attempts. Try again in ${counter}s`;
+            errorMsg.className = "bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 text-xs p-3 rounded-lg text-center";
+            
+            const interval = setInterval(() => {
+                counter--;
+                errorMsg.innerText = `Too many failed attempts. Try again in ${counter}s`;
+                if(counter <= 0) {
+                    clearInterval(interval);
+                    isLocked = false;
+                    failedAttempts = 0;
+                    submitBtn.innerText = "Login Dashboard";
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50');
+                    errorMsg.classList.add('hidden');
+                    // Reset Error Style
+                    errorMsg.className = "bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg text-center"; 
+                }
+            }, 1000);
+        }
     </script>
+
 </body>
 </html>
