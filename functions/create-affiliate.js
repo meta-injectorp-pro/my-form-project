@@ -9,6 +9,21 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+// ইউনিক কোড জেনারেটর ফাংশন
+async function generateUniqueAffiliateCode(firstName) {
+    const namePart = firstName.substring(0, 3).toUpperCase().replace(/\s/g, 'X');
+    let isUnique = false;
+    let finalCode = "";
+
+    while (!isUnique) {
+        const numPart = Math.floor(100 + Math.random() * 900);
+        finalCode = `${namePart}${numPart}`;
+        const snapshot = await db.collection("Affiliate_Data").where("affiliateCode", "==", finalCode).get();
+        if (snapshot.empty) isUnique = true;
+    }
+    return finalCode;
+}
+
 exports.handler = async (event, context) => {
   if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
@@ -16,14 +31,27 @@ exports.handler = async (event, context) => {
   const fullName = `${firstName} ${lastName}`;
 
   try {
+    // ১. চেক করা যে এই ইমেইল দিয়ে অলরেডি কোনো অ্যাফিলিয়েট অ্যাকাউন্ট আছে কি না
+    const existingUserCheck = await db.collection("Affiliate_Data").where("email", "==", email).get();
+    
+    if (!existingUserCheck.empty) {
+      return { 
+        statusCode: 400, 
+        body: JSON.stringify({ error: "This email is already registered as an affiliate." }) 
+      };
+    }
+
+    // ২. Firebase Auth এ ইউজার তৈরি করা
     const userRecord = await admin.auth().createUser({
       email: email,
       password: password,
       displayName: fullName
     });
 
-    const uniqueCode = "META" + Math.floor(1000 + Math.random() * 9000);
+    // ৩. ইউনিক কোড জেনারেট করা
+    const uniqueCode = await generateUniqueAffiliateCode(firstName);
 
+    // ৪. Firestore-এ ডেটা সেভ করা
     await db.collection("Affiliate_Data").doc(userRecord.uid).set({
       uid: userRecord.uid,
       firstName: firstName,
@@ -50,7 +78,7 @@ exports.handler = async (event, context) => {
                 <p style="color: #b3b3b3;">Hello ${firstName},</p>
                 <p style="color: #b3b3b3;">Your affiliate account is ready.</p>
                 <div style="background: rgba(160, 115, 238, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                    <p style="margin: 5px 0;"><strong>Affiliate ID:</strong> ${uniqueCode}</p>
+                    <p style="margin: 5px 0;"><strong>Your Affiliate ID:</strong> <span style="color: #A073EE; font-size: 20px; font-weight: bold;">${uniqueCode}</span></p>
                 </div>
                 <div style="text-align: center; margin-top: 30px;">
                     <a href="https://metainjector.pro/login.html" style="background: linear-gradient(90deg, #A073EE, #fd297b); color: white; padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: bold;">Login to Dashboard</a>
@@ -61,9 +89,13 @@ exports.handler = async (event, context) => {
 
     try { await transporter.sendMail(mailOptions); } catch (e) { console.error("Email Error:", e); }
 
-    return { statusCode: 200, body: JSON.stringify({ message: "Account created successfully" }) };
+    return { statusCode: 200, body: JSON.stringify({ message: "Account created successfully", code: uniqueCode }) };
 
   } catch (error) {
+    // যদি Firebase Auth থেকে "email already in use" এরর আসে
+    if (error.code === 'auth/email-already-exists') {
+        return { statusCode: 400, body: JSON.stringify({ error: "Email already exists in our system." }) };
+    }
     return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
   }
 };
