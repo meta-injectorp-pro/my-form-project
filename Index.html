@@ -1788,6 +1788,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const refCode = urlParams.get('ref');
 
   if (refCode) {
+
       function setCookie(name, value, days) {
           let expires = "";
           if (days) {
@@ -1799,7 +1800,23 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       setCookie("affiliate_ref", refCode, 7);
-      console.log("Referral Code Saved:", refCode);
+      console.log("Referral Code Saved locally:", refCode);
+
+      fetch('/.netlify/functions/track-click', { 
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ref: refCode })
+      })
+      .then(response => {
+          if (response.ok) {
+              console.log("Click tracked successfully in database.");
+          } else {
+              console.warn("Tracking failed. Check if 'track-click' function is deployed.");
+          }
+      })
+      .catch(error => console.error("Tracking connection error:", error));
   }
 </script>
 	  
