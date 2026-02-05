@@ -20,11 +20,13 @@ exports.handler = async (event, context) => {
         name: userData.name,
         balance: userData.balance,
         totalEarnings: userData.totalEarnings,
-        affiliateCode: userData.affiliateCode
+        affiliateCode: userData.affiliateCode,
+        totalClicks: userData.totalClicks || 0
       })
     };
 
   } catch (error) {
     return { statusCode: 403, body: JSON.stringify({ error: "Invalid Token" }) };
   }
+
 };
