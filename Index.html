@@ -1789,15 +1789,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const refParam = params.get('ref');
 
         if (refParam) {
-            // ১. রেফারেল কোড লোকাল স্টোরেজে সেভ করা (আপনার আগের কোড)
             const item = {
                 value: refParam,
-                expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000) // ৭ দিনের মেয়াদ
+                expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
             };
             localStorage.setItem("affiliate_ref", JSON.stringify(item));
             console.log("✅ Referral Code Saved:", refParam);
 
-            // ২. [NEW] ডাটাবেসে ক্লিক কাউন্ট আপডেট করা
             fetch('/.netlify/functions/track-click', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1808,8 +1806,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 else console.warn("⚠️ Tracking failed");
             })
             .catch(err => console.error("❌ Tracking Error:", err));
-            
-            // ৩. URL থেকে ref সরিয়ে ফেলা (Clean URL)
+
             const newUrl = window.location.href.split('?')[0];
             window.history.replaceState({}, document.title, newUrl);
         }
