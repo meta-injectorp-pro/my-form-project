@@ -114,38 +114,51 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <i class="fa-solid fa-wallet text-6xl text-[#A073EE]"></i>
-                    </div>
-                    <p class="text-gray-400 text-sm font-medium mb-1">Available Balance</p>
-                    <h3 class="text-3xl font-bold text-white balance-display">৳ 0</h3>
-                    <div class="mt-4 text-xs text-green-400 flex items-center gap-1">
-                        <i class="fa-solid fa-circle-check"></i> Ready to withdraw
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <i class="fa-solid fa-wallet text-6xl text-[#A073EE]"></i>
+        </div>
+        <p class="text-gray-400 text-sm font-medium mb-1">Available Balance</p>
+        <h3 class="text-3xl font-bold text-white balance-display">৳ 0</h3>
+        <div class="mt-4 text-xs text-green-400 flex items-center gap-1">
+            <i class="fa-solid fa-circle-check"></i> Ready to withdraw
+        </div>
+    </div>
 
-                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <i class="fa-solid fa-sack-dollar text-6xl text-[#fd297b]"></i>
-                    </div>
-                    <p class="text-gray-400 text-sm font-medium mb-1">Total Earnings</p>
-                    <h3 class="text-3xl font-bold text-white earning-display">৳ 0</h3>
-                    <div class="mt-4 text-xs text-gray-400">Lifetime commission</div>
-                </div>
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <i class="fa-solid fa-sack-dollar text-6xl text-[#fd297b]"></i>
+        </div>
+        <p class="text-gray-400 text-sm font-medium mb-1">Total Earnings</p>
+        <h3 class="text-3xl font-bold text-white earning-display">৳ 0</h3>
+        <div class="mt-4 text-xs text-gray-400">Lifetime commission</div>
+    </div>
 
-                <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <i class="fa-solid fa-hourglass-half text-6xl text-yellow-500"></i>
-                    </div>
-                    <p class="text-gray-400 text-sm font-medium mb-1">Pending Commission</p>
-                    <h3 class="text-3xl font-bold text-white" id="pending-display">৳ 0</h3>
-                    <div class="mt-4 text-xs text-yellow-400 flex items-center gap-1">
-                        <i class="fa-solid fa-clock"></i> Awaiting approval
-                    </div>
-                </div>
-            </div>
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <i class="fa-solid fa-hourglass-half text-6xl text-yellow-500"></i>
+        </div>
+        <p class="text-gray-400 text-sm font-medium mb-1">Pending Commission</p>
+        <h3 class="text-3xl font-bold text-white" id="pending-display">৳ 0</h3>
+        <div class="mt-4 text-xs text-yellow-400 flex items-center gap-1">
+            <i class="fa-solid fa-clock"></i> Awaiting approval
+        </div>
+    </div>
+
+    <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+            <i class="fa-solid fa-arrow-pointer text-6xl text-cyan-400"></i>
+        </div>
+        <p class="text-gray-400 text-sm font-medium mb-1">Total Link Clicks</p>
+        <h3 class="text-3xl font-bold text-white clicks-display">0</h3>
+        <div class="mt-4 text-xs text-cyan-400 flex items-center gap-1">
+            <i class="fa-solid fa-eye"></i> Unique visitors
+        </div>
+    </div>
+
+</div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="lg:col-span-2 glass-panel p-6 rounded-2xl">
@@ -338,6 +351,7 @@
                 // Update Texts
                 document.querySelectorAll('.balance-display').forEach(el => el.innerText = `৳ ${data.balance}`);
                 document.querySelector('.earning-display').innerText = `৳ ${data.totalEarnings}`;
+				document.querySelector('.clicks-display').innerText = data.totalClicks || 0;
                 document.querySelector('.profile-name').innerText = data.name;
                 document.querySelector('.profile-name-only').innerText = data.name.split(' ')[0]; // First name
                 document.querySelector('.profile-id').innerText = `ID: ${data.affiliateCode}`;
@@ -535,7 +549,7 @@
             });
 
             if(res.ok) {
-                showSuccessModal(); // ✅ Show Popup
+                showSuccessModal();
             } else { 
                 const r = await res.json(); 
                 alert("Error: " + r.error); 
