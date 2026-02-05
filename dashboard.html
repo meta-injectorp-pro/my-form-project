@@ -48,7 +48,7 @@
       
       <div class="h-full flex flex-col">
         <div class="p-8 border-b border-white/10 flex items-center gap-3">
-            <a href="index.html" class="block hover:opacity-80 transition-opacity">
+            <a href="/index" class="block hover:opacity-80 transition-opacity">
                 <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" class="h-8">
             </a>
         </div>
@@ -338,7 +338,7 @@
 
   <script>
     const token = localStorage.getItem('authToken');
-    if (!token) window.location.href = "login.html";
+    if (!token) window.location.href = "/login";
     else loadDashboardData();
 
     // 1. MAIN LOAD FUNCTION
@@ -583,7 +583,8 @@
         }, 300);
     }
 
-    window.logout = () => { localStorage.removeItem('authToken'); window.location.href="login.html"; }
+    window.logout = () => { localStorage.removeItem('authToken'); window.location.href="/login"; }
   </script>
 </body>
 </html>
+
