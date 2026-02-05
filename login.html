@@ -4,148 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affiliate Login - Meta Injector Pro</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         body { background-color: #0F0A1E; font-family: 'Plus Jakarta Sans', sans-serif; color: white; }
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .input-field { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; }
-        .input-field:focus { border-color: #A073EE; outline: none; }
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+        }
+        .input-field {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+        }
+        .input-field:focus {
+            border-color: #A073EE;
+            outline: none;
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
 
-    <div class="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl">
-        
-        <div class="mb-8 relative">
-            <a href="affiliate.html" class="absolute left-0 top-2 text-gray-400 hover:text-[#A073EE] transition-colors p-1" title="Back to Home">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
+    <div class="absolute top-0 left-0 w-96 h-96 bg-[#A073EE] opacity-20 blur-[150px] -z-10 rounded-full"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-[#fd297b] opacity-20 blur-[150px] -z-10 rounded-full"></div>
+
+    <div class="glass-panel p-8 md:p-10 rounded-3xl w-full max-w-md relative z-10">
+        <div class="text-center mb-8">
+            <a href="index.html" class="inline-block mb-6">
+                <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto">
             </a>
-
-            <div class="text-center">
-                <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto mb-4">
-                <h2 class="text-2xl font-bold">Affiliate Login</h2>
-            </div>
+            <h2 class="text-2xl font-bold">Welcome Back! 👋</h2>
+            <p class="text-gray-400 text-sm mt-2">Login to access your affiliate dashboard.</p>
         </div>
 
-        <form class="space-y-5">
+        <form id="loginForm" class="space-y-5">
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-2">Email Address</label>
-                <input type="email" required class="w-full px-4 py-3 rounded-lg input-field" placeholder="Enter your email">
-            </div>
-            
-            <div class="relative">
-                <label class="block text-sm font-medium text-gray-400 mb-2">Password</label>
-                <input type="password" id="passwordInput" required class="w-full px-4 py-3 rounded-lg input-field pr-10" placeholder="••••••••">
-                <button type="button" onclick="togglePassword()" class="absolute right-3 top-[38px] text-gray-400 hover:text-white">
-                    <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                </button>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Email Address</label>
+                <div class="relative">
+                    <i class="fa-solid fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="email" id="email" required placeholder="Enter your email" 
+                        class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all">
+                </div>
             </div>
 
-            <div id="loginError" class="hidden p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm font-semibold text-center"></div>
-
-            <div class="flex justify-end">
-                <button type="button" onclick="forgotPassword()" class="text-sm text-[#A073EE] hover:underline">Forgot Password?</button>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Password</label>
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="password" id="password" required placeholder="••••••••" 
+                        class="input-field w-full pl-10 pr-4 py-3 rounded-xl text-sm transition-all">
+                </div>
             </div>
 
-            <button type="submit" class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-opacity">
-                Login
+            <div id="errorMsg" class="hidden bg-red-500/10 border border-red-500/20 text-red-400 text-xs p-3 rounded-lg text-center"></div>
+
+            <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 transition-all shadow-lg shadow-[#A073EE]/20 mt-4">
+                Login Dashboard
             </button>
         </form>
 
-        <p class="text-center text-gray-400 text-sm mt-6">
-            Don't have an account? <a href="signup.html" class="text-[#A073EE] hover:underline">Register Now</a>
+        <p class="text-center text-gray-500 text-sm mt-6">
+            Don't have an account? <a href="signup.html" class="text-[#A073EE] hover:underline font-bold">Sign Up</a>
         </p>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBTK_CxNqiA1Fuu8V5-3jOec5yfLJWcU74", 
-            authDomain: "meta-injector-license-server.firebaseapp.com",
-            projectId: "meta-injector-license-server"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        window.forgotPassword = async () => {
-            const email = document.querySelector('input[type="email"]').value;
-            if(!email) {
-                alert("Please enter your email address first!");
-                return;
-            }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert("Password reset link sent to: " + email);
-            } catch (error) {
-                alert("Error: " + error.message);
-            }
-        };
-    </script>
-
     <script>
-        function togglePassword() {
-            const input = document.getElementById('passwordInput');
-            const icon = document.getElementById('eyeIcon');
-            if(input.type === "password") {
-                input.type = "text";
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>';
-            } else {
-                input.type = "password";
-                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>';
-            }
-        }
 
-        const loginForm = document.querySelector('form');
-        const submitBtn = document.querySelector('button[type="submit"]');
-        const errorBox = document.getElementById('loginError');
-
-        loginForm.addEventListener('submit', async (e) => {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            errorBox.classList.add('hidden');
-            const originalText = submitBtn.innerText;
-            submitBtn.innerText = "Verifying...";
-            submitBtn.disabled = true;
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('submitBtn');
+            const errorMsg = document.getElementById('errorMsg');
 
-            const email = document.querySelector('input[type="email"]').value.trim();
-            const password = document.getElementById('passwordInput').value.trim();
+            // Reset UI
+            errorMsg.classList.add('hidden');
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+            btn.classList.add('opacity-50');
 
             try {
-                const res = await fetch('/.netlify/functions/login-user', {
+
+                const response = await fetch('/.netlify/functions/login-user', {
                     method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
 
-                const data = await res.json();
+                const data = await response.json();
 
-                if (res.ok) {
-                    localStorage.setItem('authToken', data.idToken);
+                if (response.ok) {
+
+                    localStorage.setItem('authToken', data.token);
                     window.location.href = "dashboard.html";
                 } else {
-                    let msg = "Login Failed";
-                    if (data.error) {
-                        if (data.error.includes("INVALID_PASSWORD") || data.error.includes("INVALID_LOGIN_CREDENTIALS")) {
-                            msg = "❌ Wrong Password! Please try again.";
-                        } else if (data.error.includes("EMAIL_NOT_FOUND")) {
-                            msg = "❌ Email not found! Please create an account.";
-                        } else {
-                            msg = "Error: " + data.error;
-                        }
-                    }
-                    errorBox.innerText = msg;
-                    errorBox.classList.remove('hidden');
+                    throw new Error(data.error || "Login failed");
                 }
+
             } catch (error) {
-                errorBox.innerText = "Network Error. Please check connection.";
-                errorBox.classList.remove('hidden');
-            } finally {
-                submitBtn.innerText = originalText;
-                submitBtn.disabled = false;
+                console.error("Login Error:", error);
+                errorMsg.innerText = error.message;
+                errorMsg.classList.remove('hidden');
+                
+                btn.innerText = "Login Dashboard";
+                btn.disabled = false;
+                btn.classList.remove('opacity-50');
             }
         });
     </script>
