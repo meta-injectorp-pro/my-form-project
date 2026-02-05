@@ -92,7 +92,7 @@ exports.handler = async (event, context) => {
                     <p style="margin: 5px 0; font-size: 16px;"><strong>Your Affiliate ID:</strong> <span style="color: #A073EE; font-size: 22px; font-weight: bold;">${uniqueCode}</span></p>
                 </div>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://metainjector.pro/login.html" style="background: linear-gradient(90deg, #A073EE, #fd297b); color: white; padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: bold;">Login to Dashboard</a>
+                    <a href="https://metainjector.pro/login" style="background: linear-gradient(90deg, #A073EE, #fd297b); color: white; padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: bold;">Login to Dashboard</a>
                 </div>
             </div>
         </div>`
@@ -109,3 +109,4 @@ exports.handler = async (event, context) => {
     return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
   }
 };
+
