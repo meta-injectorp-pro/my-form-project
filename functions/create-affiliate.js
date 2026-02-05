@@ -9,17 +9,26 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// ইউনিক কোড জেনারেটর ফাংশন
+/**
+ * ইউনিক কোড জেনারেটর ফাংশন
+ * এটি ছোট হাতের অক্ষরে নাম এবং র‍্যান্ডম সংখ্যা দিয়ে কোড তৈরি করবে
+ */
 async function generateUniqueAffiliateCode(firstName) {
-    const namePart = firstName.substring(0, 3).toUpperCase().replace(/\s/g, 'X');
+    // নামের প্রথম ৩ অক্ষর ছোট হাতের (lowercase) করা হয়েছে
+    const namePart = firstName.substring(0, 3).toLowerCase().replace(/\s/g, 'x');
     let isUnique = false;
     let finalCode = "";
 
     while (!isUnique) {
+        // ৩টি র‍্যান্ডম ডিজিট
         const numPart = Math.floor(100 + Math.random() * 900);
         finalCode = `${namePart}${numPart}`;
+
+        // Firestore-এ চেক করা যে এই কোডটি ইউনিক কি না
         const snapshot = await db.collection("Affiliate_Data").where("affiliateCode", "==", finalCode).get();
-        if (snapshot.empty) isUnique = true;
+        if (snapshot.empty) {
+            isUnique = true;
+        }
     }
     return finalCode;
 }
@@ -31,7 +40,7 @@ exports.handler = async (event, context) => {
   const fullName = `${firstName} ${lastName}`;
 
   try {
-    // ১. চেক করা যে এই ইমেইল দিয়ে অলরেডি কোনো অ্যাফিলিয়েট অ্যাকাউন্ট আছে কি না
+    // ১. ইমেইল ডুপ্লিকেশন চেক
     const existingUserCheck = await db.collection("Affiliate_Data").where("email", "==", email).get();
     
     if (!existingUserCheck.empty) {
@@ -41,17 +50,17 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // ২. Firebase Auth এ ইউজার তৈরি করা
+    // ২. Firebase Auth এ ইউজার তৈরি
     const userRecord = await admin.auth().createUser({
       email: email,
       password: password,
       displayName: fullName
     });
 
-    // ৩. ইউনিক কোড জেনারেট করা
+    // ৩. ইউনিক ছোট হাতের অ্যাফিলিয়েট কোড জেনারেট
     const uniqueCode = await generateUniqueAffiliateCode(firstName);
 
-    // ৪. Firestore-এ ডেটা সেভ করা
+    // ৪. Firestore-এ ডেটা সেভ করা (Click Tracking সহ)
     await db.collection("Affiliate_Data").doc(userRecord.uid).set({
       uid: userRecord.uid,
       firstName: firstName,
@@ -60,6 +69,7 @@ exports.handler = async (event, context) => {
       email: email,
       phone: phone || "N/A",
       affiliateCode: uniqueCode,
+      totalClicks: 0,           // ক্লিক কাউন্টার শুরু হলো ০ থেকে
       balance: 0,
       totalEarnings: 0,
       isMetaInjectorUser: isMetaUser || false,
@@ -67,6 +77,7 @@ exports.handler = async (event, context) => {
       createdAt: new Date().toISOString()
     });
 
+    // ইমেইল টেমপ্লেট
     const mailOptions = {
         from: `"Meta Injector Pro" <${process.env.SMTP_EMAIL}>`,
         to: email,
@@ -78,7 +89,7 @@ exports.handler = async (event, context) => {
                 <p style="color: #b3b3b3;">Hello ${firstName},</p>
                 <p style="color: #b3b3b3;">Your affiliate account is ready.</p>
                 <div style="background: rgba(160, 115, 238, 0.1); padding: 15px; border-radius: 10px; margin: 20px 0;">
-                    <p style="margin: 5px 0;"><strong>Your Affiliate ID:</strong> <span style="color: #A073EE; font-size: 20px; font-weight: bold;">${uniqueCode}</span></p>
+                    <p style="margin: 5px 0; font-size: 16px;"><strong>Your Affiliate ID:</strong> <span style="color: #A073EE; font-size: 22px; font-weight: bold;">${uniqueCode}</span></p>
                 </div>
                 <div style="text-align: center; margin-top: 30px;">
                     <a href="https://metainjector.pro/login.html" style="background: linear-gradient(90deg, #A073EE, #fd297b); color: white; padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: bold;">Login to Dashboard</a>
@@ -92,7 +103,6 @@ exports.handler = async (event, context) => {
     return { statusCode: 200, body: JSON.stringify({ message: "Account created successfully", code: uniqueCode }) };
 
   } catch (error) {
-    // যদি Firebase Auth থেকে "email already in use" এরর আসে
     if (error.code === 'auth/email-already-exists') {
         return { statusCode: 400, body: JSON.stringify({ error: "Email already exists in our system." }) };
     }
