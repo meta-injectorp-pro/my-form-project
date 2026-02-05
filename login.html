@@ -50,12 +50,12 @@
     <div class="glass-panel p-8 md:p-10 rounded-3xl w-full max-w-md relative z-10" id="mainCard">
         
         <div class="relative flex items-center justify-center mb-8">
-            <a href="affiliate.html" class="absolute left-0 top-1 p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/5" title="Back to Affiliate Page">
+            <a href="/affiliate" class="absolute left-0 top-1 p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/5" title="Back to Affiliate Page">
                 <i class="fa-solid fa-arrow-left text-xl"></i>
             </a>
             
             <div class="text-center">
-                <a href="index.html" class="inline-block mb-4">
+                <a href="/index" class="inline-block mb-4">
                     <img src="./Source_Files/logo.svg" alt="Logo" class="h-10 mx-auto">
                 </a>
                 <h2 class="text-2xl font-bold" id="formTitle">Welcome Back! 👋</h2>
@@ -96,7 +96,7 @@
             </form>
 
             <p class="text-center text-gray-500 text-sm mt-6">
-                Don't have an account? <a href="signup.html" class="text-[#A073EE] hover:underline font-bold">Sign Up</a>
+                Don't have an account? <a href="/signup" class="text-[#A073EE] hover:underline font-bold">Sign Up</a>
             </p>
         </div>
 
@@ -243,7 +243,7 @@
                 if (response.ok) {
                     failedAttempts = 0; // Reset counter on success
                     localStorage.setItem('authToken', data.token);
-                    window.location.href = "dashboard.html";
+                    window.location.href = "/dashboard";
                 } else {
                     // Wrong Password Logic
                     failedAttempts++;
@@ -296,4 +296,5 @@
     </script>
 
 </body>
+
 </html>
