@@ -1,23 +1,27 @@
 // functions/login-user.js
-const fetch = require('node-fetch'); // নিশ্চিত করুন node-fetch ইন্সটল করা আছে, না থাকলে `npm install node-fetch` দিন
 
 exports.handler = async (event, context) => {
+  // ১. শুধু POST রিকোয়েস্ট এক্সেপ্ট করবে
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
   try {
     const { email, password } = JSON.parse(event.body);
-    s
-    // Netlify Environment Variable থেকে গোপন কি (Key) নিচ্ছে
+    
+    // Netlify থেকে সিক্রেট কি (Key) নেওয়া হচ্ছে
     const apiKey = process.env.FIREBASE_WEB_API_KEY;
 
+    // যদি API Key না থাকে
     if (!apiKey) {
-      return { statusCode: 500, body: JSON.stringify({ error: "Configuration Error" }) };
+      console.error("API Key Missing in Netlify Environment Variables");
+      return { 
+        statusCode: 500, 
+        body: JSON.stringify({ error: "Server Configuration Error: API Key Missing" }) 
+      };
     }
 
-    // 🔥 সার্ভার সাইড থেকে Google Identity API কল করা হচ্ছে
-    // এটি ইউজারের ব্রাউজারে লোড হয় না, তাই কেউ হ্যাক করতে পারবে না
+    // ২. Google Identity API কল করা (Native Fetch দিয়ে)
     const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,10 +34,11 @@ exports.handler = async (event, context) => {
 
     const data = await response.json();
 
+    // ৩. যদি লগইন ফেইল করে
     if (!response.ok) {
         let errorMsg = "Login failed";
-        // এরর মেসেজ ক্লিন করা হচ্ছে যাতে ইউজার টেকনিক্যাল এরর না দেখে
         if (data.error && data.error.message) {
+             // এরর মেসেজ সহজ করা
             if (data.error.message.includes("EMAIL_NOT_FOUND")) errorMsg = "User not found";
             else if (data.error.message.includes("INVALID_PASSWORD")) errorMsg = "Incorrect password";
             else if (data.error.message.includes("TOO_MANY_ATTEMPTS")) errorMsg = "Too many failed attempts";
@@ -42,18 +47,21 @@ exports.handler = async (event, context) => {
         return { statusCode: 400, body: JSON.stringify({ error: errorMsg }) };
     }
 
-    // সফল হলে শুধু টোকেন ফ্রন্টএন্ডে পাঠাবে
+    // ৪. সফল হলে টোকেন পাঠানো
     return {
       statusCode: 200,
       body: JSON.stringify({
         token: data.idToken,
-        localId: data.localId,
-        email: data.email
+        email: data.email,
+        localId: data.localId
       }),
     };
 
   } catch (error) {
-    console.error("Server Error:", error);
-    return { statusCode: 500, body: JSON.stringify({ error: "Internal Server Error" }) };
+    console.error("Function Error:", error);
+    return { 
+        statusCode: 500, 
+        body: JSON.stringify({ error: "Internal Server Error: Check Netlify Logs" }) 
+    };
   }
 };
