@@ -44,8 +44,37 @@ function getBDTime() {
     return new Date(utc + (3600000 * 6));
 }
 
+// 🛡️ SECURITY FUNCTION FOR EMAIL VALIDATION
+function isValidEmail(email) {
+    if (!email) return { valid: false, reason: "Email is required." };
+    
+    const emailLower = email.toLowerCase().trim();
+    const [userPart, domainPart] = emailLower.split('@');
+
+    const allowedDomains = ['gmail.com', 'yahoo.com'];
+    if (!allowedDomains.includes(domainPart)) {
+        return { valid: false, reason: "Only valid email allowed." };
+    }
+
+    if (userPart.length < 4) {
+        return { valid: false, reason: "Invalid email format. Username is too short." };
+    }
+
+    const blockedWords = ['test', 'fake', 'demo', 'temp', 'admin', 'info', '123', 'user', 'qwerty', 'asdf'];
+
+    if (blockedWords.some(word => userPart.includes(word))) {
+        return { valid: false, reason: "Please use your real personal email address." };
+    }
+
+    if (/^\d+$/.test(userPart)) {
+        return { valid: false, reason: "Email cannot consist only of numbers." };
+    }
+
+    return { valid: true };
+}
+
 const packageRules = {
-    "Free Trial":   { credits: 100,    duration: 3,   price: 0 },
+    "Free Trial":   { credits: 50,    duration: 3,   price: 0 },
     "Starter":      { credits: 2000,  duration: 30,  price: 150 },
     "Beginner":     { credits: 3500,  duration: 30,  price: 200 },
     "Professional": { credits: 6000,  duration: 60,  price: 400 },
@@ -60,6 +89,20 @@ exports.handler = async (event) => {
   try {
     const { fields } = await parseMultipartForm(event);
     const data = fields;
+
+	// ==========================================
+    // 🛡️ Email validation run check
+    // ==========================================
+    const emailCheck = isValidEmail(data.Email);
+    if (!emailCheck.valid) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({
+                status: "error",
+                message: emailCheck.reason
+            })
+        };
+    }
 
     const userSnapshot = await db.collection('licenseDatabase')
                                  .where('Email', '==', data.Email)
