@@ -39,6 +39,7 @@ exports.handler = async (event, context) => {
 
     await historyRef.set({
         amount: commission,
+        refCode: refCode,
         orderId: orderId,
         licenseKey: licenseKey,
         packageType: packageType,
@@ -53,4 +54,5 @@ exports.handler = async (event, context) => {
   } catch (error) {
     return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
   }
+
 };
