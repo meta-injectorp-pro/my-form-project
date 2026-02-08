@@ -535,6 +535,15 @@
                 if(inputs.terms.checked) warns.terms.style.display = 'none';
             });
 
+			if (inputs.trx) {
+                inputs.trx.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase().replace(/\s/g, '');
+                    
+                    warns.trx.style.display = 'none';
+                    this.style.borderColor = '';
+                });
+            }
+			
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 let isValid = true;
@@ -614,5 +623,6 @@
 </body>
 
 </html>
+
 
 
