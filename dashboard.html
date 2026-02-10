@@ -339,38 +339,95 @@
   </div>
 
   <script>
-    const token = localStorage.getItem('authToken');
-    if (!token) window.location.href = "/login";
-    else loadDashboardData();
+    // গ্লোবাল ভেরিয়েবল (যাতে সব ফাংশন টোকেন পায়)
+    let token = null;
+    let auth = null;
 
-    // 1. MAIN LOAD FUNCTION
-    async function loadDashboardData() {
+    // ১. অথেন্টিকেশন এবং ড্যাশবোর্ড লোড শুরু
+    async function initDashboard() {
         try {
-            const res = await fetch('/.netlify/functions/get-dashboard', { headers: { 'Authorization': `Bearer ${token}` } });
+            // কনফিগারেশন নিয়ে আসা
+            const res = await fetch('/.netlify/functions/get-auth-config');
+            const config = await res.json();
+            
+            // ফায়ারবেস চালু করা
+            if (!firebase.apps.length) firebase.initializeApp(config);
+            auth = firebase.auth();
+
+            // রিয়েল-টাইম লগইন চেক
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    console.log("User detected, refreshing token...");
+                    
+                    // ⚡ ফোর্স রিফ্রেশ (সবচেয়ে গুরুত্বপূর্ণ লাইন)
+                    // এটি নিশ্চিত করে যে টোকেনটি ১ ঘণ্টার বেশি পুরনো হবে না
+                    token = await user.getIdToken(true);
+                    
+                    // টোকেন পাওয়ার পর ডাটা লোড করা
+                    loadDashboardData(); 
+                } else {
+                    // লগইন না থাকলে বের করে দেওয়া
+                    window.location.href = "/login.html"; // আপনার লগইন পেজের সঠিক লিংক দিন
+                }
+            });
+
+        } catch (e) {
+            console.error("Auth Init Error:", e);
+            // কনফিগারেশন না পেলে বা এরর হলে ম্যানুয়াল চেক
+            const localToken = localStorage.getItem('authToken');
+            if(localToken) { token = localToken; loadDashboardData(); }
+            else window.location.href = "/login.html";
+        }
+    }
+
+    // পেজ লোড হলেই অথেন্টিকেশন শুরু হবে
+    document.addEventListener('DOMContentLoaded', initDashboard);
+
+    // ২. মেইন ডাটা লোড ফাংশন
+    async function loadDashboardData() {
+        if(!token) return;
+
+        try {
+            const res = await fetch('/.netlify/functions/get-dashboard', { 
+                headers: { 'Authorization': `Bearer ${token}` } 
+            });
+            
             if (res.ok) {
                 const data = await res.json();
                 
-                // Update Texts
+                // টেক্সট আপডেট
                 document.querySelectorAll('.balance-display').forEach(el => el.innerText = `৳ ${data.balance}`);
                 document.querySelector('.earning-display').innerText = `৳ ${data.totalEarnings}`;
-				document.querySelector('.clicks-display').innerText = data.totalClicks || 0;
+                if(document.querySelector('.clicks-display')) {
+                    document.querySelector('.clicks-display').innerText = data.totalClicks || 0;
+                }
+                
                 document.querySelector('.profile-name').innerText = data.name;
-                document.querySelector('.profile-name-only').innerText = data.name.split(' ')[0]; // First name
+                document.querySelector('.profile-name-only').innerText = data.name.split(' ')[0];
                 document.querySelector('.profile-id').innerText = `ID: ${data.affiliateCode}`;
                 document.getElementById('refLink').value = `https://metainjector.pro/?ref=${data.affiliateCode}`;
                 
-                // Avatar
-                document.getElementById('userAvatar').src = `https://ui-avatars.com/api/?name=${data.name}&background=A073EE&color=fff&bold=true`;
+                // অবতার আপডেট (যদি ফটো থাকে তো ভালো, না থাকলে নামের অক্ষর)
+                const avatarEl = document.getElementById('userAvatar');
+                if(data.photoURL) {
+                    avatarEl.src = data.photoURL;
+                } else {
+                    avatarEl.src = `https://ui-avatars.com/api/?name=${data.name}&background=A073EE&color=fff&bold=true`;
+                }
 
-                // Load Logs (Both for History Tab and Recent Activity Widget)
+                // লগস লোড করা
                 await loadEarningsHistory(data.balance, data.totalEarnings);
                 loadPaymentHistory();
 
+            } else {
+                console.log("Session expired or invalid");
+                // টোকেন কাজ না করলে লগআউট
+                // logout(); 
             }
         } catch (e) { console.error(e); }
     }
 
-    // 2. LOAD EARNINGS & POPULATE RECENT ACTIVITY
+    // ৩. আর্নিং হিস্ট্রি লোড
     async function loadEarningsHistory(balance, totalEarnings) {
         const tableBody = document.getElementById('earnings-list');
         const recentLogBody = document.getElementById('recent-logs-body');
@@ -384,60 +441,55 @@
             if (res.ok) {
                 const data = await res.json();
                 
-                // Calculate Pending Amount
+                // পেন্ডিং ক্যালকুলেশন
                 let pendingTotal = 0;
                 data.forEach(item => {
                     if(item.status === 'Pending') pendingTotal += item.amount;
                 });
                 if(pendingDisplay) pendingDisplay.innerText = `৳ ${pendingTotal}`;
 
-                // Update Chart Data
+                // চার্ট আপডেট
                 updateChart(balance, pendingTotal, totalEarnings);
 
-                // Populate Tables
                 if (data.length === 0) {
-                    const emptyMsg = '<tr><td colspan="6" class="p-4 text-center text-gray-500">No earnings yet.</td></tr>';
+                    const emptyMsg = '<tr><td colspan="7" class="p-4 text-center text-gray-500">No earnings yet.</td></tr>';
                     if(tableBody) tableBody.innerHTML = emptyMsg;
                     if(recentLogBody) recentLogBody.innerHTML = emptyMsg;
                     return;
                 }
 
-                // Generate Rows
                 let fullHtml = '';
                 let recentHtml = '';
-                
-                // Show only first 5 for dashboard overview
                 const recentItems = data.slice(0, 5);
 
-                // Helper to create badge
                 const getBadge = (status) => {
                     if(status === 'Pending') return '<span class="px-2 py-1 rounded bg-yellow-500/10 text-yellow-400 text-xs border border-yellow-500/20 font-bold"><i class="fa-solid fa-clock mr-1"></i>Pending</span>';
                     if(status === 'Approved') return '<span class="px-2 py-1 rounded bg-green-500/10 text-green-400 text-xs border border-green-500/20 font-bold"><i class="fa-solid fa-check mr-1"></i>Approved</span>';
                     return '<span class="px-2 py-1 rounded bg-red-500/10 text-red-400 text-xs border border-red-500/20 font-bold">Rejected</span>';
                 };
 
-                // Full History
+                // Full List
                 data.forEach(item => {
                     const dateStr = new Date(item.date).toLocaleDateString();
                     fullHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-400 text-xs font-mono">${dateStr}</td>
-							<td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
+                            <td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
                             <td class="p-4 font-medium text-white">${item.packageType || 'N/A'}</td>
-                            <td class="p-4 text-gray-400">৳${item.packagePrice}</td>
-                            <td class="p-4 text-xs text-gray-500">${item.commissionRate}</td>
+                            <td class="p-4 text-gray-400">৳${item.packagePrice || 0}</td>
+                            <td class="p-4 text-xs text-gray-500">${item.commissionRate || ''}</td>
                             <td class="p-4 text-right text-[#A073EE] font-bold">+ ৳${item.amount}</td>
                             <td class="p-4 text-center">${getBadge(item.status)}</td>
                         </tr>`;
                 });
 
-                // Recent Activity (Short Version)
+                // Recent List
                 recentItems.forEach(item => {
                     const dateStr = new Date(item.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
                     recentHtml += `
                         <tr class="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                             <td class="p-4 text-gray-300 text-sm">${dateStr}</td>
-							<td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
+                            <td class="p-4 text-gray-300 text-xs font-mono">${item.orderId || 'N/A'}</td>
                             <td class="p-4 text-white font-medium">${item.packageType}</td>
                             <td class="p-4 font-bold text-[#A073EE]">+ ৳${item.amount}</td>
                             <td class="p-4 text-center">${getBadge(item.status)}</td>
@@ -450,7 +502,7 @@
         } catch (e) { console.error(e); }
     }
 
-    // 3. WITHDRAW HISTORY (Fixed Alignment)
+    // 4. পেমেন্ট হিস্ট্রি
     async function loadPaymentHistory() {
         const tableBody = document.getElementById('payment-list');
         if (!tableBody) return;
@@ -485,20 +537,30 @@
         } catch (e) { console.error(e); }
     }
 
-    // 4. CHART FUNCTION
+    // 5. চার্ট আপডেট
     function updateChart(balance, pending, total) {
-        if(!document.getElementById('earningsChart')) return;
+        const chartCanvas = document.getElementById('earningsChart');
+        if(!chartCanvas) return;
         
-        const ctx = document.getElementById('earningsChart').getContext('2d');
+        const ctx = chartCanvas.getContext('2d');
         if(window.myChart) window.myChart.destroy();
+
+        // যদি সব জিরো হয়, তাহলে একটি ডিফল্ট গ্রে চার্ট দেখাবে
+        let dataSet = [balance, pending, (total - balance)];
+        let bgColors = ['#A073EE', '#eab308', '#374151'];
+        
+        if (balance === 0 && pending === 0 && total === 0) {
+            dataSet = [1]; 
+            bgColors = ['#ffffff10']; // হালকা কালার
+        }
 
         window.myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ['Available', 'Pending', 'Withdrawn'],
                 datasets: [{
-                    data: [balance, pending, (total - balance)],
-                    backgroundColor: ['#A073EE', '#eab308', '#374151'],
+                    data: dataSet,
+                    backgroundColor: bgColors,
                     borderWidth: 0,
                     hoverOffset: 4
                 }]
@@ -512,10 +574,9 @@
         });
     }
 
-    // 5. COPY LINK (FIXED: NO BLUE HIGHLIGHT)
+    // 6. লিংক কপি ফাংশন
     function copyLink() {
         const copyText = document.getElementById("refLink");
-
         navigator.clipboard.writeText(copyText.value).then(() => {
             const btn = document.querySelector('button[onclick="copyLink()"]');
             const original = btn.innerText;
@@ -525,12 +586,10 @@
                 btn.innerText = original; 
                 btn.classList.remove('bg-green-500');
             }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
-        });
+        }).catch(err => console.error(err));
     }
 
-    // 6. WITHDRAW (WITH POPUP)
+    // 7. উইথড্র রিকোয়েস্ট (আপডেট করা)
     async function handleWithdraw() {
         const amount = document.getElementById('withdrawAmount').value;
         const account = document.getElementById('accountNumber').value;
@@ -546,26 +605,28 @@
         try {
             const res = await fetch('/.netlify/functions/request-withdraw', {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` },
+                // এখানে নতুন টোকেন যাচ্ছে
+                headers: { 'Authorization': `Bearer ${token}` }, 
                 body: JSON.stringify({ amount, method, accountNumber: account })
             });
 
             if(res.ok) {
                 showSuccessModal();
+                // ব্যালেন্স আপডেট করার জন্য আবার ডাটা লোড
+                loadDashboardData();
             } else { 
                 const r = await res.json(); 
                 alert("Error: " + r.error); 
-                btn.innerText = originalText;
-                btn.disabled = false;
             }
         } catch(e) { 
             alert("Network Error");
+        } finally {
             btn.innerText = originalText;
             btn.disabled = false;
         }
     }
 
-    // POPUP FUNCTIONS
+    // পপআপ ফাংশন
     function showSuccessModal() {
         const modal = document.getElementById('successModal');
         const content = document.getElementById('successModalContent');
@@ -580,14 +641,18 @@
     function closeModal() {
         const modal = document.getElementById('successModal');
         modal.classList.add('opacity-0');
-        setTimeout(() => {
-            window.location.reload();
-        }, 300);
+        setTimeout(() => modal.classList.add('hidden'), 300);
     }
 
-    window.logout = () => { localStorage.removeItem('authToken'); window.location.href="/login"; }
-  </script>
+    // লগআউট ফাংশন (ফায়ারবেস থেকে সাইন আউট)
+    window.logout = () => { 
+        if(auth) auth.signOut();
+        localStorage.removeItem('authToken'); 
+        window.location.href="/login.html"; 
+    }
+</script>
 </body>
 </html>
+
 
 
