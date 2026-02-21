@@ -167,7 +167,12 @@ exports.handler = async (event) => {
             "Expiry Date": formatCustomDate(bdExpiry),
             "License Key": licenseKeyToUpdate
         };
-        
+
+		// 👇 [নতুন] অ্যাফিলিয়েট ডাটা সেভ করার কোড
+        if (data.ReferredBy && data.ReferredBy !== "None") {
+            licenseUpdateData["ReferredBy"] = data.ReferredBy;
+        }
+		
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
         // Telegram Notification (HTML Mode)
@@ -266,6 +271,11 @@ New Free User is now Registered.`;
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
+	// 👇 [নতুন] Purchase ফর্মে অ্যাফিলিয়েট সেভ করা
+    if (data.ReferredBy && data.ReferredBy !== "None") {
+        purchaseData["ReferredBy"] = data.ReferredBy;
+    }  
+
     await db.collection('purchaseForm').add(purchaseData);
     
     const licenseUpdateData = {
@@ -278,7 +288,12 @@ New Free User is now Registered.`;
         "Status": "Pending", 
         "RequestDate": bdNow
     };
-    
+
+	// 👇 [নতুন] License ডাটাবেসে অ্যাফিলিয়েট সেভ করা
+    if (data.ReferredBy && data.ReferredBy !== "None") {
+        licenseUpdateData["ReferredBy"] = data.ReferredBy;
+    }
+	  
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
     // Telegram Notification (HTML Mode)
