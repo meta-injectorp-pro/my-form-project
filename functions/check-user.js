@@ -72,11 +72,13 @@ exports.handler = async (event) => {
                 name: userData['Customer Name'],
 
                 email: maskEmail(rawEmail), 
-                phone: maskPhone(rawPhone)  
+                phone: maskPhone(rawPhone),
+                package: userData['Package']
             })
         };
 
     } catch (error) {
         return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
     }
+
 };
