@@ -180,6 +180,7 @@ exports.handler = async (event) => {
             const botToken = process.env.TELEGRAM_BOT_TOKEN;
 			const chatId = process.env.TELEGRAM_CHAT_ID; 
             if(botToken && chatId) {
+				let refInfo = (data.ReferredBy && data.ReferredBy !== "None") ? `🔗 Referral: <code>${data.ReferredBy}</code>\n` : "";
                 const msg = `🚀 <b>New Free Trial Registered!</b>
 
 👤 Name: ${data.FullName}
@@ -188,6 +189,7 @@ exports.handler = async (event) => {
 🔑 License: <code>${licenseKeyToUpdate}</code>
 📅 Activation: ${formatCustomDate(bdNow)}
 ⏳ Expiry: ${formatCustomDate(bdExpiry)}
+${refInfo}
 
 New Free User is now Registered.`;
                 await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -301,6 +303,7 @@ New Free User is now Registered.`;
         const botToken = process.env.TELEGRAM_BOT_TOKEN;
 		const chatId = process.env.TELEGRAM_CHAT_ID;
         if(botToken && chatId) {
+			let refInfoPaid = (data.ReferredBy && data.ReferredBy !== "None") ? `🔗 Referral: <code>${data.ReferredBy}</code>\n` : "";
             const msg = `💰 <b>New Package Purchase!</b>
 
 📦 Package: <b>${data.Package}</b>
@@ -310,6 +313,7 @@ New Free User is now Registered.`;
 💳 Method: ${data.PaymentMethod || "N/A"}
 📝 TrxID: <code>${data.SenderInfo || "N/A"}</code>
 🔑 License: <code>${licenseKeyToUpdate}</code>
+${refInfoPaid}
 
 Check Admin Panel to Approve.`;
 
