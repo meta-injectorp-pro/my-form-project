@@ -13,8 +13,7 @@
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #e0e0e0; }
-        
-        /* Glass Effect */
+
         .glass-panel {
             background: rgba(21, 13, 36, 0.7);
             backdrop-filter: blur(10px);
@@ -35,28 +34,24 @@
         
         .warning-message { color: #ff4d4d; font-size: 13px; margin-top: 6px; display: none; font-weight: 500; }
         .visible { display: block; }
-        
-        /* Animations */
+
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        
-        /* === NEW PAYMENT CARD STYLE === */
+
         .payment-card { 
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.03);
-            opacity: 1; /* Always visible */
-            filter: grayscale(0%); /* Always colorful */
+            opacity: 1;
+            filter: grayscale(0%);
         }
-        
-        /* Hover State */
+
         .payment-card:hover {
             border-color: rgba(138, 77, 255, 0.5);
             background: rgba(255, 255, 255, 0.08);
             transform: translateY(-2px);
         }
 
-        /* Selected State */
         input[type="radio"]:checked + .payment-card { 
             border-color: #8A4DFF; 
             background: rgba(138, 77, 255, 0.15); 
@@ -66,12 +61,10 @@
             z-index: 10;
         }
 
-        /* Button Hover Glow */
         .btn-glow:hover {
             box-shadow: 0 0 25px rgba(138, 77, 255, 0.6);
         }
 
-        /* Custom Checkbox */
         .checkbox-custom {
             appearance: none;
             background-color: rgba(255, 255, 255, 0.05);
@@ -387,7 +380,7 @@
             }
         }
     }
-    // =======================================================
+
     
         document.addEventListener('DOMContentLoaded', () => {
             const packageDetails = {
@@ -406,7 +399,6 @@
                 "Rocket": "01729816172"
             };
 
-            // ================== INITIALIZATION ==================
             const params = new URLSearchParams(window.location.search);
             const pkgName = params.get('package') || 'Starter';
             let pkgPrice = params.get('price') ? parseInt(params.get('price')) : 0;
@@ -441,7 +433,6 @@
             elements.pkgName.innerText = pkgName;
             elements.totalPrice.innerText = '৳' + pkgPrice;
 
-            // ================== SET DATA FROM HARDCODED LIST ==================
             let durationDays = "30";
             let regularPrice = 0;
 
@@ -455,7 +446,6 @@
                 elements.pkgCredits.innerText = params.get('credits') || "--";
             }
 
-            // ================== SHOW DISCOUNT LOGIC ==================
             const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
 
             if (isFreeTrial) {
@@ -478,7 +468,6 @@
                 elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
             }
 
-            // ================== PAYMENT INTERACTIONS ==================
             document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     const method = e.target.value;
@@ -498,7 +487,6 @@
                 });
             });
 
-            // ================== FORM SUBMIT LOGIC (UNCHANGED) ==================
             const form = document.getElementById('checkoutForm');
             const inputs = {
                 name: document.getElementById('fullName'),
@@ -515,7 +503,6 @@
                 terms: document.getElementById('warnTerms')
             };
 
-            // Validation Listeners
             inputs.phone.addEventListener('input', function() { 
                 this.value = this.value.replace(/[^0-9]/g, ''); 
                 warns.phone.style.display = 'none';
@@ -603,7 +590,7 @@
                 const data = await response.json();
 
                 if(response.ok) {
-                    // Success!
+
                     const orderId = inputs.trx.value || 'ORD-' + Date.now();
                     const licenseKey = data.licenseKey;
 
@@ -700,3 +687,4 @@
 </body>
 
 </html>
+
