@@ -23,11 +23,18 @@ const transporter = nodemailer.createTransport({
 });
 
 function parseMultipartForm(event) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const fields = {};
-        const busboy = Busboy({ headers: event.headers });
+        // 👇 এখানে লিমিট বসানো হয়েছে (যাতে কেউ বড় ডাটা পাঠিয়ে সার্ভার ডাউন করতে না পারে)
+        const busboy = Busboy({ 
+            headers: event.headers,
+            limits: { fileSize: 0, fieldSize: 5000 } // ফিল্ডের সাইজ সর্বোচ্চ 5KB
+        });
+        
         busboy.on('field', (fieldname, val) => fields[fieldname] = val);
         busboy.on('finish', () => resolve({ fields }));
+        busboy.on('error', (err) => reject(err));
+        
         busboy.end(Buffer.from(event.body, 'base64'));
     });
 }
