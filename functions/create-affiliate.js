@@ -36,7 +36,7 @@ async function generateUniqueAffiliateCode(firstName) {
 exports.handler = async (event, context) => {
   if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
-  const { firstName, lastName, email, phone, password, isMetaUser, metaUserDetail } = JSON.parse(event.body);
+  const { firstName, lastName, email, phone, password, isMetaUser, metaUserDetail, hasSocial, socialLink, followerCount } = JSON.parse(event.body);
   const fullName = `${firstName} ${lastName}`;
 
   try {
@@ -112,5 +112,6 @@ exports.handler = async (event, context) => {
     return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
   }
 };
+
 
 
