@@ -72,11 +72,14 @@ exports.handler = async (event, context) => {
       totalClicks: 0,           // ক্লিক কাউন্টার শুরু হলো ০ থেকে
       balance: 0,
       totalEarnings: 0,
+      totalSalesCount: 0, // আপনার ডাটাবেসে এই ফিল্ডটিও আছে
+
+      // 👇 আপনার ডাটাবেসের সাথে হুবহু মিল রেখে নামগুলো দেওয়া হলো
       isMetaInjectorUser: isMetaUser || false,
       metaInjectorID: metaUserDetail || "N/A",
-      hasSocialMedia: hasSocial || false,
+      hasSocial: hasSocial || false,
       socialLink: socialLink || "N/A",
-      followersCount: followerCount || "0",  
+      followerCount: followerCount || "0",
       createdAt: new Date().toISOString()
     });
 
@@ -112,6 +115,7 @@ exports.handler = async (event, context) => {
     return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
   }
 };
+
 
 
 
