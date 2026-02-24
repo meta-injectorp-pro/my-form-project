@@ -568,19 +568,35 @@
                 formData.append('SenderInfo', trxVal);
                 formData.append('AmountSent', pkgPrice); 
 
+
                 let rawRef = localStorage.getItem('affiliate_ref');
                 let actualRefCode = 'None';
 
                 if (rawRef) {
                     try {
+
                         const parsedData = JSON.parse(rawRef);
-                        actualRefCode = parsedData.value ? parsedData.value : rawRef;
+                        
+                        if (parsedData !== null && typeof parsedData === 'object' && parsedData.value) {
+                            actualRefCode = parsedData.value;
+                        } else if (typeof parsedData === 'string') {
+                            actualRefCode = parsedData;
+                        } else {
+                            actualRefCode = rawRef;
+                        }
                     } catch(e) {
+
                         actualRefCode = rawRef;
                     }
                 }
+                if (!actualRefCode || actualRefCode === 'null' || actualRefCode === 'undefined') {
+                    actualRefCode = 'None';
+                }
+                console.log("Raw Storage Data:", rawRef);
+                console.log("Sending to Database:", actualRefCode);
                 
                 formData.append('ReferredBy', actualRefCode);
+
                 
                 try {
                 const response = await fetch('/.netlify/functions/submit-form', {
@@ -687,4 +703,5 @@
 </body>
 
 </html>
+
 
