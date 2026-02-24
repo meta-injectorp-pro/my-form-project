@@ -74,6 +74,9 @@ exports.handler = async (event, context) => {
       totalEarnings: 0,
       isMetaInjectorUser: isMetaUser || false,
       metaInjectorID: metaUserDetail || "N/A",
+      hasSocialMedia: hasSocial || false,
+      socialLink: socialLink || "N/A",
+      followersCount: followerCount || "0",  
       createdAt: new Date().toISOString()
     });
 
@@ -109,4 +112,5 @@ exports.handler = async (event, context) => {
     return { statusCode: 400, body: JSON.stringify({ error: error.message }) };
   }
 };
+
 
