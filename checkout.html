@@ -407,8 +407,63 @@
     }
 
     let pendingFormData = null;
+    let otpTimerInterval;
+        
+    function startOtpTimer() {
+        clearInterval(otpTimerInterval);
+        let timeRemaining = 600;
+        const timerDisplay = document.getElementById('otp-timer');
+        const verifyBtn = document.getElementById('verifyOtpBtn');
+        
+        timerDisplay.style.color = "#A073EE"; 
+        verifyBtn.disabled = false;
+
+        otpTimerInterval = setInterval(() => {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            timerDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeRemaining <= 60) {
+                timerDisplay.style.color = "#ef4444";
+            }
+
+            if (timeRemaining <= 0) {
+                clearInterval(otpTimerInterval);
+                timerDisplay.innerText = "0:00";
+                document.getElementById('warnOtp').innerText = "Code expired. Please cancel and request again.";
+                document.getElementById('warnOtp').style.display = 'block';
+                verifyBtn.disabled = true; 
+            }
+            timeRemaining--;
+        }, 1000);
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const otpInputs = document.querySelectorAll('.otp-input');
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, ''); 
+                if (e.target.value !== '' && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus(); 
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    otpInputs[index - 1].focus(); 
+                }
+            });
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').replace(/[^0-9]/g, '').slice(0, 6);
+                pastedData.split('').forEach((char, i) => {
+                    if (i < otpInputs.length) {
+                        otpInputs[i].value = char;
+                        if (i < otpInputs.length - 1) otpInputs[i + 1].focus();
+                    }
+                });
+            });
+        });
+
         const packageDetails = {
             "Free Trial":   { label: "3 Days",   days: "3", credits: "50",    regular: 0 },
             "Starter":      { label: "1 Month",  days: "30", credits: "2,000",  regular: 200 }, 
@@ -437,13 +492,11 @@
             pkgDuration: document.getElementById('pkgDurationDisplay'),
             totalPrice: document.getElementById('totalPrice'),
             priceRow: document.getElementById('priceRow'),
-
             regularPriceRow: document.getElementById('regularPriceRow'),
             regularPriceVal: document.getElementById('regularPriceVal'),
             discountRow: document.getElementById('discountRow'),
             discountVal: document.getElementById('discountVal'),
             discountBadge: document.getElementById('discountBadge'),
-
             paymentSection: document.getElementById('paymentSection'),
             payInstruction: document.getElementById('paymentInstruction'),
             payNumber: document.getElementById('payNumber'),
@@ -545,7 +598,7 @@
 
         if (inputs.trx) {
             inputs.trx.addEventListener('input', function() {
-                this.value = this.value.toUpperCase().replace(/\s/g, '');
+                this.value = this.value.toUpperCase().replace(/\\s/g, '');
                 warns.trx.style.display = 'none';
                 this.style.borderColor = '';
             });
@@ -558,7 +611,7 @@
             if (!inputs.terms.checked) { warns.terms.style.display = 'block'; isValid = false; }
             if (inputs.name.value.trim().length < 3) { warns.name.style.display = 'block'; isValid = false; }
             if (inputs.phone.value.length < 11) { warns.phone.style.display = 'block'; isValid = false; }
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
             if (!emailRegex.test(inputs.email.value)) { warns.email.style.display = 'block'; isValid = false; }
 
             let selectedMethodVal = "Free Trial";
@@ -620,6 +673,10 @@
                         document.getElementById('otp-email-display').innerText = inputs.email.value;
                         elements.submitBtn.innerHTML = `Start Your Free Trial`;
                         elements.submitBtn.disabled = false;
+                        
+                        startOtpTimer();
+                        setTimeout(() => document.querySelectorAll('.otp-input')[0].focus(), 100);
+                        
                     } else {
                         const errorData = await res.json();
                         throw new Error(errorData.error || 'Failed to send OTP.');
@@ -638,11 +695,15 @@
 
         document.getElementById('cancelOtpBtn').addEventListener('click', () => {
             document.getElementById('otp-modal').classList.add('hidden');
+            clearInterval(otpTimerInterval); // clear timer on cancel
         });
 
         document.getElementById('verifyOtpBtn').addEventListener('click', () => {
-            const otpVal = document.getElementById('otpInput').value.trim();
+            const otpInputs = document.querySelectorAll('.otp-input');
+            let otpVal = Array.from(otpInputs).map(i => i.value).join('');
+
             if(otpVal.length !== 6) {
+                document.getElementById('warnOtp').innerText = "Please enter all 6 digits.";
                 document.getElementById('warnOtp').style.display = 'block';
                 return;
             }
@@ -679,6 +740,7 @@
 
                     await onPaymentSuccess(pkgPrice, orderId, pkgName, licenseKey); 
 
+                    clearInterval(otpTimerInterval);
                     document.getElementById('otp-modal').classList.add('hidden');
                     elements.checkoutGrid.style.display = 'none';
                     elements.successView.classList.remove('hidden');
@@ -742,7 +804,7 @@
                         return; 
                     }
 
-                    throw new Error(data.message || 'Submission failed');
+                    throw new Error(data.message || data.error || 'Submission failed');
                 }
             } catch (error) {
                 console.error(error);
@@ -761,8 +823,9 @@
             }
         }
     });
-    </script>
+</script>
 </body>
 </html>
+
 
 
