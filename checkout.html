@@ -406,7 +406,6 @@
         }
     }
 
-    // 💡 গ্লোবাল ভেরিয়েবল ডিক্লেয়ার করা হলো
     let pendingFormData = null;
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -575,7 +574,6 @@
 
             if(!isValid) return;
 
-            // ফর্মের ডাটা রেডি করা
             pendingFormData = new FormData();
             pendingFormData.append('FullName', inputs.name.value);
             pendingFormData.append('Email', inputs.email.value);
@@ -606,9 +604,6 @@
             }
             pendingFormData.append('ReferredBy', actualRefCode);
 
-            // ==========================================
-            // 🛑 OTP বা সাবমিট লজিক
-            // ==========================================
             if (isFreeTrial) {
                 elements.submitBtn.disabled = true;
                 elements.submitBtn.innerHTML = `Sending Verification Code...`;
@@ -641,9 +636,6 @@
             }
         });
 
-        // ==========================================
-        // ✅ OTP পপআপের "Verify" বাটনের লজিক
-        // ==========================================
         document.getElementById('cancelOtpBtn').addEventListener('click', () => {
             document.getElementById('otp-modal').classList.add('hidden');
         });
@@ -666,9 +658,6 @@
             submitFinalData(pendingFormData, true); 
         });
 
-        // ==========================================
-        // 🚀 সার্ভারে আসল ডাটা সেভ করার ফাংশন
-        // ==========================================
         async function submitFinalData(formData, isFromModal) {
             const btn = isFromModal ? document.getElementById('verifyOtpBtn') : elements.submitBtn;
             if(!isFromModal) {
@@ -775,4 +764,5 @@
     </script>
 </body>
 </html>
+
 
