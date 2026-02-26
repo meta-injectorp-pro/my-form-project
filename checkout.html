@@ -598,7 +598,7 @@
 
         if (inputs.trx) {
             inputs.trx.addEventListener('input', function() {
-                this.value = this.value.toUpperCase().replace(/\\s/g, '');
+                this.value = this.value.toUpperCase().replace(/\s/g, '');
                 warns.trx.style.display = 'none';
                 this.style.borderColor = '';
             });
@@ -611,7 +611,7 @@
             if (!inputs.terms.checked) { warns.terms.style.display = 'block'; isValid = false; }
             if (inputs.name.value.trim().length < 3) { warns.name.style.display = 'block'; isValid = false; }
             if (inputs.phone.value.length < 11) { warns.phone.style.display = 'block'; isValid = false; }
-            const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(inputs.email.value)) { warns.email.style.display = 'block'; isValid = false; }
 
             let selectedMethodVal = "Free Trial";
@@ -826,6 +826,7 @@
 </script>
 </body>
 </html>
+
 
 
 
