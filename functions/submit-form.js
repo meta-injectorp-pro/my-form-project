@@ -67,8 +67,18 @@ function isValidEmail(email) {
         return { valid: false, reason: "Invalid email format. Username is too short." };
     }
 
-    const blockedWords = ['test', 'fake', 'demo', 'temp', 'admin', 'info', '123', 'user', 'qwerty', 'asdf'];
+    // 🛡️ [NEW] Gmail Security: Block Plus (+) alias and excessive dots
+    if (domainPart === 'gmail.com') {
+        if (userPart.includes('+')) {
+            return { valid: false, reason: "Plus (+) aliases are not allowed." };
+        }
+        const dotCount = (userPart.match(/\./g) || []).length;
+        if (dotCount > 2) {
+            return { valid: false, reason: "Suspicious email format. Too many dots." };
+        }
+    }
 
+    const blockedWords = ['test', 'fake', 'demo', 'temp', 'admin', 'info', '123', 'user', 'qwerty', 'asdf'];
     if (blockedWords.some(word => userPart.includes(word))) {
         return { valid: false, reason: "Please use your real personal email address." };
     }
@@ -110,6 +120,18 @@ exports.handler = async (event) => {
             })
         };
     }
+
+	// 🛡️ [NEW] Phone & Name Backend Validation
+    if (!/^01\d{9}$/.test(data.Phone)) {
+        return { statusCode: 400, body: JSON.stringify({ status: "error", message: "Phone number must be exactly 11 digits and start with 01." }) };
+    }
+
+    const nameVal = data.FullName.trim();
+    const hasVowel = /[aeiouAEIOU]/.test(nameVal);
+    const tooManyConsonants = /[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]{4,}/.test(nameVal);
+    if (nameVal.length < 3 || !hasVowel || tooManyConsonants) {
+        return { statusCode: 400, body: JSON.stringify({ status: "error", message: "Please enter a real valid name." }) };
+    }  
 
     const userSnapshot = await db.collection('licenseDatabase')
                                  .where('Email', '==', data.Email)
