@@ -20,10 +20,54 @@ const transporter = nodemailer.createTransport({
     auth: { user: process.env.SMTP_EMAIL, pass: process.env.SMTP_PASSWORD }
 });
 
+// 🛡️ SECURITY FUNCTION FOR EMAIL VALIDATION
+function isValidEmail(email) {
+    if (!email) return { valid: false, reason: "Email is required." };
+    
+    const emailLower = email.toLowerCase().trim();
+    const [userPart, domainPart] = emailLower.split('@');
+
+    const allowedDomains = ['gmail.com', 'yahoo.com'];
+    if (!allowedDomains.includes(domainPart)) {
+        return { valid: false, reason: "Only valid email allowed." };
+    }
+
+    if (userPart.length < 4) {
+        return { valid: false, reason: "Invalid email format. Username is too short." };
+    }
+
+    // 🛡️ [NEW] Gmail Security: Block Plus (+) alias and excessive dots
+    if (domainPart === 'gmail.com') {
+        if (userPart.includes('+')) {
+            return { valid: false, reason: "Plus (+) aliases are not allowed." };
+        }
+        const dotCount = (userPart.match(/\./g) || []).length;
+        if (dotCount > 2) {
+            return { valid: false, reason: "Suspicious email format. Too many dots." };
+        }
+    }
+
+    const blockedWords = ['test', 'fake', 'demo', 'temp', 'admin', 'info', '123', 'user', 'qwerty', 'asdf'];
+    if (blockedWords.some(word => userPart.includes(word))) {
+        return { valid: false, reason: "Please use your real personal email address." };
+    }
+
+    if (/^\d+$/.test(userPart)) {
+        return { valid: false, reason: "Email cannot consist only of numbers." };
+    }
+
+    return { valid: true };
+}
+
 exports.handler = async (event) => {
     if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
     const { email, name } = JSON.parse(event.body);
+  
+    const emailCheck = isValidEmail(email);
+    if (!emailCheck.valid) {
+        return { statusCode: 400, body: JSON.stringify({ error: emailCheck.reason }) };
+    }
 
     try {
         // ১. চেক করা যে এই ইমেইল দিয়ে আগে ট্রায়াল নেওয়া হয়েছে কি না!
