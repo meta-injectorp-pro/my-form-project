@@ -1,3 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Meta Injector Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="./Source_Files/favicon.ico">
+
+    <link href="./Source_Files/style.css" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #e0e0e0; }
+
+        .glass-panel {
+            background: rgba(21, 13, 36, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .custom-input {
+            width: 100%; padding: 14px 16px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px; color: white; transition: all 0.3s;
+        }
+        .custom-input:focus {
+            outline: none; border-color: #8A4DFF;
+            box-shadow: 0 0 0 3px rgba(138, 77, 255, 0.15);
+            background-color: rgba(255, 255, 255, 0.07);
+        }
+        
+        .warning-message { color: #ff4d4d; font-size: 13px; margin-top: 6px; display: none; font-weight: 500; }
+        .visible { display: block; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        .payment-card { 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            opacity: 1;
+            filter: grayscale(0%);
+        }
+
+        .payment-card:hover {
+            border-color: rgba(138, 77, 255, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        input[type="radio"]:checked + .payment-card { 
+            border-color: #8A4DFF; 
+            background: rgba(138, 77, 255, 0.15); 
+            box-shadow: 0 0 20px rgba(138, 77, 255, 0.3);
+            transform: translateY(-3px) scale(1.02);
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(138, 77, 255, 0.6);
+        }
+
+        .checkbox-custom {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        .checkbox-custom:checked {
+            background-color: #A073EE;
+            border-color: #A073EE;
+        }
+        .checkbox-custom:checked:after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="antialiased overflow-x-hidden bg-[#0F0A1E]">
+
+    <div id="otp-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm px-4">
+        <div class="glass-panel p-8 rounded-2xl max-w-sm w-full text-center border border-[#A073EE]/50 shadow-[0_0_40px_rgba(160,115,238,0.2)] relative">
+            <h3 class="text-2xl font-bold text-white mb-2">Verify Email</h3>
+            <p class="text-gray-400 text-sm mb-6">We've sent a 6-digit code to <br><span id="otp-email-display" class="text-[#A073EE] font-bold"></span></p>
+            
+            <div class="flex justify-center gap-2 mb-2 otp-group" dir="ltr">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+            </div>
+            
+            <div class="warning-message" id="warnOtp">Invalid OTP. Please try again.</div>
+            
+            <p class="text-sm text-gray-400 mt-4">Code expires in: <span id="otp-timer" class="text-[#A073EE] font-mono font-bold">10:00</span></p>
+
+            <button type="button" id="verifyOtpBtn" class="w-full py-3.5 mt-6 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 btn-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                Verify & Start Trial
+            </button>
+            <button type="button" id="cancelOtpBtn" class="text-gray-500 text-sm mt-4 hover:text-white transition-colors">Cancel</button>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 pointer-events-none -z-10">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-900/20 rounded-full blur-[128px]"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-900/20 rounded-full blur-[128px]"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-white/5 bg-[#0F0A1E]/80 backdrop-blur-xl">
+        <div class="max-w-7xl flex flex-wrap items-center justify-between mx-auto p-4 px-6">
+            <a href="/index" class="flex items-center gap-3">
+                <img src="./Source_Files/logo.svg" class="h-10 w-auto hover:opacity-80 transition" alt="Meta Injector Pro">
+            </a>
+            <a href="/index" class="text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex flex-col items-center justify-center">
+        
+        <div id="success-view" class="hidden w-full max-w-lg mx-auto text-center pt-10 pb-20">
+        
+        <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-[#A073EE]/30 shadow-[0_0_60px_rgba(160,115,238,0.15)] relative overflow-hidden">
+            
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#A073EE] blur-[20px]"></div>
+
+            <div class="w-20 h-20 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+                <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white mb-2">Congratulations!</h2>
+            <p class="text-gray-400 mb-8">Your package order has been submited successfully.</p>
+
+            <div class="bg-[#A073EE]/5 border border-[#A073EE]/20 rounded-2xl p-6 mb-8 relative">
+                
+                <div class="mb-4 flex justify-center">
+                    <div class="relative">
+                        <svg class="w-12 h-12 text-[#A073EE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-white mb-2">Check Your Email Now</h3>
+                
+                <p class="text-gray-300 text-sm leading-relaxed mb-3">
+                    We have sent the <span class="text-[#A073EE] font-bold bg-[#A073EE]/10 px-1 rounded">Software Download Link</span> <br class="hidden sm:block"> 
+                    and your <span class="text-[#A073EE] font-bold bg-[#A073EE]/10 px-1 rounded">Activation Key</span> to your email.
+                </p>
+
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 bg-black/20 py-2 rounded-lg">
+                    <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <span>If not found, please check your <b>Spam/Junk</b> folder.</span>
+                </div>
+            </div>
+
+            <a href="/index" class="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 hover:border-white/20 transition-all duration-300 group">
+                <svg class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Return to Home
+            </a>
+
+        </div>
+    </div>
+        </div>
+
+        <div id="checkout-grid" class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            
+            <div class="lg:col-span-4 fade-in-up" style="animation-delay: 0.1s;">
+                <div class="glass-panel rounded-2xl p-8 sticky top-32 overflow-hidden relative">
+                    
+                    <div id="discountBadge" class="hidden absolute top-0 right-0 bg-gradient-to-bl from-red-500 to-pink-600 text-white text-xs font-bold px-3 py-1 rounded-bl-xl z-10 shadow-lg">
+                        25% OFF
+                    </div>
+
+                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                        Order Summary
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/5">
+                            <span class="text-gray-400 text-sm">Package</span>
+                            <span id="pkgName" class="text-purple-400 font-bold text-lg">Starter</span>
+                        </div>
+
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-gray-400 text-sm">Credits</span>
+                            <span id="pkgCredits" class="text-white font-medium">2,000</span>
+                        </div>
+
+                        <div class="flex justify-between items-center px-2">
+                            <span class="text-gray-400 text-sm">Duration</span>
+                            <span id="pkgDurationDisplay" class="text-yellow-400 font-medium">30 Days</span>
+                        </div>
+
+                        <div id="regularPriceRow" class="flex justify-between items-center px-2 hidden">
+                            <span class="text-gray-500 text-sm">Regular Price</span>
+                            <span class="text-gray-500 font-medium line-through decoration-red-500/50">৳<span id="regularPriceVal">0</span></span>
+                        </div>
+
+                        <div id="discountRow" class="flex justify-between items-center px-2 hidden">
+                            <span class="text-green-400 text-sm">Discount Savings</span>
+                            <span class="text-green-400 font-medium">-৳<span id="discountVal">0</span></span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-dashed border-white/10 pt-6 mt-6" id="priceRow">
+                        <div class="flex justify-between items-end">
+                            <span class="text-gray-300 font-medium">Total Payable</span>
+                            <span id="totalPrice" class="text-3xl font-bold text-[#A073EE] tracking-tight">৳130</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-red-500/5 rounded-lg border border-red-500/10 text-center">
+                        <p class="text-[11px] text-gray-400 leading-relaxed">
+                            <span class="text-red-400 font-bold">Note:</span> 
+                            By confirming, you agree that payments are <span class="text-white">non-refundable</span> under any circumstances.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 fade-in-up" style="animation-delay: 0.2s;">
+                <div class="glass-panel rounded-2xl p-8 md:p-10">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-white mb-2">Customer Details</h2>
+                        <p class="text-gray-400 text-sm">Please fill in your valid information.</p>
+                    </div>
+
+                    <form id="checkoutForm">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Full Name</label>
+                                <input type="text" id="fullName" name="FullName" class="custom-input" placeholder="e.g. Rahim Ahmed">
+                                <div class="warning-message" id="warnName">Please enter your full name (letters only).</div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Phone Number</label>
+                                <input type="tel" id="phone" name="Phone" class="custom-input" placeholder="017XXXXXXXX" maxlength="11">
+                                <div class="warning-message" id="warnPhone">Please enter your valid phone number.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-10">
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Email Address</label>
+                            <input type="email" id="email" name="Email" class="custom-input" placeholder="name@example.com">
+                            <div class="warning-message" id="warnEmail">Please enter your valid email address.</div>
+                        </div>
+
+                        <div id="paymentSection">
+                            <div class="border-t border-white/10 my-8"></div>
+                            
+                            <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                                Payment Method
+                            </h3>
+
+                            <div class="grid grid-cols-3 gap-4 mb-8">
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="payment_method" value="bKash" class="peer sr-only">
+                                    <div class="payment-card h-24 rounded-xl flex items-center justify-center p-4">
+                                        <img src="./Source_Files/bkash.svg" alt="bKash" class="h-10 w-auto object-contain">
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="payment_method" value="Nagad" class="peer sr-only">
+                                    <div class="payment-card h-24 rounded-xl flex items-center justify-center p-4">
+                                        <img src="./Source_Files/nagad.svg" alt="Nagad" class="h-8 w-auto object-contain">
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer group relative">
+                                    <input type="radio" name="payment_method" value="Rocket" class="peer sr-only">
+                                    <div class="payment-card h-24 rounded-xl flex items-center justify-center p-4">
+                                        <img src="./Source_Files/rocket.svg" alt="Rocket" class="h-9 w-auto object-contain">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div id="paymentInstruction" class="hidden animate-fade-in mb-8">
+                                <div class="bg-gradient-to-r from-[#1E1435] to-[#150D24] border border-purple-500/30 rounded-xl p-6 text-center relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 p-2 opacity-20"><svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                                    
+                                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-3">Send Money To (Personal)</p>
+                                    
+                                    <div class="flex items-center justify-center gap-3 mb-2">
+                                        <span id="payNumber" class="text-2xl sm:text-3xl font-mono font-bold text-white tracking-wider">01729816172</span>
+                                        <button type="button" id="copyBtn" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition group relative">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                            <span id="copyTooltip" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-0 transition-opacity">Copied!</span>
+                                        </button>
+                                    </div>
+                                    <p class="text-xs text-gray-500">Click icon to copy number</p>
+                                </div>
+                            </div>
+
+                            <div id="trxGroup" class="hidden animate-fade-in">
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Transaction ID (TrxID)</label>
+                                <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase font-mono tracking-widest text-center border-purple-500/30 focus:border-purple-500" placeholder="e.g. 8HGD73X...">
+                                <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 mb-6">
+                            <label class="flex items-start gap-3 cursor-pointer group select-none">
+                                <input type="checkbox" id="termsCheck" class="checkbox-custom w-5 h-5 mt-0.5 flex-shrink-0">
+                                <span class="text-sm text-gray-400 group-hover:text-gray-300 transition leading-snug">
+                                    I have read and agree to the 
+                                    <a href="/terms" target="_blank" class="text-blue-400 hover:text-blue-300 underline font-medium">Terms and Conditions</a>
+                                    and Refund Policy.
+                                </span>
+                            </label>
+                            <div class="warning-message" id="warnTerms">You must accept the Terms and Conditions to proceed.</div>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 btn-glow text-white font-bold rounded-xl text-lg shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            Confirm Purchase
+                        </button>
+                        
+                        <div id="statusMsg" class="mt-4 hidden p-4 rounded-lg text-center border text-sm"></div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-8 text-gray-600 text-sm border-t border-white/5">
+        &copy; 2026 Meta Injector Pro. All Rights Reserved.
+    </footer>
+
 <script>
     async function onPaymentSuccess(orderAmount, orderId, packageType, licenseKey) {
         console.log("Processing Referral...", { orderAmount, orderId, packageType, licenseKey });
@@ -185,7 +540,6 @@
             terms: document.getElementById('warnTerms')
         };
 
-        // 🛡️ [NEW] Auto 01 Format & Limit for Phone
         inputs.phone.addEventListener('input', function() { 
             this.value = this.value.replace(/[^0-9]/g, ''); 
             if (this.value.length === 1 && this.value !== '0') this.value = '';
@@ -194,10 +548,9 @@
             this.style.borderColor = '';
         });
 
-        // 🛡️ [NEW] Auto Capitalize Name
         inputs.name.addEventListener('input', function() { 
-            let val = this.value.replace(/[^a-zA-Z\s]/g, ''); // Remove special chars
-            this.value = val.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()); // Capitalize first letter of each word
+            let val = this.value.replace(/[^a-zA-Z\s]/g, '');
+            this.value = val.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
             warns.name.style.display = 'none';
             this.style.borderColor = '';
         });
@@ -223,8 +576,7 @@
             let isValid = true;
 
             if (!inputs.terms.checked) { warns.terms.style.display = 'block'; isValid = false; }
-            
-            // 🛡️ [NEW] Check for gibberish names (Must have vowels, length >= 3)
+
             const nameVal = inputs.name.value.trim();
             const hasVowel = /[aeiouAEIOU]/.test(nameVal);
             const tooManyConsonants = /[bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]{4,}/.test(nameVal);
@@ -233,13 +585,11 @@
                 warns.name.style.display = 'block'; isValid = false; 
             }
 
-            // 🛡️ [NEW] Exact 11 digits & Starts with 01
             if (!/^01\d{9}$/.test(inputs.phone.value)) { 
                 warns.phone.innerText = "Must be exactly 11 digits and start with 01.";
                 warns.phone.style.display = 'block'; isValid = false; 
             }
-            
-            // 🛡️ [NEW] Email Dot Trick & Alias block
+
             const emailVal = inputs.email.value.trim().toLowerCase();
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
             if (!emailRegex.test(emailVal)) { 
@@ -463,3 +813,4 @@
         }
     });
 </script>
+
