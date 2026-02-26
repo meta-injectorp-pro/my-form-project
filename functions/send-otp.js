@@ -94,7 +94,7 @@ exports.handler = async (event) => {
         // ৪. ইউজারের ইমেইলে প্রফেশনাল ডার্ক-থিম OTP পাঠানো
         const mailOptions = {
             // 👇 এখানেও from address এ Brevo এর মেইল বসানো হয়েছে
-            from: `"Meta Injector ᴾʳᵒ" <${process.env.BREVO_LOGIN}>`,
+            from: `"Meta Injector ᴾʳᵒ" <noreply@metainjector.pro>`,
             to: email,
             subject: '🔒 Your Free Trial Verification Code',
             html: `
