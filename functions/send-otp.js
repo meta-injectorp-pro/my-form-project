@@ -15,9 +15,14 @@ try {
 
 const db = admin.firestore();
 
+// 👇 এখানে Brevo এর SMTP ডিটেইলস বসানো হয়েছে
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user: process.env.SMTP_EMAIL, pass: process.env.SMTP_PASSWORD }
+    host: 'smtp-relay.brevo.com',
+    port: 587,
+    auth: { 
+        user: process.env.BREVO_LOGIN, 
+        pass: process.env.BREVO_PASSWORD 
+    }
 });
 
 // 🛡️ SECURITY FUNCTION FOR EMAIL VALIDATION
@@ -70,7 +75,7 @@ exports.handler = async (event) => {
     }
 
     try {
-        // ১. চেক করা যে এই ইমেইল দিয়ে আগে ট্রায়াল নেওয়া হয়েছে কি না!
+        // ১. চেক করা যে এই ইমেইল দিয়ে আগে ট্রায়াল নেওয়া হয়েছে কি না!
         const existingUser = await db.collection("licenseDatabase").where("Email", "==", email).get();
         if (!existingUser.empty) {
             return { statusCode: 400, body: JSON.stringify({ error: "Email already exists in database! Please upgrade your plan." }) };
@@ -79,7 +84,7 @@ exports.handler = async (event) => {
         // ২. ৬ ডিজিটের র‍্যান্ডম OTP তৈরি করা
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // ৩. ডাটাবেসে OTP সেভ করা (১০ মিনিট পর এক্সপায়ার হবে)
+        // ৩. ডাটাবেসে OTP সেভ করা (১০ মিনিট পর এক্সপায়ার হবে)
         await db.collection("OTP_Verifications").doc(email).set({
             otp: otp,
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -88,7 +93,8 @@ exports.handler = async (event) => {
 
         // ৪. ইউজারের ইমেইলে প্রফেশনাল ডার্ক-থিম OTP পাঠানো
         const mailOptions = {
-            from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
+            // 👇 এখানেও from address এ Brevo এর মেইল বসানো হয়েছে
+            from: `"Meta Injector ᴾʳᵒ" <${process.env.BREVO_LOGIN}>`,
             to: email,
             subject: '🔒 Your Free Trial Verification Code',
             html: `
@@ -142,6 +148,7 @@ exports.handler = async (event) => {
         return { statusCode: 200, body: JSON.stringify({ message: "OTP sent successfully" }) };
 
     } catch (error) {
+        console.error("Email send error:", error);
         return { statusCode: 500, body: JSON.stringify({ error: "Server Error. Try again later." }) };
     }
 };
