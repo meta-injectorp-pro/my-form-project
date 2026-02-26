@@ -98,10 +98,20 @@
             <h3 class="text-2xl font-bold text-white mb-2">Verify Email</h3>
             <p class="text-gray-400 text-sm mb-6">We've sent a 6-digit code to <br><span id="otp-email-display" class="text-[#A073EE] font-bold"></span></p>
             
-            <input type="text" id="otpInput" maxlength="6" class="custom-input text-center text-2xl tracking-[0.5em] font-mono mb-2" placeholder="------">
+            <div class="flex justify-center gap-2 mb-2 otp-group" dir="ltr">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+                <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
+            </div>
+            
             <div class="warning-message" id="warnOtp">Invalid OTP. Please try again.</div>
             
-            <button type="button" id="verifyOtpBtn" class="w-full py-3.5 mt-6 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 btn-glow transition-all">
+            <p class="text-sm text-gray-400 mt-4">Code expires in: <span id="otp-timer" class="text-[#A073EE] font-mono font-bold">10:00</span></p>
+
+            <button type="button" id="verifyOtpBtn" class="w-full py-3.5 mt-6 rounded-xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:opacity-90 btn-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                 Verify & Start Trial
             </button>
             <button type="button" id="cancelOtpBtn" class="text-gray-500 text-sm mt-4 hover:text-white transition-colors">Cancel</button>
@@ -765,3 +775,4 @@
     </script>
 </body>
 </html>
+
