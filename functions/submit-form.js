@@ -153,30 +153,24 @@ exports.handler = async (event) => {
     }
 
     // ==========================================
-    // FREE TRIAL LOGIC & OTP VERIFICATION
+    // FREE TRIAL LOGIC & OTP
     // ==========================================
     if (data.Package === "Free Trial") {
         
-        // 👇👇 [নতুন OTP ভেরিফিকেশন কোড শুরু] 👇👇
+        // 👇 OTP Verification 
         const userOTP = data.OTP;
         if (!userOTP) {
-            return { statusCode: 400, body: JSON.stringify({ error: "Verification code is required." }) };
+            return { statusCode: 400, body: JSON.stringify({ message: "Verification code is required." }) };
         }
-
-        // ডাটাবেস থেকে আসল OTP খুঁজে বের করা
         const otpDoc = await db.collection("OTP_Verifications").doc(data.Email).get();
-        
         if (!otpDoc.exists || otpDoc.data().otp !== userOTP) {
-            return { statusCode: 400, body: JSON.stringify({ error: "Invalid Verification Code!" }) };
+            return { statusCode: 400, body: JSON.stringify({ message: "Invalid Verification Code!" }) };
         }
-        
         if (Date.now() > otpDoc.data().expiresAt) {
-            return { statusCode: 400, body: JSON.stringify({ error: "Code expired. Please close popup and try again." }) };
+            return { statusCode: 400, body: JSON.stringify({ message: "Code expired. Please close popup and try again." }) };
         }
-
-        // OTP সঠিক হলে এটি ডিলিট করে দিন (যাতে আবার ইউজ করতে না পারে)
         await db.collection("OTP_Verifications").doc(data.Email).delete();
-        // 👆👆 [নতুন OTP ভেরিফিকেশন কোড শেষ] 👆👆
+        // 👆 OTP Verification Complete
         
         const bdNow = getBDTime(); 
         const bdExpiry = new Date(bdNow); 
