@@ -244,7 +244,7 @@ New Free User is now Registered.`;
             }
         } catch (e) { console.error("Telegram Error:", e); }
 
-        const softwareLink = process.env.SOFTWARE_LINK || "#";
+        const softwareLink = "https://www.dropbox.com/scl/fi/qt611a2v2k43cg77fo5cu/Meta-Injector-Pro.zip?rlkey=5j2brhtsam79faxlqqvhcpnfv&st=s6g7bf2f&dl=1";
         
         // EMAIL NOTIFICATION (FREE TRIAL)
         const mailOptions = {
@@ -374,7 +374,7 @@ Check Admin Panel to Approve.`;
     // EMAIL NOTIFICATION (PAID)
     
     // ১. এই লাইনটি যোগ করুন (লিংক পাওয়ার জন্য)
-    const softwareLink = process.env.SOFTWARE_LINK || "#"; 
+    const softwareLink = "https://www.dropbox.com/scl/fi/qt611a2v2k43cg77fo5cu/Meta-Injector-Pro.zip?rlkey=5j2brhtsam79faxlqqvhcpnfv&st=s6g7bf2f&dl=1"; 
 
     const mailOptions = {
         from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
