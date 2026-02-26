@@ -585,212 +585,195 @@
 
 
                 let rawRef = localStorage.getItem('affiliate_ref');
-                let actualRefCode = 'None';
-
-                if (rawRef) {
-                    try {
-
-                        const parsedData = JSON.parse(rawRef);
-                        
-                        if (parsedData !== null && typeof parsedData === 'object' && parsedData.value) {
-                            actualRefCode = parsedData.value;
-                        } else if (typeof parsedData === 'string') {
-                            actualRefCode = parsedData;
-                        } else {
-                            actualRefCode = rawRef;
-                        }
-                    } catch(e) {
-
+            let actualRefCode = 'None';
+            if (rawRef) {
+                try {
+                    const parsedData = JSON.parse(rawRef);
+                    if (parsedData !== null && typeof parsedData === 'object' && parsedData.value) {
+                        actualRefCode = parsedData.value;
+                    } else if (typeof parsedData === 'string') {
+                        actualRefCode = parsedData;
+                    } else {
                         actualRefCode = rawRef;
                     }
-                }
-                if (!actualRefCode || actualRefCode === 'null' || actualRefCode === 'undefined') {
-                    actualRefCode = 'None';
-                }
-                console.log("Raw Storage Data:", rawRef);
-                console.log("Sending to Database:", actualRefCode);
-                
-                formData.append('ReferredBy', actualRefCode);
+                } catch(e) { actualRefCode = rawRef; }
+            }
+            if (!actualRefCode || actualRefCode === 'null' || actualRefCode === 'undefined') {
+                actualRefCode = 'None';
+            }
+            pendingFormData.append('ReferredBy', actualRefCode);
 
-                
-                const btn = document.getElementById('submitBtn');
-                const statusMsg = document.getElementById('statusMsg');
-
-                if (isFreeTrial) {
-
-                    btn.disabled = true;
-                    btn.innerHTML = `Sending Verification Code...`;
-                    statusMsg.style.display = 'none';
-
-                    try {
-                        const res = await fetch('/.netlify/functions/send-otp', {
-                            method: 'POST',
-                            body: JSON.stringify({ email: inputs.email.value, name: inputs.name.value })
-                        });
-                        
-                        if(res.ok) {
-
-                            document.getElementById('otp-modal').classList.remove('hidden');
-                            document.getElementById('otp-email-display').innerText = inputs.email.value;
-                            btn.innerHTML = `Start Your Free Trial`;
-                            btn.disabled = false;
-                        } else {
-                            const errorData = await res.json();
-                            throw new Error(errorData.error || 'Failed to send OTP.');
-                        }
-                    } catch(error) {
-                        statusMsg.style.display = 'block';
-                        statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
-                        statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
-                        btn.disabled = false;
-                        btn.innerText = "Start Your Free Trial";
-                    }
-                } else {
-
-                    submitFinalData(formData);
-                }
-            });
-
-            document.getElementById('cancelOtpBtn').addEventListener('click', () => {
-                document.getElementById('otp-modal').classList.add('hidden');
-            });
-
-            document.getElementById('verifyOtpBtn').addEventListener('click', () => {
-                const otpVal = document.getElementById('otpInput').value.trim();
-                if(otpVal.length !== 6) {
-                    document.getElementById('warnOtp').style.display = 'block';
-                    return;
-                }
-                
-                document.getElementById('warnOtp').style.display = 'none';
-                const verifyBtn = document.getElementById('verifyOtpBtn');
-                verifyBtn.innerText = "Verifying...";
-                verifyBtn.disabled = true;
-
-                const submitData = new FormData();
-                submitData.append('FullName', inputs.name.value);
-                submitData.append('Email', inputs.email.value);
-                submitData.append('Phone', inputs.phone.value);
-                submitData.append('Package', pkgName);
-                submitData.append('Duration', durationDays);
-                submitData.append('Price', pkgPrice);
-                submitData.append('PaymentMethod', "Free Trial");
-                submitData.append('SenderInfo', "N/A");
-                submitData.append('AmountSent', 0); 
-
-                let actualRefCode = 'None';
-                try {
-                    let rawRef = localStorage.getItem('affiliate_ref');
-                    if (rawRef) actualRefCode = JSON.parse(rawRef).value || rawRef;
-                } catch(e) {}
-                submitData.append('ReferredBy', actualRefCode);
-
-                submitData.append('OTP', otpVal); 
-
-                submitFinalData(submitData, true); 
-            });
-
-
-            async function submitFinalData(submitData, isFromModal = false) {
-                const btn = isFromModal ? document.getElementById('verifyOtpBtn') : document.getElementById('submitBtn');
-                if(!isFromModal) { btn.disabled = true; btn.innerHTML = `Processing...`; }
+            // ==========================================
+            // 🛑 OTP বা সাবমিট লজিক
+            // ==========================================
+            if (isFreeTrial) {
+                elements.submitBtn.disabled = true;
+                elements.submitBtn.innerHTML = `Sending Verification Code...`;
+                elements.statusMsg.style.display = 'none';
 
                 try {
-                    const response = await fetch('/.netlify/functions/submit-form', { method: 'POST', body: submitData });
-                    const data = await response.json();
-
-                    if(response.ok) {
-                        const orderId = submitData.get('SenderInfo') || 'ORD-' + Date.now();
-                        const licenseKey = data.licenseKey;
-
-                        await onPaymentSuccess(pkgPrice, orderId, pkgName, licenseKey); 
-
-                        document.getElementById('otp-modal').classList.add('hidden');
-                        elements.checkoutGrid.style.display = 'none';
-                        elements.successView.classList.remove('hidden');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    const res = await fetch('/.netlify/functions/send-otp', {
+                        method: 'POST',
+                        body: JSON.stringify({ email: inputs.email.value, name: inputs.name.value })
+                    });
+                    
+                    if(res.ok) {
+                        document.getElementById('otp-modal').classList.remove('hidden');
+                        document.getElementById('otp-email-display').innerText = inputs.email.value;
+                        elements.submitBtn.innerHTML = `Start Your Free Trial`;
+                        elements.submitBtn.disabled = false;
                     } else {
-                        
-                        if (data.errorType === 'ACTIVE_PLAN') {
-                            elements.statusMsg.style.display = 'block';
-                            elements.statusMsg.className = "mt-6 p-1 rounded-2xl bg-gradient-to-r from-[#A073EE] via-purple-500 to-[#fd297b] p-[1px] relative overflow-hidden";
-                            elements.statusMsg.innerHTML = `
-                                <div class="bg-[#1A1625] rounded-2xl p-8 text-center h-full relative overflow-hidden">
-                                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-purple-500/20 blur-[50px] rounded-full pointer-events-none"></div>
-                                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center animate-pulse">
-                                        <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-white mb-2">You already have an active paid subscription!</h3>
-                                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">
-                                        Instead of buying a new package, please <span class="text-[#A073EE] font-bold">Top Up Credits</span> to continue using the service.
-                                    </p>
-                                    <a href="/topup" class="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#A073EE] to-[#fd297b] text-white font-bold shadow-[0_0_20px_rgba(160,115,238,0.4)] hover:shadow-[0_0_35px_rgba(160,115,238,0.6)] hover:scale-[1.02] transition-all duration-300">
-                                        <span>Top Up Credits Now</span>
-                                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-                            `;
-                            elements.submitBtn.style.display = 'none';
-                            elements.statusMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            return; 
-                        }
-
-                        if (data.errorType === 'TRIAL_USED' || (data.message && data.message.includes('Free Trial'))) {
-                            elements.statusMsg.style.display = 'block';
-                            elements.statusMsg.className = "mt-6 p-1 rounded-2xl bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 p-[1px] relative overflow-hidden";
-                            elements.statusMsg.innerHTML = `
-                                <div class="bg-[#1A1625] rounded-2xl p-8 text-center h-full relative overflow-hidden">
-                                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-red-500/20 blur-[50px] rounded-full pointer-events-none"></div>
-                                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center animate-pulse">
-                                        <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-white mb-2">Free Trial Already Used!</h3>
-                                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">
-                                        You have already claimed a Free Trial. To continue using Meta Injector Pro, please upgrade to a <span class="text-orange-400 font-bold">Premium Package</span>.
-                                    </p>
-                                    <a href="/index#pricing" class="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_35px_rgba(239,68,68,0.6)] hover:scale-[1.02] transition-all duration-300">
-                                        <span>Upgrade to Premium</span>
-                                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-                            `;
-                            elements.submitBtn.style.display = 'none';
-                            elements.statusMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            return; 
-                        }
-
-                        throw new Error(data.message || data.error || 'Submission failed');
+                        const errorData = await res.json();
+                        throw new Error(errorData.error || 'Failed to send OTP.');
                     }
-                } catch (error) {
-                    console.error(error);
-                    if(isFromModal) {
-                        document.getElementById('warnOtp').innerText = error.message;
-                        document.getElementById('warnOtp').style.display = 'block';
-                        btn.disabled = false;
-                        btn.innerText = "Verify & Start Trial";
-                    } else {
-                        elements.statusMsg.style.display = 'block';
-                        elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
-                        elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
-                        btn.disabled = false;
-                        btn.innerText = isFreeTrial ? "Start Your Free Trial" : "Confirm Purchase";
-                    }
+                } catch(error) {
+                    elements.statusMsg.style.display = 'block';
+                    elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
+                    elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                    elements.submitBtn.disabled = false;
+                    elements.submitBtn.innerText = "Start Your Free Trial";
                 }
+            } else {
+                submitFinalData(pendingFormData, false);
             }
         });
+
+        // ==========================================
+        // ✅ OTP পপআপের "Verify" বাটনের লজিক
+        // ==========================================
+        document.getElementById('cancelOtpBtn').addEventListener('click', () => {
+            document.getElementById('otp-modal').classList.add('hidden');
+        });
+
+        document.getElementById('verifyOtpBtn').addEventListener('click', () => {
+            const otpVal = document.getElementById('otpInput').value.trim();
+            if(otpVal.length !== 6) {
+                document.getElementById('warnOtp').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('warnOtp').style.display = 'none';
+            const verifyBtn = document.getElementById('verifyOtpBtn');
+            verifyBtn.innerText = "Verifying...";
+            verifyBtn.disabled = true;
+
+            pendingFormData.delete('OTP'); 
+            pendingFormData.append('OTP', otpVal); 
+
+            submitFinalData(pendingFormData, true); 
+        });
+
+        // ==========================================
+        // 🚀 সার্ভারে আসল ডাটা সেভ করার ফাংশন
+        // ==========================================
+        async function submitFinalData(formData, isFromModal) {
+            const btn = isFromModal ? document.getElementById('verifyOtpBtn') : elements.submitBtn;
+            if(!isFromModal) {
+                btn.disabled = true;
+                btn.innerHTML = `Processing...`;
+                elements.statusMsg.style.display = 'none';
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/submit-form', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if(response.ok) {
+                    const orderId = formData.get('SenderInfo') || 'ORD-' + Date.now();
+                    const licenseKey = data.licenseKey;
+
+                    await onPaymentSuccess(pkgPrice, orderId, pkgName, licenseKey); 
+
+                    document.getElementById('otp-modal').classList.add('hidden');
+                    elements.checkoutGrid.style.display = 'none';
+                    elements.successView.classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    if (data.errorType === 'ACTIVE_PLAN') {
+                        elements.statusMsg.style.display = 'block';
+                        elements.statusMsg.className = "mt-6 p-1 rounded-2xl bg-gradient-to-r from-[#A073EE] via-purple-500 to-[#fd297b] p-[1px] relative overflow-hidden";
+                        elements.statusMsg.innerHTML = `
+                            <div class="bg-[#1A1625] rounded-2xl p-8 text-center h-full relative overflow-hidden">
+                                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-purple-500/20 blur-[50px] rounded-full pointer-events-none"></div>
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center animate-pulse">
+                                    <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">You already have an active paid subscription!</h3>
+                                <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                    Instead of buying a new package, please <span class="text-[#A073EE] font-bold">Top Up Credits</span> to continue using the service.
+                                </p>
+                                <a href="/topup" class="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#A073EE] to-[#fd297b] text-white font-bold shadow-[0_0_20px_rgba(160,115,238,0.4)] hover:shadow-[0_0_35px_rgba(160,115,238,0.6)] hover:scale-[1.02] transition-all duration-300">
+                                    <span>Top Up Credits Now</span>
+                                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        `;
+                        elements.submitBtn.style.display = 'none';
+                        document.getElementById('otp-modal').classList.add('hidden');
+                        elements.statusMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return; 
+                    }
+
+                    if (data.errorType === 'TRIAL_USED' || (data.message && data.message.includes('Free Trial'))) {
+                        elements.statusMsg.style.display = 'block';
+                        elements.statusMsg.className = "mt-6 p-1 rounded-2xl bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 p-[1px] relative overflow-hidden";
+                        elements.statusMsg.innerHTML = `
+                            <div class="bg-[#1A1625] rounded-2xl p-8 text-center h-full relative overflow-hidden">
+                                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-20 bg-red-500/20 blur-[50px] rounded-full pointer-events-none"></div>
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center animate-pulse">
+                                    <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Free Trial Already Used!</h3>
+                                <p class="text-gray-300 text-sm mb-6 leading-relaxed">
+                                    You have already claimed a Free Trial. To continue using Meta Injector Pro, please upgrade to a <span class="text-orange-400 font-bold">Premium Package</span>.
+                                </p>
+                                <a href="/index#pricing" class="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold shadow-[0_0_20px_rgba(239,68,68,0.4)] hover:shadow-[0_0_35px_rgba(239,68,68,0.6)] hover:scale-[1.02] transition-all duration-300">
+                                    <span>Upgrade to Premium</span>
+                                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        `;
+                        elements.submitBtn.style.display = 'none';
+                        document.getElementById('otp-modal').classList.add('hidden');
+                        elements.statusMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        return; 
+                    }
+
+                    throw new Error(data.message || 'Submission failed');
+                }
+            } catch (error) {
+                console.error(error);
+                if(isFromModal) {
+                    document.getElementById('warnOtp').innerText = error.message;
+                    document.getElementById('warnOtp').style.display = 'block';
+                    btn.disabled = false;
+                    btn.innerText = "Verify & Start Trial";
+                } else {
+                    elements.statusMsg.style.display = 'block';
+                    elements.statusMsg.className = "mt-4 p-4 rounded-lg text-center border bg-red-900/50 border-red-500 text-red-200";
+                    elements.statusMsg.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                    btn.disabled = false;
+                    btn.innerText = isFreeTrial ? "Start Your Free Trial" : "Confirm Purchase";
+                }
+            }
+        }
     });
-</script>
+    </script>
 </body>
 
 </html>
+
 
 
 
