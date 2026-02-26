@@ -142,6 +142,7 @@ exports.handler = async (event) => {
             </body>
             </html>`
         };
+      
 
         await transporter.sendMail(mailOptions);
 
