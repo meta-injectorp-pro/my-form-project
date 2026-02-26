@@ -396,195 +396,188 @@
         }
     }
 
-    
-        document.addEventListener('DOMContentLoaded', () => {
-            const packageDetails = {
-                "Free Trial":   { label: "3 Days",   days: "3", credits: "50",    regular: 0 },
-                "Starter":      { label: "1 Month",  days: "30", credits: "2,000",  regular: 200 }, 
-                "Beginner":     { label: "1 Month",  days: "30", credits: "3,500",  regular: 350 },
-                "Professional": { label: "2 Months", days: "60", credits: "6,000",  regular: 600 },
-                "Ultimate":     { label: "3 Months", days: "90", credits: "10,000", regular: 950 },
-                "Corporate":    { label: "6 Months", days: "180", credits: "20,000", regular: 1350 },
-                "Enterprise":   { label: "1 Year",   days: "365", credits: "35,000", regular: 2000 }
-            };
+    // 💡 গ্লোবাল ভেরিয়েবল ডিক্লেয়ার করা হলো
+    let pendingFormData = null;
 
-            const paymentNumbers = {
-                "bKash": "01729816172", 
-                "Nagad": "01729816172",
-                "Rocket": "01729816172"
-            };
+    document.addEventListener('DOMContentLoaded', () => {
+        const packageDetails = {
+            "Free Trial":   { label: "3 Days",   days: "3", credits: "50",    regular: 0 },
+            "Starter":      { label: "1 Month",  days: "30", credits: "2,000",  regular: 200 }, 
+            "Beginner":     { label: "1 Month",  days: "30", credits: "3,500",  regular: 350 },
+            "Professional": { label: "2 Months", days: "60", credits: "6,000",  regular: 600 },
+            "Ultimate":     { label: "3 Months", days: "90", credits: "10,000", regular: 950 },
+            "Corporate":    { label: "6 Months", days: "180", credits: "20,000", regular: 1350 },
+            "Enterprise":   { label: "1 Year",   days: "365", credits: "35,000", regular: 2000 }
+        };
 
-            const params = new URLSearchParams(window.location.search);
-            const pkgName = params.get('package') || 'Starter';
-            let pkgPrice = params.get('price') ? parseInt(params.get('price')) : 0;
-            
-            if(pkgName === "Free Trial") pkgPrice = 0;
+        const paymentNumbers = {
+            "bKash": "01729816172", 
+            "Nagad": "01729816172",
+            "Rocket": "01729816172"
+        };
 
-            const elements = {
-                pkgName: document.getElementById('pkgName'),
-                pkgCredits: document.getElementById('pkgCredits'),
-                pkgDuration: document.getElementById('pkgDurationDisplay'),
-                totalPrice: document.getElementById('totalPrice'),
-                priceRow: document.getElementById('priceRow'),
+        const params = new URLSearchParams(window.location.search);
+        const pkgName = params.get('package') || 'Starter';
+        let pkgPrice = params.get('price') ? parseInt(params.get('price')) : 0;
+        
+        if(pkgName === "Free Trial") pkgPrice = 0;
 
-                regularPriceRow: document.getElementById('regularPriceRow'),
-                regularPriceVal: document.getElementById('regularPriceVal'),
-                discountRow: document.getElementById('discountRow'),
-                discountVal: document.getElementById('discountVal'),
-                discountBadge: document.getElementById('discountBadge'),
+        const elements = {
+            pkgName: document.getElementById('pkgName'),
+            pkgCredits: document.getElementById('pkgCredits'),
+            pkgDuration: document.getElementById('pkgDurationDisplay'),
+            totalPrice: document.getElementById('totalPrice'),
+            priceRow: document.getElementById('priceRow'),
 
-                paymentSection: document.getElementById('paymentSection'),
-                payInstruction: document.getElementById('paymentInstruction'),
-                payNumber: document.getElementById('payNumber'),
-                trxGroup: document.getElementById('trxGroup'),
-                submitBtn: document.getElementById('submitBtn'),
-                checkoutGrid: document.getElementById('checkout-grid'),
-                successView: document.getElementById('success-view'),
-                statusMsg: document.getElementById('statusMsg'),
-                copyBtn: document.getElementById('copyBtn'),
-                copyTooltip: document.getElementById('copyTooltip')
-            };
+            regularPriceRow: document.getElementById('regularPriceRow'),
+            regularPriceVal: document.getElementById('regularPriceVal'),
+            discountRow: document.getElementById('discountRow'),
+            discountVal: document.getElementById('discountVal'),
+            discountBadge: document.getElementById('discountBadge'),
 
-            elements.pkgName.innerText = pkgName;
-            elements.totalPrice.innerText = '৳' + pkgPrice;
+            paymentSection: document.getElementById('paymentSection'),
+            payInstruction: document.getElementById('paymentInstruction'),
+            payNumber: document.getElementById('payNumber'),
+            trxGroup: document.getElementById('trxGroup'),
+            submitBtn: document.getElementById('submitBtn'),
+            checkoutGrid: document.getElementById('checkout-grid'),
+            successView: document.getElementById('success-view'),
+            statusMsg: document.getElementById('statusMsg'),
+            copyBtn: document.getElementById('copyBtn'),
+            copyTooltip: document.getElementById('copyTooltip')
+        };
 
-            let durationDays = "30";
-            let regularPrice = 0;
+        elements.pkgName.innerText = pkgName;
+        elements.totalPrice.innerText = '৳' + pkgPrice;
 
-            if (packageDetails[pkgName]) {
-                elements.pkgDuration.innerText = packageDetails[pkgName].label;
-                elements.pkgCredits.innerText = packageDetails[pkgName].credits;
-                durationDays = packageDetails[pkgName].days;
-                regularPrice = packageDetails[pkgName].regular;
-            } else {
-                elements.pkgDuration.innerText = "1 Month";
-                elements.pkgCredits.innerText = params.get('credits') || "--";
+        let durationDays = "30";
+        let regularPrice = 0;
+
+        if (packageDetails[pkgName]) {
+            elements.pkgDuration.innerText = packageDetails[pkgName].label;
+            elements.pkgCredits.innerText = packageDetails[pkgName].credits;
+            durationDays = packageDetails[pkgName].days;
+            regularPrice = packageDetails[pkgName].regular;
+        } else {
+            elements.pkgDuration.innerText = "1 Month";
+            elements.pkgCredits.innerText = params.get('credits') || "--";
+        }
+
+        const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
+
+        if (isFreeTrial) {
+            elements.paymentSection.style.display = 'none';
+            elements.priceRow.style.display = 'none';
+            elements.submitBtn.innerText = "Start Your Free Trial";
+        } else {
+            const discountAmount = regularPrice - pkgPrice;
+            if (regularPrice > pkgPrice) {
+                elements.regularPriceVal.innerText = regularPrice;
+                elements.discountVal.innerText = discountAmount;
+                elements.regularPriceRow.classList.remove('hidden');
+                elements.discountRow.classList.remove('hidden');
+                elements.discountBadge.classList.remove('hidden');
             }
+            elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
+        }
 
-            const isFreeTrial = (pkgName === "Free Trial" || pkgPrice === 0);
-
-            if (isFreeTrial) {
-                elements.paymentSection.style.display = 'none';
-                elements.priceRow.style.display = 'none';
-                elements.submitBtn.innerText = "Start Your Free Trial";
-            } else {
-
-                const discountAmount = regularPrice - pkgPrice;
-
-                if (regularPrice > pkgPrice) {
-                    elements.regularPriceVal.innerText = regularPrice;
-                    elements.discountVal.innerText = discountAmount;
-
-                    elements.regularPriceRow.classList.remove('hidden');
-                    elements.discountRow.classList.remove('hidden');
-                    elements.discountBadge.classList.remove('hidden');
+        document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const method = e.target.value;
+                if(paymentNumbers[method]) {
+                    elements.payNumber.innerText = paymentNumbers[method];
+                    elements.payInstruction.classList.remove('hidden');
+                    elements.trxGroup.classList.remove('hidden');
                 }
-
-                elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
-            }
-
-            document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    const method = e.target.value;
-                    if(paymentNumbers[method]) {
-                        elements.payNumber.innerText = paymentNumbers[method];
-                        elements.payInstruction.classList.remove('hidden');
-                        elements.trxGroup.classList.remove('hidden');
-                    }
-                });
             });
+        });
 
-            elements.copyBtn.addEventListener('click', () => {
-                const number = elements.payNumber.innerText;
-                navigator.clipboard.writeText(number).then(() => {
-                    elements.copyTooltip.style.opacity = '1';
-                    setTimeout(() => { elements.copyTooltip.style.opacity = '0'; }, 1500);
-                });
+        elements.copyBtn.addEventListener('click', () => {
+            const number = elements.payNumber.innerText;
+            navigator.clipboard.writeText(number).then(() => {
+                elements.copyTooltip.style.opacity = '1';
+                setTimeout(() => { elements.copyTooltip.style.opacity = '0'; }, 1500);
             });
+        });
 
-            const form = document.getElementById('checkoutForm');
-            const inputs = {
-                name: document.getElementById('fullName'),
-                phone: document.getElementById('phone'),
-                email: document.getElementById('email'),
-                trx: document.getElementById('senderInfo'),
-                terms: document.getElementById('termsCheck')
-            };
-            const warns = {
-                name: document.getElementById('warnName'),
-                phone: document.getElementById('warnPhone'),
-                email: document.getElementById('warnEmail'),
-                trx: document.getElementById('warnTrx'),
-                terms: document.getElementById('warnTerms')
-            };
+        const form = document.getElementById('checkoutForm');
+        const inputs = {
+            name: document.getElementById('fullName'),
+            phone: document.getElementById('phone'),
+            email: document.getElementById('email'),
+            trx: document.getElementById('senderInfo'),
+            terms: document.getElementById('termsCheck')
+        };
+        const warns = {
+            name: document.getElementById('warnName'),
+            phone: document.getElementById('warnPhone'),
+            email: document.getElementById('warnEmail'),
+            trx: document.getElementById('warnTrx'),
+            terms: document.getElementById('warnTerms')
+        };
 
-            inputs.phone.addEventListener('input', function() { 
-                this.value = this.value.replace(/[^0-9]/g, ''); 
-                warns.phone.style.display = 'none';
+        inputs.phone.addEventListener('input', function() { 
+            this.value = this.value.replace(/[^0-9]/g, ''); 
+            warns.phone.style.display = 'none';
+            this.style.borderColor = '';
+        });
+        inputs.name.addEventListener('input', function() { 
+            this.value = this.value.replace(/[0-9]/g, ''); 
+            warns.name.style.display = 'none';
+            this.style.borderColor = '';
+        });
+        inputs.email.addEventListener('input', () => {
+            warns.email.style.display = 'none';
+            inputs.email.style.borderColor = '';
+        });
+        inputs.terms.addEventListener('change', () => {
+            if(inputs.terms.checked) warns.terms.style.display = 'none';
+        });
+
+        if (inputs.trx) {
+            inputs.trx.addEventListener('input', function() {
+                this.value = this.value.toUpperCase().replace(/\s/g, '');
+                warns.trx.style.display = 'none';
                 this.style.borderColor = '';
             });
-            inputs.name.addEventListener('input', function() { 
-                this.value = this.value.replace(/[0-9]/g, ''); 
-                warns.name.style.display = 'none';
-                this.style.borderColor = '';
-            });
-            inputs.email.addEventListener('input', () => {
-                warns.email.style.display = 'none';
-                inputs.email.style.borderColor = '';
-            });
-            inputs.terms.addEventListener('change', () => {
-                if(inputs.terms.checked) warns.terms.style.display = 'none';
-            });
+        }
 
-            if (inputs.trx) {
-                inputs.trx.addEventListener('input', function() {
-                    this.value = this.value.toUpperCase().replace(/\s/g, '');
-                    
-                    warns.trx.style.display = 'none';
-                    this.style.borderColor = '';
-                });
-            }
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let isValid = true;
+
+            if (!inputs.terms.checked) { warns.terms.style.display = 'block'; isValid = false; }
+            if (inputs.name.value.trim().length < 3) { warns.name.style.display = 'block'; isValid = false; }
+            if (inputs.phone.value.length < 11) { warns.phone.style.display = 'block'; isValid = false; }
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(inputs.email.value)) { warns.email.style.display = 'block'; isValid = false; }
+
+            let selectedMethodVal = "Free Trial";
+            let trxVal = "N/A";
             
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                let isValid = true;
+            if (!isFreeTrial) {
+                const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
+                if(!selectedMethod) { alert("Please select a payment method."); return; }
+                selectedMethodVal = selectedMethod.value;
+                trxVal = inputs.trx.value.trim();
+                if (trxVal.length < 4) { warns.trx.style.display = 'block'; isValid = false; }
+            }
 
-                if (!inputs.terms.checked) { warns.terms.style.display = 'block'; isValid = false; }
-                if (inputs.name.value.trim().length < 3) { warns.name.style.display = 'block'; isValid = false; }
-                if (inputs.phone.value.length < 11) { warns.phone.style.display = 'block'; isValid = false; }
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(inputs.email.value)) { warns.email.style.display = 'block'; isValid = false; }
+            if(!isValid) return;
 
-                let selectedMethodVal = "Free Trial";
-                let trxVal = "N/A";
-                
-                if (!isFreeTrial) {
-                    const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
-                    if(!selectedMethod) { alert("Please select a payment method."); return; }
-                    selectedMethodVal = selectedMethod.value;
-                    trxVal = inputs.trx.value.trim();
-                    if (trxVal.length < 4) { warns.trx.style.display = 'block'; isValid = false; }
-                }
+            // ফর্মের ডাটা রেডি করা
+            pendingFormData = new FormData();
+            pendingFormData.append('FullName', inputs.name.value);
+            pendingFormData.append('Email', inputs.email.value);
+            pendingFormData.append('Phone', inputs.phone.value);
+            pendingFormData.append('Package', pkgName);
+            pendingFormData.append('Duration', durationDays);
+            pendingFormData.append('Price', pkgPrice);
+            pendingFormData.append('PaymentMethod', selectedMethodVal);
+            pendingFormData.append('SenderInfo', trxVal);
+            pendingFormData.append('AmountSent', pkgPrice); 
 
-                if(!isValid) return;
-
-                elements.submitBtn.disabled = true;
-                elements.submitBtn.innerHTML = `Processing...`;
-                elements.statusMsg.style.display = 'none';
-
-                const formData = new FormData();
-                formData.append('FullName', inputs.name.value);
-                formData.append('Email', inputs.email.value);
-                formData.append('Phone', inputs.phone.value);
-                formData.append('Package', pkgName);
-                formData.append('Duration', durationDays);
-                formData.append('Price', pkgPrice);
-                formData.append('PaymentMethod', selectedMethodVal);
-                formData.append('SenderInfo', trxVal);
-                formData.append('AmountSent', pkgPrice); 
-
-
-                let rawRef = localStorage.getItem('affiliate_ref');
+            let rawRef = localStorage.getItem('affiliate_ref');
             let actualRefCode = 'None';
             if (rawRef) {
                 try {
@@ -771,9 +764,4 @@
     });
     </script>
 </body>
-
 </html>
-
-
-
-
