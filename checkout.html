@@ -96,7 +96,16 @@
     <div id="otp-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 hidden backdrop-blur-sm px-4">
         <div class="glass-panel p-8 rounded-2xl max-w-sm w-full text-center border border-[#A073EE]/50 shadow-[0_0_40px_rgba(160,115,238,0.2)] relative">
             <h3 class="text-2xl font-bold text-white mb-2">Verify Email</h3>
-            <p class="text-gray-400 text-sm mb-6">We've sent a 6-digit code to <br><span id="otp-email-display" class="text-[#A073EE] font-bold"></span></p>
+            <p class="text-gray-400 text-sm mb-4">We've sent a 6-digit code to <br><span id="otp-email-display" class="text-[#A073EE] font-bold"></span></p>
+            
+            <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 mb-6 flex items-start gap-2.5 text-left">
+                <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p class="text-xs text-yellow-200/80 leading-relaxed">
+                    If not found in Primary inbox, please check your <b class="text-yellow-400">Updates</b> or <b class="text-yellow-400">Spam</b> folder.
+                </p>
+            </div>
             
             <div class="flex justify-center gap-2 mb-2 otp-group" dir="ltr">
                 <input type="text" maxlength="1" class="otp-input w-11 h-14 text-center text-2xl font-bold bg-white/5 border border-white/10 rounded-lg text-white focus:border-[#A073EE] focus:outline-none focus:ring-2 focus:ring-[#A073EE]/30 transition-all">
@@ -813,4 +822,5 @@
         }
     });
 </script>
+
 
