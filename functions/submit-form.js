@@ -299,6 +299,23 @@ New Free User is now Registered.`;
     // PAID PURCHASE LOGIC
     // ==========================================
 
+	// 👇 [নতুন] Pending Check: ইউজারের আগে থেকে কোনো রিকোয়েস্ট পেন্ডিং আছে কি না চেক করা
+    const pendingPurchaseCheck = await db.collection('purchaseForm')
+        .where('Email', '==', data.Email)
+        .where('Status', '==', 'Pending')
+        .get();
+
+    if (!pendingPurchaseCheck.empty) {
+        return { 
+            statusCode: 400, 
+            body: JSON.stringify({ 
+                status: "error", 
+                message: "You already have a purchase request pending. Please wait for admin approval." 
+            }) 
+        };
+    }
+    // 👆 Pending Check শেষ
+	  
     const bdNow = getBDTime(); 
 
     const purchaseData = {
