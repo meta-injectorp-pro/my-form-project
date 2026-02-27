@@ -38,6 +38,8 @@ exports.handler = async (event) => {
             return { statusCode: 400, body: JSON.stringify({ message: "Missing required fields" }) };
         }
 
+        data.trxId = data.trxId.trim().toUpperCase();
+
         const pendingCheck = await db.collection('Credits_Purchase')
             .where('License Key', '==', data.licenseKey)
             .where('Status', '==', 'Pending')
@@ -105,4 +107,5 @@ Check Admin Panel to Approve.`;
         console.error("Handler Error:", error);
         return { statusCode: 500, body: JSON.stringify({ message: error.message }) };
     }
+
 };
