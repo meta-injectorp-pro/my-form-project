@@ -212,9 +212,10 @@ exports.handler = async (event) => {
             "License Key": licenseKeyToUpdate
         };
 
-		// 👇 [নতুন] অ্যাফিলিয়েট ডাটা সেভ করার কোড
-        if (data.ReferredBy && data.ReferredBy !== "None") {
-            licenseUpdateData["ReferredBy"] = data.ReferredBy;
+		// 👇 [ফিক্সড] অ্যাফিলিয়েট ডাটা সেভ করার কোড
+        let refCodeFree = data.ReferredBy ? data.ReferredBy.trim() : "None";
+        if (refCodeFree !== "None" && refCodeFree !== "null" && refCodeFree !== "undefined" && refCodeFree !== "") {
+            licenseUpdateData["ReferredBy"] = refCodeFree;
         }
 		
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
@@ -334,10 +335,11 @@ New Free User is now Registered.`;
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
-	// 👇 [নতুন] Purchase ফর্মে অ্যাফিলিয়েট সেভ করা
-    if (data.ReferredBy && data.ReferredBy !== "None") {
-        purchaseData["ReferredBy"] = data.ReferredBy;
-    }  
+	// 👇 [ফিক্সড] Purchase ফর্মে অ্যাফিলিয়েট সেভ করা
+    let refCodePaid = data.ReferredBy ? data.ReferredBy.trim() : "None";
+    if (refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
+        purchaseData["ReferredBy"] = refCodePaid;
+    } 
 
     await db.collection('purchaseForm').add(purchaseData);
     
@@ -352,9 +354,9 @@ New Free User is now Registered.`;
         "RequestDate": bdNow
     };
 
-	// 👇 [নতুন] License ডাটাবেসে অ্যাফিলিয়েট সেভ করা
-    if (data.ReferredBy && data.ReferredBy !== "None") {
-        licenseUpdateData["ReferredBy"] = data.ReferredBy;
+	// 👇 [ফিক্সড] License ডাটাবেসে অ্যাফিলিয়েট সেভ করা
+    if (refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
+        licenseUpdateData["ReferredBy"] = refCodePaid;
     }
 	  
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
