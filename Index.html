@@ -1807,7 +1807,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (refParam) {
             const item = {
                 value: refParam,
-                expiry: new Date().getTime() + (7 * 24 * 60 * 60 * 1000)
+                expiry: new Date().getTime() + (30 * 24 * 60 * 60 * 1000)
             };
             localStorage.setItem("affiliate_ref", JSON.stringify(item));
             console.log("✅ Referral Code Saved:", refParam);
