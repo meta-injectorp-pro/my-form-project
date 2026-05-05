@@ -209,7 +209,8 @@ exports.handler = async (event) => {
             "RequestDate": bdNow, 
             "Activation Date": formatCustomDate(bdNow),
             "Expiry Date": formatCustomDate(bdExpiry),
-            "License Key": licenseKeyToUpdate
+            "License Key": licenseKeyToUpdate,
+			"Joining Date": formatCustomDate(bdNow)
         };
 
 		// 👇 [ফিক্সড] অ্যাফিলিয়েট ডাটা সেভ করার কোড
@@ -353,6 +354,11 @@ New Free User is now Registered.`;
         "Status": "Pending", 
         "RequestDate": bdNow
     };
+
+	// 👇 [নতুন] শুধুমাত্র নতুন ইউজার হলে Joining Date অ্যাড হবে
+    if (isNewUser) {
+        licenseUpdateData["Joining Date"] = formatCustomDate(bdNow);
+    }  
 
 	// 👇 [ফিক্সড] License ডাটাবেসে অ্যাফিলিয়েট সেভ করা
     if (refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
