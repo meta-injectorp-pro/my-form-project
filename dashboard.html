@@ -43,7 +43,7 @@
     .payment-radio:checked + div { border-color: #fd297b; background: rgba(253, 41, 123, 0.1); }
 	
 	
-	/* 📄 A4 Paper Scaling & Wrapper */
+	/* 📄 A4 Paper Design with 1-inch Margin Logic */
     .a4-wrapper {
         width: 100%;
         overflow-x: auto;
@@ -55,18 +55,25 @@
     .a4-paper {
         width: 210mm;
         min-height: 297mm;
-        background: white;
+        background: white !important;
         position: relative;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         transform-origin: top center;
         color: black;
         flex-shrink: 0;
         overflow: hidden;
-        background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 10%);
+        /* Show background in print */
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 10%) !important;
     }
 
-    /* Typography & Design Elements */
-    .serif-text { font-family: 'Merriweather', serif; color: #1f2937; line-height: 1.6; }
+    /* Padding applied to simulate 1-inch margins for content */
+    .pad-content-area {
+        padding: 0 1in; /* Left & Right 1 inch margin */
+    }
+
+    .serif-text { font-family: 'Merriweather', serif; color: #1f2937; line-height: 1.5; }
     .clip-angled { clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%); }
     
     .watermark {
@@ -88,32 +95,19 @@
         z-index: 0;
     }
 
-    /* Signature Fade Animation */
     .sig-reveal { opacity: 0; transform: translateY(10px); transition: all 0.8s ease-out; }
     .sig-visible { opacity: 1; transform: translateY(0); }
 
-    /* 📱 Mobile Scaling */
-    @media (max-width: 900px) {
-        .a4-paper {
-            transform: scale(0.45);
-            margin-bottom: -160mm;
-        }
-    }
+    @media (max-width: 900px) { .a4-paper { transform: scale(0.45); margin-bottom: -160mm; } }
+    @media (max-width: 600px) { .a4-paper { transform: scale(0.35); margin-bottom: -190mm; } }
 
-    @media (max-width: 600px) {
-        .a4-paper {
-            transform: scale(0.35);
-            margin-bottom: -190mm;
-        }
-    }
-
-    /* 🖨️ Print / PDF Download Optimization */
+    /* 🖨️ Print Optimization */
     @media print {
         @page {
             size: A4;
-            margin: 0;
+            margin: 0; /* Browser will handle the 1-inch logic via our CSS padding */
         }
-        body * { visibility: hidden; background: white !important; }
+        body * { visibility: hidden; }
         .a4-wrapper, .a4-wrapper * { visibility: visible; }
         .a4-wrapper { 
             position: absolute; 
@@ -125,11 +119,10 @@
             margin: 0 !important;
             box-shadow: none !important;
             border: none !important;
-            width: 210mm !important;
-            height: 297mm !important;
-            page-break-after: avoid;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
         }
-        #signature-action-area, #already-signed-area, .lg-hidden, aside { display: none !important; }
+        #signature-action-area, #already-signed-area, #download-area, aside, .lg-hidden { display: none !important; }
     }
   </style>
 </head>
@@ -418,7 +411,7 @@
         </div>
 
 <!-- Agreement Tab -->
-	<div id="agreement-loading" class="text-center py-10 text-gray-500">
+    <div id="agreement-loading" class="text-center py-10 text-gray-500">
         <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-[#A073EE]"></i>
         <p>Loading agreement status...</p>
     </div>
@@ -429,9 +422,9 @@
         </div>
         <h3 class="text-xl font-bold text-white mb-2">No Agreement Available</h3>
         <p class="text-gray-400">There is currently no active partnership agreement to sign.</p>
-    </div>
+    </div>    
 		
-        <div x-show="currentTab === 'agreement'" style="display: none;" class="pb-10">
+		<div x-show="currentTab === 'agreement'" style="display: none;" class="pb-10">
     <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
         <div>
             <h1 class="text-3xl font-bold tracking-tight">Partnership Agreement</h1>
@@ -483,56 +476,54 @@
             </div>
         </div>
 
-        <div class="a4-wrapper">
-            <div id="agreement-document" class="a4-paper flex flex-col relative">
+        <div id="agreement-document" class="a4-paper flex flex-col relative">
                 
                 <div class="h-14 w-full bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-between px-10 z-20">
                     <p class="text-[10px] font-bold text-blue-200 uppercase tracking-[0.3em]">Official Partnership Document</p>
-                    <div id="pad-status-tag" class="text-[9px] font-black px-3 py-1 bg-white/10 text-white rounded-sm border border-white/20 uppercase tracking-widest">
-                        Draft Version
-                    </div>
+                    <div id="pad-status-tag" class="text-[9px] font-black px-3 py-1 bg-white/10 text-white rounded-sm border border-white/20 uppercase tracking-widest">Draft Version</div>
                 </div>
 
                 <img src="./Source_Files/watermark.png" class="watermark" alt="Watermark">
 
-                <div class="px-12 pt-10 pb-4 flex justify-between items-center z-10">
-                    <img src="./Source_Files/affiliate_logo.svg" alt="Logo" class="h-10 sm:h-12">
-                    <div class="text-right text-[10px] sm:text-[11px] font-bold text-gray-600 leading-tight">
-                        <p>Meta Injector Pro</p>
+                <div class="pad-content-area pt-10 pb-4 flex justify-between items-center z-10">
+                    <img src="./Source_Files/affiliate_logo.svg" alt="Logo" class="h-10">
+                    <div class="text-right text-[10px] font-bold text-gray-600 leading-tight">
+                        <p>Meta Injector Pro Technologies</p>
                         <p>+8801729816172</p>
                         <p>app.metainjectorpro@gmail.com</p>
                     </div>
                 </div>
 
                 <div class="w-full h-8 bg-blue-400 flex items-center z-10 shadow-sm">
-                    <div class="bg-blue-600 h-full clip-angled px-10 flex items-center">
+                    <div class="bg-blue-600 h-full clip-angled px-[1in] flex items-center">
                         <p class="text-white font-bold text-[10px] tracking-widest uppercase">https://www.metainjector.pro</p>
                     </div>
                 </div>
 
-                <div class="px-16 pt-10 pb-4 flex-1 z-10 relative">
-                    <h2 class="text-lg font-black text-center text-gray-800 mb-10 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
-                    <div id="agreement-text-display" class="serif-text text-[13px] text-justify text-gray-700 leading-relaxed"></div>
+                <div class="pad-content-area pt-6 pb-4 flex-1 z-10 relative">
+                    <h2 class="text-base font-black text-center text-gray-800 mb-4 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
+                    <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal">
+                        </div>
                 </div>
 
-                <div class="px-16 pb-14 z-10 relative flex justify-between items-end">
+                <div class="pad-content-area pb-[1in] z-10 relative flex justify-between items-end">
                     <div class="text-center w-48">
-                        <div id="dir-sig" class="h-14 flex justify-center items-end sig-reveal">
+                        <div id="dir-sig" class="h-12 flex justify-center items-end sig-reveal">
                             <img src="./Source_Files/signature.png" class="max-h-full object-contain mb-1">
                         </div>
                         <div class="border-t-2 border-gray-300 pt-2">
-                            <p class="font-extrabold text-gray-800 text-[12px]">Md Farhad Hossain</p>
-                            <p class="text-gray-500 text-[9px] font-bold uppercase tracking-tighter">Managing Director</p>
-                        </div>
+                            <p class="font-extrabold text-gray-800 text-[11px]">Md Farhad Hossain</p>
+                            <p class="text-gray-500 text-[8px] font-bold uppercase tracking-tighter">Managing Director</p>
+                            <p class="font-bold text-blue-700 text-[9px] mt-0.5">Meta Injector Pro</p> </div>
                     </div>
 
                     <div class="text-center w-48">
-                        <div id="user-sig" class="h-14 flex justify-center items-end sig-reveal">
+                        <div id="user-sig" class="h-12 flex justify-center items-end sig-reveal">
                             <img id="renderUserSign" src="" class="max-h-full object-contain mb-1 hidden">
                         </div>
                         <div class="border-t-2 border-gray-300 pt-2">
-                            <p class="font-extrabold text-gray-800 text-[12px]" id="renderUserName">[Signatory Name]</p>
-                            <p class="text-gray-500 text-[9px] font-bold uppercase tracking-tighter" id="renderUserPhone">[Phone Number]</p>
+                            <p class="font-extrabold text-gray-800 text-[11px]" id="renderUserName">[Signatory Name]</p>
+                            <p class="text-gray-500 text-[8px] font-bold uppercase tracking-tighter" id="renderUserPhone">[Phone Number]</p>
                             <p class="text-gray-400 text-[8px]" id="renderUserEmail"></p>
                         </div>
                     </div>
