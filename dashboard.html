@@ -895,10 +895,8 @@
         const name = document.getElementById('signerName').value.trim();
         const email = document.getElementById('signerEmail').value.trim();
         const phone = document.getElementById('signerPhone').value.trim();
-        const checkbox = document.getElementById('agreeCheckbox');
 
         if(!name || !email || !phone) return alert("Please fill your Name, Email, and Phone.");
-        if (!checkbox.checked) return alert("You must accept the terms first.");
         if (signaturePad.isEmpty()) return alert("Please provide your signature on the pad.");
 
         const btn = document.getElementById('submitSignatureBtn');
@@ -908,7 +906,6 @@
         const signatureBase64 = signaturePad.toDataURL(); 
 
         try {
-            // Update backend to also accept name, email, phone
             const res = await fetch('/.netlify/functions/sign-agreement', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -937,12 +934,12 @@
                 loadAgreementData(); // Refresh state
             } else {
                 alert("Failed to save signature.");
-                btn.innerText = "Submit & Confirm";
+                btn.innerText = "Sign & Activate";
                 btn.disabled = false;
             }
         } catch (e) {
             alert("Network Error");
-            btn.innerText = "Submit & Confirm";
+            btn.innerText = "Sign & Activate";
             btn.disabled = false;
         }
     }
