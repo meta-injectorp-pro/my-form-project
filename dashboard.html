@@ -102,46 +102,55 @@
     @media (max-width: 900px) { .a4-paper { transform: scale(0.45); margin-bottom: -160mm; } }
     @media (max-width: 600px) { .a4-paper { transform: scale(0.35); margin-bottom: -190mm; } }
 
-    /* 🖨️ Print & PDF Fix (Perfect 1-Page A4 Fit & No Black Borders) */
+    /* 🖨️ Print & PDF Fix (Blank White Page Issue Resolved) */
     @media print {
         @page { 
             size: A4; 
             margin: 0; 
         }
         
-        /* Force white background and remove all dark shadows/colors from dashboard */
         body, html { 
             background-color: white !important; 
             color: black !important; 
             margin: 0 !important; 
             padding: 0 !important; 
-            height: 100% !important;
+            height: auto !important;
             width: 100% !important;
-            overflow: hidden !important;
             -webkit-print-color-adjust: exact !important; 
             print-color-adjust: exact !important;
         }
 
-        /* Dashboard-er dark elements gulo ke completely hide kora */
+        /* 🚫 Hide all dark dashboard elements */
         aside, nav, header, .lg\:hidden, .agreement-header, 
         #signature-action-area, #already-signed-area, #download-area,
-        #agreement-loading, #agreement-empty, [x-show] { 
+        #agreement-loading, #agreement-empty { 
+            display: none !important; 
+        }
+
+        /* 🚫 Hide ONLY the other tabs (Etai main fix) */
+        [x-show="currentTab === 'dashboard'"], 
+        [x-show="currentTab === 'withdraw'"], 
+        [x-show="currentTab === 'history'"] { 
             display: none !important; 
         }
         
-        /* Main container reset */
+        /* ✅ Force the agreement tab to show */
+        [x-show="currentTab === 'agreement'"] {
+            display: block !important;
+        }
+        
         main, .p-6, .lg\:p-10, .max-w-7xl, .space-y-8 { 
             padding: 0 !important; 
             margin: 0 !important; 
-            background: white !important;
+            background: transparent !important;
             height: auto !important;
+            overflow: visible !important;
         }
         
         #agreement-content-section, .a4-wrapper { 
             display: block !important; 
             margin: 0 !important; 
             padding: 0 !important; 
-            background: white !important;
         }
         
         .a4-paper {
@@ -155,10 +164,10 @@
             width: 210mm !important;
             height: 297mm !important;
             page-break-after: avoid !important;
+            page-break-inside: avoid !important;
             background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 10%) !important;
         }
 
-        /* SVG Waves ensure colors */
         svg path {
             fill-opacity: 1 !important;
         }
