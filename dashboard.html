@@ -459,27 +459,23 @@
         </div>
 
 <!-- Agreement Tab -->
-    <div id="agreement-empty" class="hidden glass-panel p-10 rounded-3xl text-center border-dashed border-[#A073EE]/50 mt-4">
-        <div class="w-20 h-20 bg-[#0F0A1E] rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-inner">
-            <i class="fa-solid fa-file-circle-xmark text-4xl text-gray-600"></i>
-        </div>
-        <h3 class="text-xl font-bold text-white mb-2">No Agreement Available</h3>
-        <p class="text-gray-400">There is currently no active partnership agreement to sign.</p>
-    </div>    
-		
-		<div x-show="currentTab === 'agreement'" style="display: none;" class="pb-10">
+    <div x-show="currentTab === 'agreement'" style="display: none;" class="pb-10">
             
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4 agreement-header">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 agreement-header">
                 <div>
                     <h1 class="text-3xl font-bold tracking-tight">Partnership Agreement</h1>
                     <p class="text-gray-400 text-sm mt-1">Meta Injector Pro Official Affiliate Contract</p>
                 </div>
-                <div id="already-signed-area" class="hidden flex items-center gap-3 bg-green-500/10 border border-green-500/30 px-4 py-2 rounded-full">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span class="text-green-400 text-xs font-bold uppercase tracking-widest">Agreement Verified</span>
+                
+                <div id="already-signed-area" class="hidden flex flex-wrap items-center gap-2">
+                    <div class="flex items-center gap-2 bg-green-500/10 border border-green-500/30 px-3 py-1.5 rounded-lg">
+                        <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                        <span class="text-green-400 text-[10px] font-bold uppercase tracking-widest">Verified</span>
+                    </div>
+                    <button onclick="const oldTitle = document.title; document.title = 'Meta injector pro affiliate agreement'; window.print(); document.title = oldTitle;" 
+                        class="flex items-center gap-2 bg-[#A073EE]/10 border border-[#A073EE]/30 px-3 py-1.5 rounded-lg text-[#A073EE] text-[10px] font-bold uppercase hover:bg-[#A073EE]/20 transition-all">
+                        <i class="fa-solid fa-download"></i> Download PDF
+                    </button>
                 </div>
             </div>
 
@@ -498,49 +494,33 @@
 
             <div id="agreement-content-section" class="hidden flex flex-col xl:flex-row gap-8 items-start">
                 
-                <div class="w-full xl:max-w-sm shrink-0 space-y-6">
-                    <div id="signature-action-area" class="glass-panel p-6 rounded-3xl border border-[#A073EE]/30 shadow-xl">
-                        <h3 class="text-white font-bold mb-4 flex items-center gap-2">
-                            <i class="fa-solid fa-pen-nib text-[#A073EE]"></i> Complete Your Profile
-                        </h3>
-                        <div class="space-y-4 mb-6">
-                            <input type="text" id="signerName" placeholder="Full Name" class="w-full bg-white/5 border border-white/10 text-white p-3 rounded-xl focus:border-[#A073EE] outline-none text-sm transition-all">
-                            <input type="email" id="signerEmail" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 text-white p-3 rounded-xl focus:border-[#A073EE] outline-none text-sm transition-all">
-                            <input type="text" id="signerPhone" placeholder="Phone Number" class="w-full bg-white/5 border border-white/10 text-white p-3 rounded-xl focus:border-[#A073EE] outline-none text-sm transition-all">
-                        </div>
-                        
-                        <p class="text-xs text-gray-400 mb-2 font-bold uppercase tracking-widest">Draw Signature</p>
-                        <div class="bg-white rounded-2xl overflow-hidden mb-3">
-                            <canvas id="signature-pad" class="w-full h-[140px] touch-none"></canvas>
-                        </div>
-                        <button onclick="signaturePad.clear()" class="text-[10px] text-gray-500 hover:text-red-400 mb-4 block ml-auto">Clear Pad</button>
-
-                        <label class="flex items-start gap-3 cursor-pointer group mb-6">
-                            <input type="checkbox" id="agreeCheckbox" class="w-5 h-5 mt-0.5 accent-[#A073EE] cursor-pointer shrink-0">
-                            <span class="text-sm text-gray-300 leading-snug">I accept the terms and conditions stated in the agreement.</span>
-                        </label>
-
-                        <button id="submitSignatureBtn" onclick="submitSignature()" class="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:shadow-[0_0_20px_rgba(160,115,238,0.4)] transition-all">
-                            Sign & Activate
-                        </button>
+                <div id="signature-action-area" class="w-full xl:max-w-sm shrink-0 glass-panel p-6 rounded-3xl border border-[#A073EE]/30 shadow-xl">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2"><i class="fa-solid fa-pen-nib text-[#A073EE]"></i> Complete Your Profile</h3>
+                    <div class="space-y-4 mb-6">
+                        <input type="text" id="signerName" placeholder="Full Name" class="w-full bg-white/5 border border-white/10 text-white p-3 rounded-xl focus:border-[#A073EE] outline-none text-sm transition-all">
+                        <input type="email" id="signerEmail" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 text-white p-3 rounded-xl focus:border-[#A073EE] outline-none text-sm transition-all">
+                        <input type="text" id="signerPhone" placeholder="Phone Number" class="w-full bg-white/5 border border-white/10 text-white p-3 rounded-xl focus:border-[#A073EE] outline-none text-sm transition-all">
                     </div>
+                    
+                    <p class="text-xs text-gray-400 mb-2 font-bold uppercase tracking-widest">Draw Signature</p>
+                    <div class="bg-white rounded-2xl overflow-hidden mb-3"><canvas id="signature-pad" class="w-full h-[140px] touch-none"></canvas></div>
+                    <button onclick="signaturePad.clear()" class="text-[10px] text-gray-500 hover:text-red-400 mb-4 block ml-auto">Clear Pad</button>
 
-                    <div id="download-area" class="hidden glass-panel p-8 rounded-3xl border border-white/10 text-center animate-fade-in">
-                        <div class="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/20">
-                            <i class="fa-solid fa-file-pdf text-3xl text-green-500"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white mb-2">Ready for Download</h3>
-                        <p class="text-gray-400 text-sm mb-8 leading-relaxed">Your agreement is officially signed and secured.</p>
-                        <button onclick="const oldTitle = document.title; document.title = 'Meta injector pro affiliate agreement'; window.print(); document.title = oldTitle;" 
-							class="w-full py-4 rounded-2xl font-bold text-white bg-white/10 hover:bg-white/20 border border-white/10 transition-all flex items-center justify-center gap-3">
-							<i class="fa-solid fa-cloud-arrow-down"></i> Download PDF
-						</button>
-                    </div>
+                    <label class="flex items-start gap-3 cursor-pointer group mb-6">
+                        <input type="checkbox" id="agreeCheckbox" class="w-5 h-5 mt-0.5 accent-[#A073EE] cursor-pointer shrink-0">
+                        <span class="text-sm text-gray-300 leading-snug">I accept the terms and conditions.</span>
+                    </label>
+
+                    <button id="submitSignatureBtn" onclick="submitSignature()" class="w-full py-4 rounded-2xl font-bold text-white bg-gradient-to-r from-[#A073EE] to-[#fd297b] hover:shadow-[0_0_20px_rgba(160,115,238,0.4)] transition-all">
+                        Sign & Activate
+                    </button>
                 </div>
 
                 <div class="a4-wrapper">
                     <div id="agreement-document" class="a4-paper flex flex-col relative">
                         
+                        <div class="absolute top-44 right-[1in] text-[11px] font-bold text-gray-700 z-30" id="pad-date-display">Date: --/--/----</div>
+
                         <div class="h-12 w-full bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-between px-10 z-20">
                             <p class="text-[10px] font-bold text-blue-200 uppercase tracking-[0.3em]">Official Partnership Document</p>
                             <div id="pad-status-tag" class="text-[9px] font-black px-3 py-1 bg-white/10 text-white rounded-sm border border-white/20 uppercase tracking-widest">Draft Version</div>
@@ -564,8 +544,18 @@
                         </div>
 
                         <div class="pad-content-area pt-8 pb-4 flex-1 z-10 relative">
-                            <h2 class="text-base font-black text-center text-gray-800 mb-4 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
-                            <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal"></div>
+                            <h2 class="text-base font-black text-center text-gray-800 mb-6 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
+                            
+                            <div class="serif-text text-[12px] text-gray-800 mb-5 leading-snug">
+                                <p><strong>To,</strong><br>The Affiliate Partner<br>Marketing & Sales Dept.<br>Meta Injector Pro<br>Holding # 3/A, 5/A, 7/A, Road # 17,<br>Gulshan-1, Dhaka-1212, Bangladesh.</p>
+                                <p class="mt-4 font-bold border-b border-gray-300 inline-block mb-4">Sub: Authorization Letter for Affiliate Partnership</p>
+                            </div>
+
+                            <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal mb-6"></div>
+
+                            <div class="serif-text text-[12px] text-gray-800">
+                                <p>Thanking you,<br>Yours faithfully,<br><strong>For Meta Injector Pro</strong></p>
+                            </div>
                         </div>
 
                         <div class="pad-content-area pb-[1in] z-10 relative flex justify-between items-end">
@@ -875,7 +865,6 @@
 	
 	
 	// === Agreement Logic ===
-    // === Agreement & Signature Logic ===
     let signaturePad;
 
     async function loadAgreementData() {
@@ -884,11 +873,8 @@
         document.getElementById('agreement-content-section').classList.add('hidden');
 
         try {
-            const res = await fetch('/.netlify/functions/get-agreement', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const res = await fetch('/.netlify/functions/get-agreement', { headers: { 'Authorization': `Bearer ${token}` } });
             const data = await res.json();
-
             document.getElementById('agreement-loading').classList.add('hidden');
 
             if (!data.agreementText) {
@@ -897,7 +883,6 @@
                 document.getElementById('agreement-content-section').classList.remove('hidden');
                 document.getElementById('agreement-text-display').innerHTML = data.agreementText;
 
-                // Pre-fill Name in the form
                 const profileName = document.querySelector('.profile-name').innerText;
                 document.getElementById('signerName').value = profileName !== 'Loading...' ? profileName : '';
 
@@ -905,23 +890,21 @@
                     // Already Signed Mode
                     document.getElementById('signature-action-area').classList.add('hidden');
                     document.getElementById('already-signed-area').classList.remove('hidden');
-					document.getElementById('download-area').classList.remove('hidden');
-        
-					// banner update
-					const statusTag = document.getElementById('pad-status-tag');
-					statusTag.innerText = "Officially Verified";
-					statusTag.classList.replace('bg-white/10', 'bg-green-500');
-					statusTag.classList.replace('text-white', 'text-white');
                     
-                    // Show Signatures on Pad
+                    // Auto-Date Show
+                    const signedDate = new Date(data.signedAt).toLocaleDateString('en-GB');
+                    document.getElementById('pad-date-display').innerText = `Date: ${signedDate}`;
+        
+                    const statusTag = document.getElementById('pad-status-tag');
+                    statusTag.innerText = "Officially Verified";
+                    statusTag.classList.replace('bg-white/10', 'bg-green-500');
+                    
                     document.getElementById('dir-sig').classList.add('sig-visible');
                     const userSigImg = document.getElementById('renderUserSign');
                     userSigImg.src = data.signatureImage;
                     userSigImg.classList.remove('hidden');
                     document.getElementById('user-sig').classList.add('sig-visible');
 
-                    // Set Date and Info from DB (if you saved them)
-                    document.getElementById('signed-date').innerText = new Date(data.signedAt).toLocaleDateString();
                     document.getElementById('renderUserName').innerText = data.signedName || profileName;
                     document.getElementById('renderUserEmail').innerText = data.signedEmail || '';
                     document.getElementById('renderUserPhone').innerText = data.signedPhone || '';
@@ -931,7 +914,6 @@
                     document.getElementById('signature-action-area').classList.remove('hidden');
                     document.getElementById('already-signed-area').classList.add('hidden');
                     
-                    // Initialize Signature Pad
                     const canvas = document.getElementById('signature-pad');
                     if(canvas && !signaturePad) {
                         const ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -949,53 +931,28 @@
         const name = document.getElementById('signerName').value.trim();
         const email = document.getElementById('signerEmail').value.trim();
         const phone = document.getElementById('signerPhone').value.trim();
+        const isChecked = document.getElementById('agreeCheckbox').checked;
 
-        if(!name || !email || !phone) return alert("Please fill your Name, Email, and Phone.");
-        if (signaturePad.isEmpty()) return alert("Please provide your signature on the pad.");
+        // Strict Validations
+        if(!name || !email || !phone) return alert("All fields are required. Please fill your profile.");
+        if(!isChecked) return alert("You must check 'I accept the terms' before signing.");
+        if (signaturePad.isEmpty()) return alert("Please draw your signature.");
 
         const btn = document.getElementById('submitSignatureBtn');
-        btn.innerText = "Submitting...";
-        btn.disabled = true;
-
-        const signatureBase64 = signaturePad.toDataURL(); 
+        btn.innerText = "Processing..."; btn.disabled = true;
 
         try {
             const res = await fetch('/.netlify/functions/sign-agreement', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    signature: signatureBase64,
-                    signedName: name,
-                    signedEmail: email,
-                    signedPhone: phone
-                })
+                body: JSON.stringify({ signature: signaturePad.toDataURL(), signedName: name, signedEmail: email, signedPhone: phone })
             });
 
             if (res.ok) {
-                // Instant Feedback on Pad
-                document.getElementById('renderUserName').innerText = name;
-                document.getElementById('renderUserEmail').innerText = email;
-                document.getElementById('renderUserPhone').innerText = phone;
-                
-                const userSigImg = document.getElementById('renderUserSign');
-                userSigImg.src = signatureBase64;
-                userSigImg.classList.remove('hidden');
-                
-                document.getElementById('dir-sig').classList.add('sig-visible');
-                document.getElementById('user-sig').classList.add('sig-visible');
-                
-                alert("Agreement signed successfully!");
-                loadAgreementData(); // Refresh state
-            } else {
-                alert("Failed to save signature.");
-                btn.innerText = "Sign & Activate";
-                btn.disabled = false;
-            }
-        } catch (e) {
-            alert("Network Error");
-            btn.innerText = "Sign & Activate";
-            btn.disabled = false;
-        }
+                alert("Agreement Activated!");
+                loadAgreementData();
+            } else { alert("Error saving signature."); btn.disabled = false; }
+        } catch (e) { alert("Network Error"); btn.disabled = false; }
     }
 	
   </script>
