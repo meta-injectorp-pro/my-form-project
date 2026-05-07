@@ -463,8 +463,8 @@
             
             <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 agreement-header">
                 <div>
-                    <h1 class="text-3xl font-bold tracking-tight">Partnership Agreement</h1>
-                    <p class="text-gray-400 text-sm mt-1">Meta Injector Pro Official Affiliate Contract</p>
+                    <h1 class="text-3xl font-bold tracking-tight text-white">Partnership Agreement</h1>
+                    <p class="text-gray-400 text-sm mt-1">Official Affiliate Contract</p>
                 </div>
                 
                 <div id="already-signed-area" class="hidden flex flex-wrap items-center gap-2">
@@ -485,9 +485,7 @@
             </div>
 
             <div id="agreement-empty" class="hidden glass-panel p-10 rounded-3xl text-center border-dashed border-[#A073EE]/50 mt-4">
-                <div class="w-20 h-20 bg-[#0F0A1E] rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-inner">
-                    <i class="fa-solid fa-file-circle-xmark text-4xl text-gray-600"></i>
-                </div>
+                <i class="fa-solid fa-file-circle-xmark text-4xl text-gray-600 mb-4"></i>
                 <h3 class="text-xl font-bold text-white mb-2">No Agreement Available</h3>
                 <p class="text-gray-400">There is currently no active partnership agreement to sign.</p>
             </div>
@@ -519,8 +517,6 @@
                 <div class="a4-wrapper">
                     <div id="agreement-document" class="a4-paper flex flex-col relative">
                         
-                        <div class="absolute top-[220px] right-[1in] text-[11px] font-bold text-gray-700 z-30" id="pad-date-display">Date: --/--/----</div>
-
                         <div class="h-12 w-full bg-gradient-to-r from-blue-900 to-blue-700 flex items-center justify-between px-10 z-20">
                             <p class="text-[10px] font-bold text-blue-200 uppercase tracking-[0.3em]">Official Partnership Document</p>
                             <div id="pad-status-tag" class="text-[9px] font-black px-3 py-1 bg-white/10 text-white rounded-sm border border-white/20 uppercase tracking-widest">Draft Version</div>
@@ -531,7 +527,7 @@
                         <div class="pad-content-area pt-10 pb-4 flex justify-between items-center z-10">
                             <img src="./Source_Files/affiliate_logo.svg" alt="Logo" class="h-10">
                             <div class="text-right text-[10px] font-bold text-gray-600 leading-tight">
-                                <p>Meta Injector Pro</p>
+                                <p>Meta Injector Pro Technologies</p>
                                 <p>+8801729816172</p>
                                 <p>app.metainjectorpro@gmail.com</p>
                             </div>
@@ -544,24 +540,40 @@
                         </div>
 
                         <div class="pad-content-area pt-8 pb-4 flex-1 z-10 relative">
-                            <h2 class="text-base font-black text-center text-gray-800 mb-6 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
+                            <h2 class="text-base font-black text-center text-gray-800 mb-10 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
                             
-                            <div class="serif-text text-[12px] text-gray-800 mb-5 leading-snug">
-                                <p class="font-bold text-gray-900 mb-2">Agreement Between:</p>
-                                <p><strong>1. Meta Injector Pro</strong> (The Company)</p>
-                                <p><strong>2. The Affiliate Partner</strong> (You)</p>
+                            <div class="serif-text text-[11px] font-bold text-gray-700 mb-6" id="pad-date-display">Date: --/--/----</div>
+
+                            <div class="serif-text text-[12px] text-gray-800 mb-6 leading-snug">
+                                <p class="font-bold text-gray-900 mb-3 uppercase tracking-tighter text-[11px] border-l-4 border-blue-500 pl-3">Agreement Between:</p>
                                 
-                                <p class="mt-5 font-bold border-b border-gray-300 inline-block mb-4 uppercase tracking-wider">Subject: Official Affiliate Partnership Agreement</p>
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div class="bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+                                        <p class="text-blue-700 font-bold">1. Meta Injector Pro</p>
+                                        <p class="text-[11px] text-gray-600 italic">Department: Affiliate & Marketing Dept.</p>
+                                    </div>
+
+                                    <div class="bg-gray-50/50 p-3 rounded-lg border border-gray-100">
+                                        <p class="text-gray-900 font-bold">2. The Affiliate Partner</p>
+                                        <div class="text-[11px] text-gray-600 space-y-0.5 mt-1">
+                                            <p>Name: <span id="pad-user-name" class="font-bold text-gray-800">...</span></p>
+                                            <p>Email: <span id="pad-user-email">...</span></p>
+                                            <p>Phone: <span id="pad-user-phone">...</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p class="mt-8 font-bold border-b border-gray-300 inline-block mb-4 uppercase tracking-wider">Subject: Official Affiliate Partnership Agreement</p>
                             </div>
 
-                            <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal mb-6"></div>
+                            <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal mb-8"></div>
 
-                            <div class="serif-text text-[12px] text-gray-800">
+                            <div class="serif-text text-[12px] text-gray-800 mt-10">
                                 <p>Thanking you,<br>Yours faithfully,<br><strong>For Meta Injector Pro</strong></p>
                             </div>
                         </div>
 
-                        <div class="pad-content-area pb-[1in] z-10 relative flex justify-between items-end">
+                        <div class="pad-content-area pb-[0.8in] z-10 relative flex justify-between items-end">
                             <div class="text-center w-48">
                                 <div id="dir-sig" class="h-12 flex justify-center items-end sig-reveal">
                                     <img src="./Source_Files/signature.png" class="max-h-full object-contain mb-1">
