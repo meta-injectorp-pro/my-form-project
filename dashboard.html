@@ -882,6 +882,26 @@
 	// === Agreement Logic ===
     let signaturePad;
 
+    // 🆕 Real-time Sync of Profile Details to Agreement Pad
+    ['signerName', 'signerEmail', 'signerPhone'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', function() {
+                const value = this.value.trim();
+                if (id === 'signerName') {
+                    document.getElementById('pad-user-name').innerText = value || "...";
+                    document.getElementById('renderUserName').innerText = value || "[Signatory Name]";
+                } else if (id === 'signerEmail') {
+                    document.getElementById('pad-user-email').innerText = value || "...";
+                    document.getElementById('renderUserEmail').innerText = value || "";
+                } else if (id === 'signerPhone') {
+                    document.getElementById('pad-user-phone').innerText = value || "...";
+                    document.getElementById('renderUserPhone').innerText = value || "[Phone Number]";
+                }
+            });
+        }
+    });
+
     async function loadAgreementData() {
         document.getElementById('agreement-loading').classList.remove('hidden');
         document.getElementById('agreement-empty').classList.add('hidden');
@@ -899,7 +919,8 @@
                 document.getElementById('agreement-text-display').innerHTML = data.agreementText;
 
                 const profileName = document.querySelector('.profile-name').innerText;
-                document.getElementById('signerName').value = profileName !== 'Loading...' ? profileName : '';
+                const signerNameInput = document.getElementById('signerName');
+                signerNameInput.value = profileName !== 'Loading...' ? profileName : '';
 
                 if (data.hasSigned) {
                     // Already Signed Mode
@@ -909,17 +930,24 @@
                     // Auto-Date Show
                     const signedDate = new Date(data.signedAt).toLocaleDateString('en-GB');
                     document.getElementById('pad-date-display').innerText = `Date: ${signedDate}`;
+
+                    // Update Top Affiliate Details Box
+                    document.getElementById('pad-user-name').innerText = data.signedName || profileName;
+                    document.getElementById('pad-user-email').innerText = data.signedEmail || '...';
+                    document.getElementById('pad-user-phone').innerText = data.signedPhone || '...';
         
                     const statusTag = document.getElementById('pad-status-tag');
                     statusTag.innerText = "Officially Verified";
                     statusTag.classList.replace('bg-white/10', 'bg-green-500');
                     
+                    // Signatures Update
                     document.getElementById('dir-sig').classList.add('sig-visible');
                     const userSigImg = document.getElementById('renderUserSign');
                     userSigImg.src = data.signatureImage;
                     userSigImg.classList.remove('hidden');
                     document.getElementById('user-sig').classList.add('sig-visible');
 
+                    // Bottom Signature Info Update
                     document.getElementById('renderUserName').innerText = data.signedName || profileName;
                     document.getElementById('renderUserEmail').innerText = data.signedEmail || '';
                     document.getElementById('renderUserPhone').innerText = data.signedPhone || '';
@@ -928,6 +956,10 @@
                     // Action Mode
                     document.getElementById('signature-action-area').classList.remove('hidden');
                     document.getElementById('already-signed-area').classList.add('hidden');
+                    
+                    // Pre-fill Name in Pad from loaded profile
+                    document.getElementById('pad-user-name').innerText = signerNameInput.value || "...";
+                    document.getElementById('renderUserName').innerText = signerNameInput.value || "[Signatory Name]";
                     
                     const canvas = document.getElementById('signature-pad');
                     if(canvas && !signaturePad) {
