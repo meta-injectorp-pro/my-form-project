@@ -102,53 +102,50 @@
     @media (max-width: 900px) { .a4-paper { transform: scale(0.45); margin-bottom: -160mm; } }
     @media (max-width: 600px) { .a4-paper { transform: scale(0.35); margin-bottom: -190mm; } }
 
-    /* 🖨️ Print & PDF Fix (Perfect 1-Page A4 Fit) */
+    /* 🖨️ Print & PDF Fix (Perfect 1-Page A4 Fit & No Black Borders) */
     @media print {
         @page { 
             size: A4; 
             margin: 0; 
         }
         
+        /* Force white background and remove all dark shadows/colors from dashboard */
         body, html { 
-            background: white !important; 
+            background-color: white !important; 
             color: black !important; 
             margin: 0 !important; 
             padding: 0 !important; 
+            height: 100% !important;
+            width: 100% !important;
+            overflow: hidden !important;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
         }
-        
-        /* 🚫 Hide all dashboard menus, sidebars, and stray logos */
-        aside, .lg\:hidden, nav, header { 
+
+        /* Dashboard-er dark elements gulo ke completely hide kora */
+        aside, nav, header, .lg\:hidden, .agreement-header, 
+        #signature-action-area, #already-signed-area, #download-area,
+        #agreement-loading, #agreement-empty, [x-show] { 
             display: none !important; 
         }
         
-        /* 🚫 Remove paddings from main wrappers that push content down */
+        /* Main container reset */
         main, .p-6, .lg\:p-10, .max-w-7xl, .space-y-8 { 
             padding: 0 !important; 
             margin: 0 !important; 
-            gap: 0 !important;
+            background: white !important;
+            height: auto !important;
         }
         
-        /* 🚫 Hide unneeded tabs and panels */
-        [x-show="currentTab === 'dashboard'"], 
-        [x-show="currentTab === 'withdraw'"], 
-        [x-show="currentTab === 'history'"],
-        .agreement-header, 
-        #agreement-loading, 
-        #agreement-empty, 
-        #signature-action-area, 
-        #download-area { 
-            display: none !important; 
-        }
-        
-        /* ✅ Make A4 Paper take over the whole screen from the absolute top */
         #agreement-content-section, .a4-wrapper { 
             display: block !important; 
             margin: 0 !important; 
             padding: 0 !important; 
+            background: white !important;
         }
         
         .a4-paper {
-            position: absolute !important; /* Forces it to start from exact top left */
+            position: absolute !important; 
             top: 0 !important;
             left: 0 !important;
             transform: scale(1) !important;
@@ -158,8 +155,12 @@
             width: 210mm !important;
             height: 297mm !important;
             page-break-after: avoid !important;
-            page-break-before: avoid !important;
-            page-break-inside: avoid !important;
+            background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 10%) !important;
+        }
+
+        /* SVG Waves ensure colors */
+        svg path {
+            fill-opacity: 1 !important;
         }
     }
   </style>
@@ -521,9 +522,10 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-2">Ready for Download</h3>
                         <p class="text-gray-400 text-sm mb-8 leading-relaxed">Your agreement is officially signed and secured.</p>
-                        <button onclick="window.print()" class="w-full py-4 rounded-2xl font-bold text-white bg-white/10 hover:bg-white/20 border border-white/10 transition-all flex items-center justify-center gap-3">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> Download PDF
-                        </button>
+                        <button onclick="const oldTitle = document.title; document.title = 'Meta injector pro affiliate agreement'; window.print(); document.title = oldTitle;" 
+							class="w-full py-4 rounded-2xl font-bold text-white bg-white/10 hover:bg-white/20 border border-white/10 transition-all flex items-center justify-center gap-3">
+							<i class="fa-solid fa-cloud-arrow-down"></i> Download PDF
+						</button>
                     </div>
                 </div>
 
