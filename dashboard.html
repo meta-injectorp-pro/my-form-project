@@ -43,6 +43,9 @@
     .payment-radio:checked + div { border-color: #fd297b; background: rgba(253, 41, 123, 0.1); }
 	
 	
+	/* Payment Radio */
+    .payment-radio:checked + div { border-color: #fd297b; background: rgba(253, 41, 123, 0.1); }
+	
 	/* 📄 A4 Paper Design & Scaling */
     .a4-wrapper {
         width: 100%;
@@ -102,7 +105,7 @@
     @media (max-width: 900px) { .a4-paper { transform: scale(0.45); margin-bottom: -160mm; } }
     @media (max-width: 600px) { .a4-paper { transform: scale(0.35); margin-bottom: -190mm; } }
 
-    /* 🖨️ Print & PDF Fix (Blank White Page Issue Resolved) */
+    /* 🖨️ Print & PDF Fix */
     @media print {
         @page { 
             size: A4; 
@@ -127,7 +130,7 @@
             display: none !important; 
         }
 
-        /* 🚫 Hide ONLY the other tabs (Etai main fix) */
+        /* 🚫 Hide ONLY the other tabs */
         [x-show="currentTab === 'dashboard'"], 
         [x-show="currentTab === 'withdraw'"], 
         [x-show="currentTab === 'history'"] { 
@@ -524,10 +527,10 @@
 
                         <img src="./Source_Files/watermark.png" class="watermark" alt="Watermark">
 
-                        <div class="pad-content-area pt-10 pb-4 flex justify-between items-center z-10">
+                        <div class="pad-content-area pt-6 pb-2 flex justify-between items-center z-10">
                             <img src="./Source_Files/affiliate_logo.svg" alt="Logo" class="h-10">
                             <div class="text-right text-[10px] font-bold text-gray-600 leading-tight">
-                                <p>Meta Injector Pro</p>
+                                <p>Meta Injector Pro Technologies</p>
                                 <p>+8801729816172</p>
                                 <p>app.metainjectorpro@gmail.com</p>
                             </div>
@@ -539,15 +542,15 @@
                             </div>
                         </div>
 
-                        <div class="pad-content-area pt-8 pb-4 flex-1 z-10 relative">
-                            <h2 class="text-base font-black text-center text-gray-800 mb-10 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
+                        <div class="pad-content-area pt-6 pb-2 flex-1 z-10 relative">
+                            <h2 class="text-base font-black text-center text-gray-800 mb-6 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
                             
-                            <div class="serif-text text-[11px] font-bold text-gray-700 mb-6" id="pad-date-display">Date: --/--/----</div>
+                            <div class="serif-text text-[11px] font-bold text-gray-700 mb-4" id="pad-date-display">Date: --/--/----</div>
 
-                            <div class="serif-text text-[12px] text-gray-800 mb-6 leading-snug">
-                                <p class="font-bold text-gray-900 mb-3 uppercase tracking-tighter text-[11px] border-l-4 border-blue-500 pl-3">Agreement Between:</p>
+                            <div class="serif-text text-[12px] text-gray-800 mb-5 leading-snug">
+                                <p class="font-bold text-gray-900 mb-2 uppercase tracking-tighter text-[11px] border-l-4 border-blue-500 pl-3">Agreement Between:</p>
                                 
-                                <div class="grid grid-cols-1 gap-4">
+                                <div class="grid grid-cols-1 gap-3">
                                     <div class="bg-blue-50/50 p-3 rounded-lg border border-blue-100">
                                         <p class="text-blue-700 font-bold">1. Meta Injector Pro</p>
                                         <p class="text-[11px] text-gray-600 italic">Department: Affiliate & Marketing Dept.</p>
@@ -563,17 +566,17 @@
                                     </div>
                                 </div>
                                 
-                                <p class="mt-8 font-bold border-b border-gray-300 inline-block mb-4 uppercase tracking-wider">Subject: Official Affiliate Partnership Agreement</p>
+                                <p class="mt-4 font-bold border-b border-gray-300 inline-block mb-3 uppercase tracking-wider">Subject: Official Affiliate Partnership Agreement</p>
                             </div>
 
-                            <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal mb-8"></div>
+                            <div id="agreement-text-display" class="serif-text text-[12px] text-justify text-gray-700 leading-normal mb-4"></div>
 
-                            <div class="serif-text text-[12px] text-gray-800 mt-10">
+                            <div class="serif-text text-[12px] text-gray-800 mt-4">
                                 <p>Thanking you,<br>Yours faithfully,<br><strong>For Meta Injector Pro</strong></p>
                             </div>
                         </div>
 
-                        <div class="pad-content-area pb-[0.8in] z-10 relative flex justify-between items-end">
+                        <div class="pad-content-area pb-[0.5in] z-10 relative flex justify-between items-end mt-auto">
                             <div class="text-center w-48">
                                 <div id="dir-sig" class="h-12 flex justify-center items-end sig-reveal">
                                     <img src="./Source_Files/signature.png" class="max-h-full object-contain mb-1">
@@ -1005,7 +1008,6 @@
   </script>
 </body>
 </html>
-
 
 
 
