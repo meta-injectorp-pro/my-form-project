@@ -102,28 +102,64 @@
     @media (max-width: 900px) { .a4-paper { transform: scale(0.45); margin-bottom: -160mm; } }
     @media (max-width: 600px) { .a4-paper { transform: scale(0.35); margin-bottom: -190mm; } }
 
-    /* 🖨️ Print & PDF Fix (Black screen issue resolved) */
+    /* 🖨️ Print & PDF Fix (Perfect 1-Page A4 Fit) */
     @media print {
-        @page { size: A4; margin: 0; }
-        body, html { background: white !important; color: black !important; }
+        @page { 
+            size: A4; 
+            margin: 0; 
+        }
         
-        /* Reset dashboard layout constraints for print */
-        main { height: auto !important; overflow: visible !important; padding: 0 !important; }
+        body, html { 
+            background: white !important; 
+            color: black !important; 
+            margin: 0 !important; 
+            padding: 0 !important; 
+        }
         
-        /* Hide everything else */
-        aside, .lg-hidden, .agreement-header, #signature-action-area, #download-area, #already-signed-area, #agreement-loading, #agreement-empty { display: none !important; }
-        [x-show="currentTab === 'dashboard'"], [x-show="currentTab === 'withdraw'"], [x-show="currentTab === 'history'"] { display: none !important; }
+        /* 🚫 Hide all dashboard menus, sidebars, and stray logos */
+        aside, .lg\:hidden, nav, header { 
+            display: none !important; 
+        }
         
-        #agreement-content-section { display: block !important; margin: 0 !important; }
-        .a4-wrapper { padding: 0 !important; overflow: visible !important; }
+        /* 🚫 Remove paddings from main wrappers that push content down */
+        main, .p-6, .lg\:p-10, .max-w-7xl, .space-y-8 { 
+            padding: 0 !important; 
+            margin: 0 !important; 
+            gap: 0 !important;
+        }
+        
+        /* 🚫 Hide unneeded tabs and panels */
+        [x-show="currentTab === 'dashboard'"], 
+        [x-show="currentTab === 'withdraw'"], 
+        [x-show="currentTab === 'history'"],
+        .agreement-header, 
+        #agreement-loading, 
+        #agreement-empty, 
+        #signature-action-area, 
+        #download-area { 
+            display: none !important; 
+        }
+        
+        /* ✅ Make A4 Paper take over the whole screen from the absolute top */
+        #agreement-content-section, .a4-wrapper { 
+            display: block !important; 
+            margin: 0 !important; 
+            padding: 0 !important; 
+        }
         
         .a4-paper {
+            position: absolute !important; /* Forces it to start from exact top left */
+            top: 0 !important;
+            left: 0 !important;
             transform: scale(1) !important;
             margin: 0 !important;
             box-shadow: none !important;
             border: none !important;
             width: 210mm !important;
             height: 297mm !important;
+            page-break-after: avoid !important;
+            page-break-before: avoid !important;
+            page-break-inside: avoid !important;
         }
     }
   </style>
@@ -269,7 +305,7 @@
                             Copy
                         </button>
                     </div>
-                    <p class="text-xs text-gray-500 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> Share this link. Commission is tracked via 7-day cookies.</p>
+                    <p class="text-xs text-gray-500 mt-4"><i class="fa-solid fa-circle-info mr-1"></i> Share this link. Commission is tracked via 30-day cookies.</p>
                 </div>
 
                 <div class="glass-panel p-6 rounded-2xl flex flex-col justify-center items-center">
