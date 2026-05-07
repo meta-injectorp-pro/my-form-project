@@ -60,12 +60,12 @@
     .clip-angled { clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%); }
     .watermark {
         position: absolute;
-        top: 50%;
+        top: 45%;
         left: 50%;
         transform: translate(-50%, -50%);
-        opacity: 0.05;
+        opacity: 0.03;
         pointer-events: none;
-        width: 70%;
+        width: 40%;
         z-index: 0;
     }
     .bottom-wave {
@@ -441,74 +441,65 @@
                 </div>
 
                 <!-- ================== THE A4 PAD ================== -->
-                <div id="agreement-document" class="a4-paper flex flex-col relative shrink-0" style="transform-origin: top left;">
+                <div id="agreement-document" class="a4-paper flex flex-col relative shrink-0 bg-white" style="transform-origin: top left;">
                     
-                    <!-- Watermark -->
+                    <div class="absolute inset-3 border border-gray-100 rounded z-0 pointer-events-none"></div>
+
                     <img src="./Source_Files/watermark.png" class="watermark" alt="Watermark">
 
-                    <!-- HEADER -->
-                    <div class="px-10 sm:px-14 pt-10 pb-4 flex justify-between items-center z-10">
-                        <img src="./Source_Files/logo.svg" alt="Logo" class="h-12 sm:h-14">
-                        <div class="text-right flex flex-col gap-1">
-                            <div class="flex items-center justify-end gap-2 text-[11px] sm:text-xs font-bold text-gray-700">
-                                +8801729816172 <div class="bg-[#1e3a8a] text-white w-5 h-5 flex items-center justify-center rounded"><i class="fa-solid fa-phone text-[10px]"></i></div>
+                    <div class="px-10 sm:px-14 pt-12 pb-5 flex justify-between items-center z-10">
+                        <img src="./Source_Files/affiliate_logo.svg" alt="Logo" class="h-9 sm:h-11"> 
+                        <div class="text-right flex flex-col gap-1.5">
+                            <div class="flex items-center justify-end gap-2 text-[10px] sm:text-[11px] font-bold text-gray-600">
+                                +8801729816172 <div class="bg-blue-600 text-white w-5 h-5 flex items-center justify-center rounded-full"><i class="fa-solid fa-phone text-[9px]"></i></div>
                             </div>
-                            <div class="flex items-center justify-end gap-2 text-[11px] sm:text-xs font-bold text-gray-700">
-                                app.metainjectorpro@gmail.com <div class="bg-[#1e3a8a] text-white w-5 h-5 flex items-center justify-center rounded"><i class="fa-solid fa-paper-plane text-[10px]"></i></div>
+                            <div class="flex items-center justify-end gap-2 text-[10px] sm:text-[11px] font-bold text-gray-600">
+                                app.metainjectorpro@gmail.com <div class="bg-blue-600 text-white w-5 h-5 flex items-center justify-center rounded-full"><i class="fa-solid fa-envelope text-[9px]"></i></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- RIBBON -->
-                    <div class="w-full h-8 bg-[#38bdf8] flex items-center z-10">
-                        <div class="bg-[#0284c7] h-full clip-angled px-10 flex items-center">
-                            <p class="text-white font-medium text-xs"><i class="fa-solid fa-globe mr-2"></i> https://www.metainjector.pro</p>
+                    <div class="w-full h-7 bg-blue-400 flex items-center z-10 shadow-sm">
+                        <div class="bg-blue-600 h-full clip-angled px-10 flex items-center">
+                            <p class="text-white font-semibold text-[10px] sm:text-xs tracking-wider"><i class="fa-solid fa-globe mr-2"></i> https://www.metainjector.pro</p>
                         </div>
                     </div>
 
-                    <!-- CONTENT BODY (Padding Adjusted) -->
-                    <div class="px-10 sm:px-16 pt-8 pb-4 flex-1 z-10 relative">
-                        <h2 class="text-xl sm:text-2xl font-bold text-center text-black mb-8 border-b-2 border-black inline-block mx-auto flex w-max">Affiliate Program Agreement</h2>
+                    <div class="px-10 sm:px-16 pt-10 pb-4 z-10 relative">
+                        <h2 class="text-base sm:text-lg font-extrabold text-center text-gray-800 mb-6 border-b-2 border-blue-500 inline-block mx-auto flex w-max pb-1 uppercase tracking-widest">Affiliate Program Agreement</h2>
                         
-                        <!-- Database Text Appears Here -->
-                        <div id="agreement-text-display" class="serif-text text-xs sm:text-sm text-justify">
-                            <!-- Text loaded dynamically -->
-                        </div>
+                        <div id="agreement-text-display" class="serif-text text-xs sm:text-[13px] text-justify text-gray-700 leading-relaxed">
+                            </div>
                     </div>
 
-                    <!-- SIGNATURES BLOCK (Moved Up) -->
-                    <div class="px-10 sm:px-16 pb-8 z-10 relative flex justify-between items-end mt-auto">
+                    <div class="px-10 sm:px-16 pb-12 z-10 relative flex justify-between items-end mt-8">
                         
-                        <!-- Director Signature -->
-                        <div class="text-center w-40 sm:w-56">
-                            <div id="dir-sig" class="h-16 flex justify-center items-end sig-reveal">
+                        <div class="text-center w-40 sm:w-48">
+                            <div id="dir-sig" class="h-14 flex justify-center items-end sig-reveal">
                                 <img src="./Source_Files/signature.png" class="max-h-full object-contain mb-1" alt="Director Signature">
                             </div>
-                            <div class="border-t border-black pt-2">
-                                <p class="font-bold text-black text-[11px] sm:text-sm">Md Farhad Hossain</p>
-                                <p class="text-gray-600 text-[10px] sm:text-xs mt-1">Managing Director</p>
-                                <p class="font-bold text-black text-[11px] sm:text-sm">Meta Injector Pro</p>
+                            <div class="border-t-2 border-gray-300 pt-2">
+                                <p class="font-extrabold text-gray-800 text-[11px] sm:text-[13px]">Md Farhad Hossain</p>
+                                <p class="text-gray-500 text-[9px] sm:text-[10px] mt-0.5 font-semibold uppercase tracking-wider">Managing Director</p>
+                                <p class="font-bold text-gray-800 text-[10px] sm:text-[11px] mt-1">Meta Injector Pro</p>
                             </div>
                         </div>
 
-                        <!-- User Signature -->
-                        <div class="text-center w-40 sm:w-56">
-                            <div id="user-sig" class="h-16 flex justify-center items-end sig-reveal">
+                        <div class="text-center w-40 sm:w-48">
+                            <div id="user-sig" class="h-14 flex justify-center items-end sig-reveal">
                                 <img id="renderUserSign" src="" class="max-h-full object-contain mb-1 hidden" alt="User Signature">
                             </div>
-                            <div class="border-t border-black pt-2">
-                                <p class="font-bold text-black text-[11px] sm:text-sm" id="renderUserName">[Signatory Name]</p>
-                                <p class="text-gray-600 text-[10px] sm:text-xs mt-1">Affiliate Partner</p>
-                                <p class="font-bold text-black text-[11px] sm:text-sm">Meta Injector Pro</p>
-                                <p class="text-gray-700 text-[10px]" id="renderUserEmail"></p>
-                                <p class="text-gray-700 text-[10px]" id="renderUserPhone"></p>
+                            <div class="border-t-2 border-gray-300 pt-2">
+                                <p class="font-extrabold text-gray-800 text-[11px] sm:text-[13px]" id="renderUserName">[Signatory Name]</p>
+                                <p class="text-gray-500 text-[9px] sm:text-[10px] mt-0.5 font-semibold uppercase tracking-wider">Affiliate Partner</p>
+                                <p class="font-bold text-gray-800 text-[10px] sm:text-[11px] mt-1" id="renderUserPhone">[Phone Number]</p>
+                                <p class="text-gray-500 text-[9px] mt-0.5" id="renderUserEmail"></p>
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- BOTTOM WAVE -->
-                    <svg viewBox="0 0 1440 320" class="bottom-wave pointer-events-none">
+                    <svg viewBox="0 0 1440 320" class="bottom-wave pointer-events-none mt-auto">
                         <path fill="#bae6fd" fill-opacity="0.6" d="M0,160L80,176C160,192,320,224,480,218.7C640,213,800,171,960,160C1120,149,1280,171,1360,181.3L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
                         <path fill="#38bdf8" fill-opacity="0.8" d="M0,256L80,245.3C160,235,320,213,480,218.7C640,224,800,256,960,245.3C1120,235,1280,181,1360,154.7L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
                     </svg>
