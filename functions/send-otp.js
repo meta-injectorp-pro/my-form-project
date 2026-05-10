@@ -67,7 +67,8 @@ function isValidEmail(email) {
 exports.handler = async (event) => {
     if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
-    const { email, name } = JSON.parse(event.body);
+    // 👇 এখানে name এর সাথে phone রিসিভ করা হয়েছে
+    const { email, name, phone } = JSON.parse(event.body);
   
     const emailCheck = isValidEmail(email);
     if (!emailCheck.valid) {
@@ -84,9 +85,11 @@ exports.handler = async (event) => {
         // ২. ৬ ডিজিটের র‍্যান্ডম OTP তৈরি করা
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // ৩. ডাটাবেসে OTP সেভ করা (১০ মিনিট পর এক্সপায়ার হবে)
+        // ৩. ডাটাবেসে OTP এর পাশাপাশি Name এবং Phone সেভ করা
         await db.collection("OTP_Verifications").doc(email).set({
             otp: otp,
+            name: name || "Unknown",        // 👇 ইউজারের নাম সেভ হচ্ছে
+            phone: phone || "N/A",          // 👇 ইউজারের ফোন নম্বর সেভ হচ্ছে
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
             expiresAt: Date.now() + 10 * 60 * 1000 // 10 Minutes
         });
