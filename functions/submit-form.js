@@ -103,6 +103,9 @@ const packageRules = {
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
+// 👇 Edge Function theke maintenance er signal asche kina check kora
+  const isAffiliatePaused = event.headers['x-affiliate-maintenance'] === 'true';
+
   try {
     const { fields } = await parseMultipartForm(event);
     const data = fields;
@@ -213,12 +216,12 @@ exports.handler = async (event) => {
 			"Joining Date": formatCustomDate(bdNow)
         };
 
-		// 👇 [ফিক্সড] অ্যাফিলিয়েট ডাটা সেভ করার কোড
+		// 🚨 [আপডেট] Header theke maintenance check kore save kora
         let refCodeFree = data.ReferredBy ? data.ReferredBy.trim() : "None";
-        if (refCodeFree !== "None" && refCodeFree !== "null" && refCodeFree !== "undefined" && refCodeFree !== "") {
+        if (!isAffiliatePaused && refCodeFree !== "None" && refCodeFree !== "null" && refCodeFree !== "undefined" && refCodeFree !== "") {
             licenseUpdateData["ReferredBy"] = refCodeFree;
         }
-		
+        
         await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
         // Telegram Notification (HTML Mode)
@@ -226,7 +229,8 @@ exports.handler = async (event) => {
             const botToken = process.env.TELEGRAM_BOT_TOKEN;
 			const chatId = process.env.TELEGRAM_CHAT_ID; 
             if(botToken && chatId) {
-				let refInfo = (data.ReferredBy && data.ReferredBy !== "None") ? `🔗 Referral: <code>${data.ReferredBy}</code>\n` : "";
+				// Telegram Notification e update
+				let refInfo = (!isAffiliatePaused && data.ReferredBy && data.ReferredBy !== "None") ? `🔗 Referral: <code>${data.ReferredBy}</code>\n` : "";
                 const msg = `🚀 <b>New Free Trial Registered!</b>
 
 👤 Name: ${data.FullName}
@@ -336,9 +340,9 @@ New Free User is now Registered.`;
         "UserStatus": isNewUser ? "New User" : "Existing User"
     };
 
-	// 👇 [ফিক্সড] Purchase ফর্মে অ্যাফিলিয়েট সেভ করা
+	// 🚨 [আপডেট] Form Data te referral save kora off kora
     let refCodePaid = data.ReferredBy ? data.ReferredBy.trim() : "None";
-    if (refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
+    if (!isAffiliatePaused && refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
         purchaseData["ReferredBy"] = refCodePaid;
     } 
 
@@ -360,11 +364,11 @@ New Free User is now Registered.`;
         licenseUpdateData["Joining Date"] = formatCustomDate(bdNow);
     }  
 
-	// 👇 [ফিক্সড] License ডাটাবেসে অ্যাফিলিয়েট সেভ করা
-    if (refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
+	// 🚨 [আপডেট] License ডাটাবেসে referral save kora off kora
+    if (!isAffiliatePaused && refCodePaid !== "None" && refCodePaid !== "null" && refCodePaid !== "undefined" && refCodePaid !== "") {
         licenseUpdateData["ReferredBy"] = refCodePaid;
     }
-	  
+    
     await db.collection('licenseDatabase').doc(licenseKeyToUpdate).update(licenseUpdateData);
 
     // Telegram Notification (HTML Mode)
@@ -372,7 +376,8 @@ New Free User is now Registered.`;
         const botToken = process.env.TELEGRAM_BOT_TOKEN;
 		const chatId = process.env.TELEGRAM_CHAT_ID;
         if(botToken && chatId) {
-			let refInfoPaid = (data.ReferredBy && data.ReferredBy !== "None") ? `🔗 Referral: <code>${data.ReferredBy}</code>\n` : "";
+			// Telegram Notification e update
+			let refInfoPaid = (!isAffiliatePaused && data.ReferredBy && data.ReferredBy !== "None") ? `🔗 Referral: <code>${data.ReferredBy}</code>\n` : "";
             const msg = `💰 <b>New Package Purchase!</b>
 
 📦 Package: <b>${data.Package}</b>
