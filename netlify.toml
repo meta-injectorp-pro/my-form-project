@@ -1,5 +1,13 @@
 [functions]
   directory = "functions/"
+  
+  [[edge_functions]]
+  path = "/.netlify/functions/add-commission"
+  function = "affiliate_maintenance"
+
+[[edge_functions]]
+  path = "/.netlify/functions/submit-form"
+  function = "affiliate_maintenance"
 
 # For Maintenance Mode OFF Use "#"
 #[[edge_functions]]
