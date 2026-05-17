@@ -318,10 +318,14 @@
                             </div>
 
                             <div id="paymentInstruction" class="hidden animate-fade-in mb-8">
-                                <div class="bg-gradient-to-r from-[#1E1435] to-[#150D24] border border-purple-500/30 rounded-xl p-6 text-center relative overflow-hidden">
+                                <div class="bg-gradient-to-r from-[#1E1435] to-[#150D24] border border-purple-500/30 rounded-xl p-6 text-center relative overflow-hidden flex flex-col items-center">
                                     <div class="absolute top-0 right-0 p-2 opacity-20"><svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
                                     
-                                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-3">Send Money To (Personal)</p>
+                                    <p class="text-gray-400 text-xs uppercase tracking-widest mb-4">Send Money To (Personal)</p>
+                                    
+                                    <div id="qrCodeContainer" class="hidden bg-white p-2 rounded-xl mb-5 shadow-[0_0_20px_rgba(160,115,238,0.15)] transition-all">
+                                        <img id="qrCodeImg" src="" alt="QR Code" class="w-32 h-32 object-contain">
+                                    </div>
                                     
                                     <div class="flex items-center justify-center gap-3 mb-2">
                                         <span id="payNumber" class="text-2xl sm:text-3xl font-mono font-bold text-white tracking-wider">01729816172</span>
@@ -330,7 +334,7 @@
                                             <span id="copyTooltip" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-0 transition-opacity">Copied!</span>
                                         </button>
                                     </div>
-                                    <p class="text-xs text-gray-500">Click icon to copy number</p>
+                                    <p class="text-xs text-gray-500">Scan QR or Copy Number to Pay</p>
                                 </div>
                             </div>
 
@@ -486,7 +490,9 @@
             copyBtn: document.getElementById('copyBtn'),
             copyTooltip: document.getElementById('copyTooltip'),
             refundNote: document.getElementById('refundNote'),
-            freeTrialBadge: document.getElementById('freeTrialBadge')
+            freeTrialBadge: document.getElementById('freeTrialBadge'),
+            qrCodeContainer: document.getElementById('qrCodeContainer'),
+            qrCodeImg: document.getElementById('qrCodeImg')
         };
 
         elements.pkgName.innerText = pkgName;
@@ -540,6 +546,11 @@
             elements.submitBtn.classList.add('from-purple-600', 'to-blue-600', 'shadow-purple-500/30');
         }
 
+        const qrCodes = { 
+            "bKash": "./Source_Files/bkash_qr.svg", 
+            "Rocket": "./Source_Files/rocket_qr.svg" 
+        };
+
         document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const method = e.target.value;
@@ -547,6 +558,13 @@
                     elements.payNumber.innerText = paymentNumbers[method];
                     elements.payInstruction.classList.remove('hidden');
                     elements.trxGroup.classList.remove('hidden');
+
+                    if (qrCodes[method]) {
+                        elements.qrCodeImg.src = qrCodes[method];
+                        elements.qrCodeContainer.classList.remove('hidden');
+                    } else {
+                        elements.qrCodeContainer.classList.add('hidden');
+                    }
                 }
             });
         });
