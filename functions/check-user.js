@@ -16,12 +16,9 @@ function maskEmail(email) {
     if (!email || email === "No Email") return "No Email";
     const parts = email.split('@');
     if (parts.length < 2) return email;
-    
     const local = parts[0];
     const domain = parts[1];
-
     if (local.length <= 4) return email;
-
     const start = local.substring(0, 4);
     const end = local.substring(local.length - 2);
     return `${start}******${end}@${domain}`;
@@ -30,7 +27,6 @@ function maskEmail(email) {
 function maskPhone(phone) {
     if (!phone) return "N/A";
     const phoneStr = String(phone);
-    
     if (phoneStr.length >= 11) {
         return phoneStr.substring(0, 5) + "XXXX" + phoneStr.substring(phoneStr.length - 2);
     }
@@ -46,9 +42,9 @@ exports.handler = async (event) => {
         const body = JSON.parse(event.body);
         const phoneNumber = body.phone;
 
+        // 👇 limit(1) মুছে ফেলা হয়েছে যাতে একই নাম্বারের সব ডাটা পায়
         const userSnapshot = await db.collection('licenseDatabase')
                                      .where('Phone Number', '==', phoneNumber)
-                                     .limit(1)
                                      .get();
 
         if (userSnapshot.empty) {
@@ -58,27 +54,30 @@ exports.handler = async (event) => {
             };
         }
 
-        const userData = userSnapshot.docs[0].data();
-        const licenseKey = userSnapshot.docs[0].id;
-
-        const rawEmail = userData['Email'] || userData['Email Address'] || "No Email";
-        const rawPhone = userData['Phone Number'];
+        // 👇 সব আইডি একটি লিস্টে (Array) সাজানো হচ্ছে
+        const accounts = [];
+        userSnapshot.forEach(doc => {
+            const userData = doc.data();
+            const rawEmail = userData['Email'] || userData['Email Address'] || "No Email";
+            
+            accounts.push({
+                licenseKey: doc.id,
+                name: userData['Customer Name'] || "Unknown",
+                email: maskEmail(rawEmail),
+                phone: maskPhone(userData['Phone Number']),
+                package: userData['Package'] || "N/A"
+            });
+        });
 
         return {
             statusCode: 200,
             body: JSON.stringify({
                 found: true,
-                licenseKey: licenseKey,
-                name: userData['Customer Name'],
-
-                email: maskEmail(rawEmail), 
-                phone: maskPhone(rawPhone),
-                package: userData['Package']
+                accounts: accounts // 👈 লিস্ট হিসেবে পাঠানো হলো
             })
         };
 
     } catch (error) {
         return { statusCode: 500, body: JSON.stringify({ error: error.message }) };
     }
-
 };
