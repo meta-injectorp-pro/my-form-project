@@ -210,6 +210,13 @@
                         <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
                         Order Summary
                     </h3>
+
+                    <div id="freeTrialBadge" class="hidden mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-center animate-fade-in">
+                        <h4 class="text-green-400 font-bold text-lg mb-1">
+                            <i class="fa-solid fa-gift mr-2"></i>100% Free Trial
+                        </h4>
+                        <p class="text-green-200/70 text-xs">No payment details required. Instantly activated via email.</p>
+                    </div>
                     
                     <div class="space-y-4">
                         <div class="flex justify-between items-center p-4 bg-white/5 rounded-xl border border-white/5">
@@ -245,7 +252,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-8 p-4 bg-red-500/5 rounded-lg border border-red-500/10 text-center">
+                    <div class="mt-8 p-4 bg-red-500/5 rounded-lg border border-red-500/10 text-center" id="refundNote">
                         <p class="text-[11px] text-gray-400 leading-relaxed">
                             <span class="text-red-400 font-bold">Note:</span> 
                             By confirming, you agree that payments are <span class="text-white">non-refundable</span> under any circumstances.
@@ -477,7 +484,9 @@
             successView: document.getElementById('success-view'),
             statusMsg: document.getElementById('statusMsg'),
             copyBtn: document.getElementById('copyBtn'),
-            copyTooltip: document.getElementById('copyTooltip')
+            copyTooltip: document.getElementById('copyTooltip'),
+            refundNote: document.getElementById('refundNote'),
+            freeTrialBadge: document.getElementById('freeTrialBadge')
         };
 
         elements.pkgName.innerText = pkgName;
@@ -500,9 +509,21 @@
 
         if (isFreeTrial) {
             elements.paymentSection.style.display = 'none';
-            elements.priceRow.style.display = 'none';
+            elements.totalPrice.innerText = "৳0 (FREE)";
+            elements.totalPrice.classList.remove('text-[#A073EE]');
+            elements.totalPrice.classList.add('text-green-400');
+
+            elements.refundNote.style.display = 'none';
+            elements.freeTrialBadge.classList.remove('hidden');
+
             elements.submitBtn.innerText = "Start Your Free Trial";
+            elements.submitBtn.classList.remove('from-purple-600', 'to-blue-600', 'hover:from-purple-500', 'hover:to-blue-500', 'shadow-purple-500/30');
+            elements.submitBtn.classList.add('from-green-500', 'to-emerald-600', 'hover:from-green-400', 'hover:to-emerald-500', 'shadow-green-500/30');
+
         } else {
+            elements.refundNote.style.display = 'block';
+            elements.freeTrialBadge.classList.add('hidden');
+            
             const discountAmount = regularPrice - pkgPrice;
             if (regularPrice > pkgPrice) {
                 elements.regularPriceVal.innerText = regularPrice;
@@ -848,6 +869,3 @@
         }
     });
 </script>
-
-
-
