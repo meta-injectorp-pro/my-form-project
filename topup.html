@@ -13,7 +13,6 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0F0A1E; color: #fff; }
         
-        /* === Homepage Style Card CSS === */
         .pkg-card {
             transition: all 0.3s ease-in-out;
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -46,9 +45,7 @@
             background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
         }
 
-        /* === Updated Modern Glass Steps (Darker) === */
         .glass-panel-modern {
-            /* Darker background for better visibility */
             background: rgba(13, 11, 22, 0.95); 
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -58,14 +55,12 @@
             overflow: hidden;
         }
         
-        /* 4-Side Glow Effect */
         .glass-panel-modern::before {
             content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
             background: linear-gradient(45deg, #A073EE, transparent, #6E25ED, transparent);
             z-index: -1; border-radius: 26px; opacity: 0.5; filter: blur(10px);
         }
 
-        /* Inputs */
         .custom-input {
             background-color: rgba(255, 255, 255, 0.05) !important;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -77,7 +72,6 @@
             box-shadow: 0 0 15px rgba(160, 115, 238, 0.2);
         }
 
-        /* Buttons */
         .pricing-button-gradient {
             background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%);
             color: white; border: none; position: relative; overflow: hidden;
@@ -87,7 +81,6 @@
             box-shadow: 0 0 25px rgba(160, 115, 238, 0.6); transform: translateY(-2px);
         }
 
-        /* Payment Selectors */
         .payment-btn {
             display: flex; align-items: center; justify-content: center; height: 65px;
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
@@ -101,9 +94,25 @@
 
         .step-hidden { display: none; }
         .spinner { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
+        
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        /* === Fixed Checkbox Style === */
+        @keyframes scaleFadeIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-scale-fade {
+            animation: scaleFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUpNumber {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-number-slide {
+            animation: slideUpNumber 0.3s ease-out forwards;
+        }
+        
         .checkbox-custom { 
             appearance: none; 
             background-color: rgba(255,255,255,0.1); 
@@ -124,7 +133,6 @@
         }
         
         .warning-message { color: #ff4d4d; font-size: 12px; margin-top: 5px; display: none; }
-
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #A073EE; border-radius: 10px; }
@@ -152,7 +160,7 @@
 
     <main class="pt-32 pb-20">
         
-        <div id="step-pricing" class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 animate-fade-in">
+        <div id="step-pricing" class="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0 animate-scale-fade">
             <div class="text-center mb-16">
                 <span class="inline-flex items-center gap-2 py-2 px-4.5 rounded-full bg-white/5 border border-white/10 mb-4">
                     <span class="text-[#A073EE] text-sm font-bold">Top-Up Store</span>
@@ -312,7 +320,7 @@
                 <i class="fa-solid fa-arrow-left"></i> Change Package
             </button>
             
-            <div class="glass-panel-modern p-10 text-center">
+            <div class="glass-panel-modern p-10 text-center animate-scale-fade">
                 <div class="mb-8 border-b border-white/10 pb-6">
                     <p class="text-gray-400 text-xs uppercase tracking-wider font-bold mb-2">Selected Package</p>
                     <h3 class="text-3xl font-extrabold text-white" id="selected-pkg-name">Starter</h3>
@@ -337,7 +345,7 @@
         </div>
 
         <div id="step-payment" class="step-hidden max-w-[550px] mx-auto px-6 mt-10">
-            <div class="glass-panel-modern p-8 md:p-10">
+            <div class="glass-panel-modern p-8 md:p-10 animate-scale-fade">
                 
                 <div class="text-center mb-8">
                     <div class="w-14 h-14 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-5 text-2xl shadow-[0_0_20px_rgba(74,222,128,0.3)]">
@@ -385,7 +393,7 @@
                     </div>
                     <div class="flex justify-between border-t border-white/10 pt-3 mt-2 items-center">
                         <span class="text-white font-medium">Total Payable</span>
-                        <strong class="text-[#A073EE] text-3xl">৳<span id="conf-amount">150</span></strong>
+                        <strong class="text-[#A073EE] text-3xl transition-all duration-300">৳<span id="conf-amount">150</span></strong>
                     </div>
                 </div>
 
@@ -398,11 +406,25 @@
                     </div>
                 </div>
 
-                <div id="payment-instruction" class="bg-gradient-to-r from-[#241a3e] to-[#150D24] border border-[#A073EE]/30 p-5 rounded-xl mb-6 text-center hidden relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-2 opacity-10 text-white"><i class="fa-solid fa-money-bill-transfer text-4xl"></i></div>
-                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-2 font-bold">Send Money To (Personal)</p>
-                    <strong class="text-white text-2xl font-mono tracking-widest block mb-1" id="pay-number">01729816172</strong>
-                    <p class="text-[10px] text-gray-500">Copy the number and use 'Send Money'</p>
+                <div id="payment-instruction" class="hidden mb-6">
+                    <div class="bg-gradient-to-r from-[#1E1435] to-[#150D24] border border-purple-500/30 rounded-xl p-6 text-center relative overflow-hidden flex flex-col items-center shadow-lg">
+                        <div class="absolute top-0 right-0 p-2 opacity-20"><svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                        
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-4 font-bold">Send Money To (Personal)</p>
+                        
+                        <div id="qrCodeContainer" class="hidden bg-white p-2 rounded-xl mb-5 shadow-[0_0_20px_rgba(160,115,238,0.15)] transition-all ease-in-out duration-500 transform scale-95 opacity-0">
+                            <img id="qrCodeImg" src="" alt="QR Code" class="w-32 h-32 object-contain transition-opacity duration-500 opacity-0">
+                        </div>
+                        
+                        <div class="flex items-center justify-center gap-3 mb-2">
+                            <span id="pay-number" class="text-2xl sm:text-3xl font-mono font-bold text-white tracking-wider">01729816172</span>
+                            <button type="button" id="copyBtn" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition group relative">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                <span id="copyTooltip" class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] py-1 px-2 rounded opacity-0 transition-opacity">Copied!</span>
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-gray-500">Scan QR or Copy Number to Pay</p>
+                    </div>
                 </div>
 
                 <div id="payment-inputs" class="hidden space-y-5">
@@ -499,7 +521,7 @@
                 if (result.found) {
                     const allAccounts = result.accounts;
                     
-                    // ফ্রি ট্রায়াল আইডিগুলো ফিল্টার করে বাদ দেওয়া হচ্ছে, শুধু Paid গুলো রাখা হচ্ছে
+                    // Filter out free trial accounts
                     const paidAccounts = allAccounts.filter(acc => acc.package !== 'Free Trial');
 
                     if (paidAccounts.length > 1) {
@@ -621,14 +643,61 @@
             msg.innerHTML = "<span class='text-green-400'>You can try again now.</span>";
         }
 
+        const qrCodes = { 
+            "Bkash": "./Source_Files/bkash_qr.svg", 
+            "Rocket": "./Source_Files/rocket_qr.svg" 
+        };
+
         function selectPayment(method) {
             selectedMethod = method;
             document.querySelectorAll('.payment-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + method).classList.add('active');
-            document.getElementById('payment-instruction').classList.remove('hidden');
-            document.getElementById('pay-number').innerText = paymentNumbers[method];
-            document.getElementById('payment-inputs').classList.remove('hidden');
+            
+            const instructionPanel = document.getElementById('payment-instruction');
+            const payNumber = document.getElementById('pay-number');
+            const inputsPanel = document.getElementById('payment-inputs');
+            const qrContainer = document.getElementById('qrCodeContainer');
+            const qrImg = document.getElementById('qrCodeImg');
+
+            instructionPanel.classList.remove('hidden');
+            instructionPanel.classList.add('animate-scale-fade');
+            
+            inputsPanel.classList.remove('hidden');
+            inputsPanel.classList.add('animate-scale-fade');
+
+            payNumber.classList.remove('animate-number-slide');
+            void payNumber.offsetWidth; 
+            payNumber.innerText = paymentNumbers[method];
+            payNumber.classList.add('animate-number-slide');
+
+            if (qrCodes[method]) {
+                qrImg.style.opacity = '0';
+                qrImg.src = qrCodes[method];
+                
+                qrImg.onload = () => {
+                    qrImg.style.opacity = '1';
+                };
+
+                qrContainer.classList.remove('hidden');
+                setTimeout(() => {
+                    qrContainer.classList.remove('scale-95', 'opacity-0');
+                    qrContainer.classList.add('scale-100', 'opacity-100');
+                }, 50);
+            } else {
+                qrContainer.classList.remove('scale-100', 'opacity-100');
+                qrContainer.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => qrContainer.classList.add('hidden'), 300);
+            }
         }
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const number = document.getElementById('pay-number').innerText;
+            navigator.clipboard.writeText(number).then(() => {
+                const tooltip = document.getElementById('copyTooltip');
+                tooltip.style.opacity = '1';
+                setTimeout(() => { tooltip.style.opacity = '0'; }, 1500);
+            });
+        });
 
         async function submitCreditRequest() {
             const paymentDetails = document.getElementById('paymentDetails').value;
@@ -693,7 +762,7 @@
                                     <p class="text-gray-300 text-sm leading-relaxed">Please open your <span class="text-blue-400 font-bold">Meta Injector Pro</span> software. <br class="hidden sm:block"> Your new credits will automatically sync and show up immediately!</p>
                                 </div>
                                 <a href="/index" class="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-[#A073EE] hover:bg-[#8b5bdc] text-white font-bold transition-all duration-300 shadow-lg shadow-[#A073EE]/25 hover:shadow-[#A073EE]/40 hover:-translate-y-1">
-                                    <i class="fa-solid fa-arrow-left"></i> Return to Home
+                                    <i class="fa-solid fa-arrow-left"></i> Return to Dashboard
                                 </a>
                             </div>
                         </div>
@@ -721,10 +790,5 @@
             }
         }
     </script>
-
 </body>
-
 </html>
-
-
-
