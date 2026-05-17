@@ -510,9 +510,10 @@
         if (isFreeTrial) {
             elements.paymentSection.style.display = 'none';
             elements.totalPrice.innerText = "৳0 (FREE)";
-            elements.totalPrice.classList.remove('text-[#A073EE]');
-            elements.totalPrice.classList.add('text-green-400');
 
+            elements.totalPrice.classList.remove('text-[#A073EE]', 'text-3xl');
+            elements.totalPrice.classList.add('text-green-400', 'text-xl'); 
+            
             elements.refundNote.style.display = 'none';
             elements.freeTrialBadge.classList.remove('hidden');
 
@@ -523,6 +524,8 @@
         } else {
             elements.refundNote.style.display = 'block';
             elements.freeTrialBadge.classList.add('hidden');
+            elements.totalPrice.classList.add('text-[#A073EE]', 'text-3xl');
+            elements.totalPrice.classList.remove('text-green-400', 'text-xl');
             
             const discountAmount = regularPrice - pkgPrice;
             if (regularPrice > pkgPrice) {
@@ -533,6 +536,8 @@
                 elements.discountBadge.classList.remove('hidden');
             }
             elements.submitBtn.innerText = `Pay ৳${pkgPrice} & Confirm`;
+            elements.submitBtn.classList.remove('from-green-500', 'to-emerald-600', 'shadow-green-500/30');
+            elements.submitBtn.classList.add('from-purple-600', 'to-blue-600', 'shadow-purple-500/30');
         }
 
         document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
