@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link rel="icon" href="./Source_Files/favicon.ico">
-
     <link href="./Source_Files/style.css" rel="stylesheet">
     
     <style>
@@ -38,6 +37,23 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
+        /* Smooth UI Animations */
+        @keyframes scaleFadeIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-scale-fade {
+            animation: scaleFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUpNumber {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-number-slide {
+            animation: slideUpNumber 0.3s ease-out forwards;
+        }
+
         .payment-card { 
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -45,13 +61,11 @@
             opacity: 1;
             filter: grayscale(0%);
         }
-
         .payment-card:hover {
             border-color: rgba(138, 77, 255, 0.5);
             background: rgba(255, 255, 255, 0.08);
             transform: translateY(-2px);
         }
-
         input[type="radio"]:checked + .payment-card { 
             border-color: #8A4DFF; 
             background: rgba(138, 77, 255, 0.15); 
@@ -73,6 +87,7 @@
             display: inline-block;
             position: relative;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
         .checkbox-custom:checked {
             background-color: #A073EE;
@@ -147,7 +162,6 @@
     <section class="relative z-10 pt-32 pb-20 px-4 min-h-screen flex flex-col items-center justify-center">
         
         <div id="success-view" class="hidden w-full max-w-lg mx-auto text-center pt-10 pb-20">
-        
         <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-[#A073EE]/30 shadow-[0_0_60px_rgba(160,115,238,0.15)] relative overflow-hidden">
             
             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-[#A073EE] blur-[20px]"></div>
@@ -211,7 +225,7 @@
                         Order Summary
                     </h3>
 
-                    <div id="freeTrialBadge" class="hidden mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-center animate-fade-in">
+                    <div id="freeTrialBadge" class="hidden mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-center animate-scale-fade">
                         <h4 class="text-green-400 font-bold text-lg mb-1">
                             <i class="fa-solid fa-gift mr-2"></i>100% Free
                         </h4>
@@ -248,11 +262,11 @@
                     <div class="border-t border-dashed border-white/10 pt-6 mt-6" id="priceRow">
                         <div class="flex justify-between items-end">
                             <span class="text-gray-300 font-medium">Total Payable</span>
-                            <span id="totalPrice" class="text-3xl font-bold text-[#A073EE] tracking-tight">৳130</span>
+                            <span id="totalPrice" class="text-3xl font-bold text-[#A073EE] tracking-tight transition-all duration-300">৳130</span>
                         </div>
                     </div>
                     
-                    <div class="mt-8 p-4 bg-red-500/5 rounded-lg border border-red-500/10 text-center" id="refundNote">
+                    <div class="mt-8 p-4 bg-red-500/5 rounded-lg border border-red-500/10 text-center transition-all duration-300" id="refundNote">
                         <p class="text-[11px] text-gray-400 leading-relaxed">
                             <span class="text-red-400 font-bold">Note:</span> 
                             By confirming, you agree that payments are <span class="text-white">non-refundable</span> under any circumstances.
@@ -317,14 +331,14 @@
                                 </label>
                             </div>
 
-                            <div id="paymentInstruction" class="hidden animate-fade-in mb-8">
+                            <div id="paymentInstruction" class="hidden mb-8">
                                 <div class="bg-gradient-to-r from-[#1E1435] to-[#150D24] border border-purple-500/30 rounded-xl p-6 text-center relative overflow-hidden flex flex-col items-center">
                                     <div class="absolute top-0 right-0 p-2 opacity-20"><svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
                                     
                                     <p class="text-gray-400 text-xs uppercase tracking-widest mb-4">Send Money To (Personal)</p>
                                     
-                                    <div id="qrCodeContainer" class="hidden bg-white p-2 rounded-xl mb-5 shadow-[0_0_20px_rgba(160,115,238,0.15)] transition-all">
-                                        <img id="qrCodeImg" src="" alt="QR Code" class="w-32 h-32 object-contain">
+                                    <div id="qrCodeContainer" class="hidden bg-white p-2 rounded-xl mb-5 shadow-[0_0_20px_rgba(160,115,238,0.15)] transition-all ease-in-out duration-500 transform scale-95 opacity-0">
+                                        <img id="qrCodeImg" src="" alt="QR Code" class="w-32 h-32 object-contain transition-opacity duration-500 opacity-0">
                                     </div>
                                     
                                     <div class="flex items-center justify-center gap-3 mb-2">
@@ -338,7 +352,7 @@
                                 </div>
                             </div>
 
-                            <div id="trxGroup" class="hidden animate-fade-in">
+                            <div id="trxGroup" class="hidden">
                                 <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 pl-1">Transaction ID (TrxID)</label>
                                 <input type="text" id="senderInfo" name="SenderInfo" class="custom-input uppercase font-mono tracking-widest text-center border-purple-500/30 focus:border-purple-500" placeholder="e.g. 8HGD73X...">
                                 <div class="warning-message" id="warnTrx">Transaction ID is required.</div>
@@ -515,7 +529,7 @@
 
         if (isFreeTrial) {
             elements.paymentSection.style.display = 'none';
-            elements.totalPrice.innerText = "৳0";
+            elements.totalPrice.innerText = "৳0 (FREE)";
 
             elements.totalPrice.classList.remove('text-[#A073EE]', 'text-3xl');
             elements.totalPrice.classList.add('text-green-400', 'text-xl'); 
@@ -555,15 +569,37 @@
             radio.addEventListener('change', (e) => {
                 const method = e.target.value;
                 if(paymentNumbers[method]) {
-                    elements.payNumber.innerText = paymentNumbers[method];
+                    // Trigger container animation
                     elements.payInstruction.classList.remove('hidden');
+                    elements.payInstruction.classList.add('animate-scale-fade');
+                    
                     elements.trxGroup.classList.remove('hidden');
+                    elements.trxGroup.classList.add('animate-scale-fade');
 
+                    // Trigger number slide animation
+                    elements.payNumber.classList.remove('animate-number-slide');
+                    void elements.payNumber.offsetWidth; 
+                    elements.payNumber.innerText = paymentNumbers[method];
+                    elements.payNumber.classList.add('animate-number-slide');
+
+                    // Handle QR code visibility and animation
                     if (qrCodes[method]) {
+                        elements.qrCodeImg.style.opacity = '0';
                         elements.qrCodeImg.src = qrCodes[method];
+                        
+                        elements.qrCodeImg.onload = () => {
+                            elements.qrCodeImg.style.opacity = '1';
+                        };
+
                         elements.qrCodeContainer.classList.remove('hidden');
+                        setTimeout(() => {
+                            elements.qrCodeContainer.classList.remove('scale-95', 'opacity-0');
+                            elements.qrCodeContainer.classList.add('scale-100', 'opacity-100');
+                        }, 50);
                     } else {
-                        elements.qrCodeContainer.classList.add('hidden');
+                        elements.qrCodeContainer.classList.remove('scale-100', 'opacity-100');
+                        elements.qrCodeContainer.classList.add('scale-95', 'opacity-0');
+                        setTimeout(() => elements.qrCodeContainer.classList.add('hidden'), 300);
                     }
                 }
             });
@@ -612,6 +648,7 @@
             warns.email.style.display = 'none';
             inputs.email.style.borderColor = '';
         });
+        
         inputs.terms.addEventListener('change', () => {
             if(inputs.terms.checked) warns.terms.style.display = 'none';
         });
@@ -892,3 +929,5 @@
         }
     });
 </script>
+</body>
+</html>
