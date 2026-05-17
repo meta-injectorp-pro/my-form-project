@@ -1834,6 +1834,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function scrollToSection(sectionId) {
     const section = document.getElementById(sectionId);
     if (section) {
+      if (sectionId === 'pricing') {
+        const gridSection = document.getElementById('pricingGrid');
+        if (gridSection) {
+          const yOffset = -100;
+          const yPosition = gridSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: yPosition, behavior: 'smooth' });
+          return;
+        }
+      }
       section.scrollIntoView({ behavior: 'smooth' });
     } else {
       window.location.href = "/#" + sectionId;
