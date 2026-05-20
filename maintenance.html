@@ -1,129 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>We'll be back soon! - Meta Injector Pro</title>
-  
-  <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
-  <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
-  
-  <link href="./Source_Files/style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Maintenance - Meta Injector Pro</title>
+    
+    <link rel="icon" href="./Source_Files/favicon.ico" sizes="any">
+    <link rel="icon" href="./Source_Files/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./Source_Files/icon.svg">
 
-  <style>
-    /* Base Setup */
-    body {
-        background-color: #0F0A1E;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        overflow: hidden;
-        position: relative;
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #0F0A1E; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
 
-    /* Premium Glass Box */
-    .maintenance-card {
-        background: rgba(20, 15, 35, 0.6);
-        backdrop-filter: blur(40px);
-        -webkit-backdrop-filter: blur(40px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 
-            0 50px 100px -20px rgba(0, 0, 0, 0.7), 
-            inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-        transform: translateZ(0);
-    }
+        /* === SVG Plug-in / Plug-out Animation === */
+        #plug-left {
+            animation: unplugLeft 4s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+        }
+        #plug-right {
+            animation: unplugRight 4s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+        }
 
-    /* Glow Text */
-    .text-glow {
-        text-shadow: 0 0 30px rgba(160, 115, 238, 0.5);
-    }
+        @keyframes unplugLeft {
+            0%, 20%, 80%, 100% { transform: translateX(0); }
+            40%, 60% { transform: translateX(-80px); }      
+        }
 
-    /* Floating Animation for Background */
-    @keyframes float-slow {
-        0%, 100% { transform: translate(0, 0); }
-        50% { transform: translate(-20px, 20px); }
-    }
-    .animate-float {
-        animation: float-slow 8s ease-in-out infinite;
-    }
-  </style>
+        @keyframes unplugRight {
+            0%, 20%, 80%, 100% { transform: translateX(0); }
+            40%, 60% { transform: translateX(80px); }       
+        }
+
+        .st0{fill:#66CC5D;}
+        .st1{fill:#82F870;}
+        .st2{fill:#366E23;}
+        .st3{fill:#BDE5FB;}
+        .st4{fill:#52A7EA;}
+        .st5{fill:#2B5DA5;}
+    </style>
 </head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-x-hidden text-center">
 
-<body>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[700px] h-[300px] sm:h-[700px] bg-[#A073EE] opacity-[0.08] blur-[100px] sm:blur-[150px] rounded-full pointer-events-none -z-10"></div>
 
-  <div class="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-      <div class="absolute inset-0 bg-[url('./Source_Files/grid.svg')] opacity-10"></div>
-      
-      <div class="absolute top-[-10%] left-[20%] w-[600px] h-[600px] bg-[#A073EE] rounded-full mix-blend-screen filter blur-[150px] opacity-20 animate-float"></div>
-      <div class="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] bg-[#6E25ED] rounded-full mix-blend-screen filter blur-[150px] opacity-20 animate-float" style="animation-delay: 2s;"></div>
-  </div>
+    <div class="w-full max-w-[650px] flex flex-col items-center justify-center mx-auto z-10">
+        
+        <div class="flex justify-center mb-10 sm:mb-14 select-none">
+            <img src="./Source_Files/logo.svg" 
+                 alt="Meta Injector Pro" 
+                 class="h-11 sm:h-14 w-auto opacity-90 pointer-events-none select-none" 
+                 oncontextmenu="return false;" 
+                 draggable="false">
+        </div>
 
-  <div class="relative z-10 w-full max-w-[580px] px-6">
-      
-      <div class="maintenance-card rounded-[40px] p-10 sm:p-14 text-center relative overflow-hidden group">
-          
-          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[150px] bg-gradient-to-b from-[#A073EE]/20 to-transparent blur-[60px] pointer-events-none"></div>
+        <div class="w-full max-w-[450px] sm:max-w-full mb-10 sm:mb-14 px-2 mx-auto flex justify-center">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 2024 276.8" style="enable-background:new 0 0 2024 276.8;" xml:space="preserve" class="w-full h-auto drop-shadow-2xl">
+                
+                <g id="plug-right">
+                    <g>
+                        <rect x="1121.2" y="78.4" class="st0" width="37.1" height="93.1"/>
+                        <rect x="1121.2" y="171.6" class="st1" width="37.1" height="93.1"/>
+                    </g>
+                    <g>
+                        <rect x="1158.3" y="94.1" class="st1" width="75.1" height="77.9"/>
+                        <path class="st0" d="M1308.4,172h-75.1V94.1h40.4c19.2,0,34.7,15.5,34.7,34.7V172z"/>
+                        <path class="st2" d="M1273.8,250h-40.4V172h75.1v43.2C1308.4,234.4,1292.9,250,1273.8,250z"/>
+                        <rect x="1158.3" y="172" class="st0" width="75.1" height="77.9"/>
+                    </g>
+                    <path class="st2" d="M1392.1,171.6h-83.6v-34.2h57c14.7,0,26.6,11.9,26.6,26.6V171.6z"/>
+                    <path class="st0" d="M1365.5,206.3h-57V172h83.6v7.6C1392.1,194.3,1380.2,206.3,1365.5,206.3z"/>
+                    <path class="st1" d="M1504.1,157.5h-112v29h112c21.4,0,40-12,49.4-29.7H1510C1508.1,157.3,1506.1,157.5,1504.1,157.5z"/>
+                    <path class="st0" d="M1560.1,100.9c0-14.9,12.1-27,27-27h-49.1c-4.4,8-7,17.2-7,27v29.6c0,12.9-9,23.7-21.1,26.4h43.5c4.2-7.9,6.6-16.8,6.6-26.4V100.9z"/>
+                    <path class="st1" d="M2023.9,73.9v-29h-436.8c-21.1,0-39.5,11.7-49.1,29h49.1H2023.9z"/>
+                </g>
 
-          <div class="mb-10 relative">
-              <img src="./Source_Files/logo.svg" alt="Meta Injector Pro" class="h-10 mx-auto drop-shadow-[0_0_15px_rgba(160,115,238,0.4)]">
-          </div>
+                <g id="plug-left">
+                    <rect x="865.6" y="78.1" transform="matrix(-1 -4.489932e-11 4.489932e-11 -1 1768.3452 249.2725)" class="st3" width="37.1" height="93.1"/>
+                    <rect x="865.6" y="171.2" transform="matrix(-1 -4.489932e-11 4.489932e-11 -1 1768.3452 435.5695)" class="st4" width="37.1" height="93.1"/>
+                    <rect x="790.5" y="93.7" transform="matrix(-1 -4.488777e-11 4.488777e-11 -1 1656.1868 265.4309)" class="st4" width="75.1" height="77.9"/>
+                    <path class="st5" d="M715.5,171.7h75.1V93.7h-40.4c-19.2,0-34.7,15.5-34.7,34.7V171.7z"/>
+                    <path class="st4" d="M750.2,249.6h40.4v-77.9h-75.1v43.2C715.5,234.1,731,249.6,750.2,249.6z"/>
+                    <rect x="790.5" y="171.7" transform="matrix(-1 -4.488777e-11 4.488777e-11 -1 1656.1868 421.3121)" class="st3" width="75.1" height="77.9"/>
+                    <path class="st4" d="M631.8,171.2h83.6V137h-57c-14.7,0-26.6,11.9-26.6,26.6V171.2z"/>
+                    <path class="st5" d="M658.4,205.9h57v-34.2h-83.6v7.6C631.8,194,643.7,205.9,658.4,205.9z"/>
+                    <path class="st3" d="M519.8,157.2h112v29h-112c-21.4,0-40-12-49.4-29.7h43.5C515.8,157,517.8,157.2,519.8,157.2z"/>
+                    <path class="st4" d="M463.8,100.6c0-14.9-12.1-27-27-27h49.1c4.4,8,7,17.2,7,27v29.6c0,12.9,9,23.7,21.1,26.4h-43.5c-4.2-7.9-6.6-16.8-6.6-26.4V100.6z"/>
+                    <path class="st3" d="M0,73.6l0-29h436.8c21.1,0,39.5,11.7,49.1,29h-49.1H0z"/>
+                    <path class="st4" d="M957.2,151.6h-54.5v-34.2h54.5c9.4,0,17.1,7.7,17.1,17.1v0C974.3,143.9,966.7,151.6,957.2,151.6z"/>
+                    <path class="st5" d="M957.2,227.8h-54.5v-34.2h54.5c9.4,0,17.1,7.7,17.1,17.1v0C974.3,220.1,966.7,227.8,957.2,227.8z"/>
+                </g>
+            </svg>
+        </div>
 
-          <div class="mb-8 flex justify-center relative">
-              <div class="relative w-20 h-20 flex items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-[0_0_40px_rgba(160,115,238,0.15)]">
-                  <svg class="animate-spin-slow w-10 h-10 text-[#A073EE]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  <div class="absolute inset-0 rounded-full border border-[#A073EE]/30 animate-ping opacity-20"></div>
-              </div>
-          </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 sm:mb-6 tracking-tight leading-tight px-2">
+            System Under Maintenance
+        </h1>
+        
+        <p class="text-white/60 text-sm sm:text-lg leading-relaxed max-w-xl mx-auto mb-10 sm:mb-12 px-4">
+            We are currently doing some work on our servers to enhance your experience. The platform will be back online shortly. We appreciate your patience.
+        </p>
 
-          <h1 class="text-white text-4xl sm:text-5xl font-bold mb-6 tracking-tight">
-              We&rsquo;ll be <br>
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#fff] via-[#A073EE] to-[#fff] text-glow">back soon!</span>
-          </h1>
-
-          <div class="text-gray-300 text-base sm:text-lg leading-relaxed mb-10 space-y-4">
-              <p>
-                  Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment.
-              </p>
-              <p>
-                  If you need to, you can always 
-                  <a href="mailto:support@metainjector.pro" class="text-[#A073EE] font-semibold hover:text-white transition-colors underline decoration-[#A073EE]/30 underline-offset-4 hover:decoration-white">contact us</a>, 
-                  otherwise we&rsquo;ll be back online shortly!
-              </p>
-          </div>
-
-          <div class="flex items-center justify-center gap-3 opacity-60 mb-8">
-			<div class="h-[1px] w-8 bg-white/30"></div>
-			<p class="text-sm font-medium text-white tracking-widest uppercase">&mdash; Meta Injector Pro Team</p>
-			<div class="h-[1px] w-8 bg-white/30"></div>
-		</div>
-
-          <div class="mt-20 flex justify-center gap-4">
-               <a href="https://www.facebook.com/metainjector" target="_blank" class="p-2 rounded-full bg-white/5 hover:bg-[#1877F2]/20 hover:text-[#1877F2] text-gray-400 transition-all duration-300 border border-transparent hover:border-[#1877F2]/30">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385h-3.047v-3.47h3.047v-2.641c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385c5.737-.9 10.125-5.864 10.125-11.854z"/></svg>
-               </a>
-               <a href="https://wa.me/+8801729816172" target="_blank" class="p-2 rounded-full bg-white/5 hover:bg-[#25D366]/20 hover:text-[#25D366] text-gray-400 transition-all duration-300 border border-transparent hover:border-[#25D366]/30">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-               </a>
-          </div>
-
-      </div>
-  </div>
-
-  <style>
-      /* Slow Spin for the Refresh Icon */
-      @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-      }
-      .animate-spin-slow {
-          animation: spin-slow 3s linear infinite;
-      }
-  </style>
+        <div class="w-full max-w-sm mx-auto pt-6 border-t border-white/5 flex flex-col items-center justify-center">
+            <p class="text-white/40 text-xs sm:text-sm mb-3">For urgent inquiries, please contact our support team</p>
+            <a href="https://wa.me/+8801729816172" 
+               target="_blank" 
+               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#25D366]/10 border border-[#25D366]/20 text-[#25D366] text-sm font-semibold hover:bg-[#25D366]/20 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg shadow-[#25D366]/5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Contact on WhatsApp
+            </a>
+        </div>
+        
+    </div>
 
 </body>
 </html>
