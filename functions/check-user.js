@@ -65,7 +65,8 @@ exports.handler = async (event) => {
                 name: userData['Customer Name'] || "Unknown",
                 email: maskEmail(rawEmail),
                 phone: maskPhone(userData['Phone Number']),
-                package: userData['Package'] || "N/A"
+                package: userData['Package'] || "N/A",
+                expiryDate: userData['Expiry Date'] || ""
             });
         });
 
