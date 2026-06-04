@@ -470,6 +470,26 @@
 
     </main>
 
+    <!-- Expiry Alert Popup -->
+    <div id="expiry-popup" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all">
+        <div class="bg-[#120d21] border border-red-500/50 shadow-[0_0_40px_rgba(239,68,59,0.2)] max-w-md w-full p-8 text-center rounded-2xl animate-scale-fade relative">
+            <div class="w-16 h-16 bg-red-500/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-5 text-3xl shadow-[0_0_20px_rgba(239,68,59,0.3)]">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-3">Top-Up Not Allowed Yet!</h2>
+            <p class="text-gray-300 text-sm mb-4 leading-relaxed">
+                You can only top-up when your current package has <span class="font-bold text-white">7 days or less</span> remaining. 
+            </p>
+            <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6">
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-1 font-bold">Your Package Expires On</p>
+                <p class="text-lg font-mono font-bold text-red-400" id="popup-expiry-date">Loading...</p>
+            </div>
+            <button onclick="closeExpiryPopup()" class="w-full py-3.5 rounded-xl font-bold text-white bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/30 transition transform hover:-translate-y-1">
+                Understood, Go Back
+            </button>
+        </div>
+    </div>
+    
     <footer class="text-center py-8 border-t border-white/5 bg-[#0F0A1E] text-gray-600 text-sm">
         &copy; 2026 Meta Injector Pro. All Rights Reserved.
     </footer>
@@ -590,10 +610,28 @@
 
         function proceedWithAccount(index) {
             const account = foundAccounts[index];
+            const expiryStr = account['Expiry Date'] || account.expiryDate; 
+
+            if (expiryStr) {
+                let [datePart, timePart] = expiryStr.split(" ");
+                let [day, month, year] = datePart.split("-");
+                let [hour, minute, second] = (timePart || "00:00:00").split(":");
+                
+                let expDate = new Date(year, month - 1, day, hour, minute, second);
+                let now = new Date();
+
+                let diffTime = expDate - now;
+                let diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+                if (diffDays > 7) {
+                    showExpiryPopup(day, month, year, hour, minute);
+                    return;
+                }
+            }
 
             failedAttempts = 0;
             
-            document.getElementById('display-name').innerText = account.name;
+            document.getElementById('display-name').innerText = account.name || "N/A";
             document.getElementById('display-email').innerText = account.email || "N/A";
             document.getElementById('display-phone').innerText = account.phone || document.getElementById('userPhone').value;
             document.getElementById('hiddenLicenseKey').value = account.licenseKey;
@@ -612,6 +650,23 @@
 
             document.getElementById('step-verify').classList.add('step-hidden');
             document.getElementById('step-payment').classList.remove('step-hidden');
+        }
+
+        function showExpiryPopup(day, month, year, hour, minute) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let ampm = hour >= 12 ? 'PM' : 'AM';
+            let niceHour = hour % 12 || 12;
+ো
+            const formattedDate = `${day} ${monthNames[parseInt(month) - 1]} ${year}, ${niceHour}:${minute} ${ampm}`;
+            
+            document.getElementById('popup-expiry-date').innerText = formattedDate;
+            document.getElementById('expiry-popup').classList.remove('hidden');
+            document.getElementById('expiry-popup').classList.add('flex');
+        }
+
+        function closeExpiryPopup() {
+            document.getElementById('expiry-popup').classList.add('hidden');
+            document.getElementById('expiry-popup').classList.remove('flex');
         }
 
         function handleFailure(btn, input, msg, customError = "User not found!") {
