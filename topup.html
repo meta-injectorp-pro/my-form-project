@@ -656,7 +656,7 @@
             const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             let ampm = hour >= 12 ? 'PM' : 'AM';
             let niceHour = hour % 12 || 12;
-ো
+            
             const formattedDate = `${day} ${monthNames[parseInt(month) - 1]} ${year}, ${niceHour}:${minute} ${ampm}`;
             
             document.getElementById('popup-expiry-date').innerText = formattedDate;
