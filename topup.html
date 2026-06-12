@@ -503,6 +503,7 @@
         let isLocked = false;
         let countdownInterval;
         let foundAccounts = []; 
+        let verifiedPhone = "";
 
         const regularPrices = {
             "Starter": 200, "Beginner": 350, "Professional": 600,
@@ -536,6 +537,7 @@
             const btn = document.getElementById('verifyBtn');
             const msg = document.getElementById('verify-msg');
             const phone = phoneInput.value;
+            verifiedPhone = phone;
 
             if (phone.length < 11) {
                 msg.innerHTML = "<span class='text-red-400'><i class='fa-solid fa-circle-exclamation mr-1'></i> Invalid phone number.</span>";
@@ -641,7 +643,7 @@
             
             document.getElementById('display-name').innerText = account.name || "N/A";
             document.getElementById('display-email').innerText = account.email || "N/A";
-            document.getElementById('display-phone').innerText = account.phone || document.getElementById('userPhone').value;
+            document.getElementById('display-phone').innerText = account.phone || verifiedPhone;
             document.getElementById('hiddenLicenseKey').value = account.licenseKey;
             
             document.getElementById('conf-pkg-name').innerText = selectedData.name;
@@ -803,7 +805,7 @@
 
             const requestData = {
                 name: document.getElementById('display-name').innerText,
-                phone: document.getElementById('userPhone').value,
+                phone: verifiedPhone,
                 licenseKey: document.getElementById('hiddenLicenseKey').value,
                 credits: selectedData.credits,
                 amount: selectedData.price,
