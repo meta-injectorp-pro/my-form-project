@@ -2,6 +2,6 @@
   directory = "functions/"
 
 # For Maintenance Mode OFF Use "#"
-[[edge_functions]]
-  path = "/*"
-  function = "maintenance"
+#[[edge_functions]]
+  #path = "/*"
+  #function = "maintenance"
