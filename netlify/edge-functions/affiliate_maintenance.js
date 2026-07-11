@@ -4,7 +4,7 @@ export default async (request, context) => {
     // 👇 GitHub theke On/Off korar switch
     // true = Affiliate system bondho thakbe (Commission jabe na)
     // false = Affiliate system normal cholbe
-    const isMaintenanceMode = false; 
+    const isMaintenanceMode = true; 
 
     // Jodi maintenance off thake, normal vabe cholte dibe
     if (!isMaintenanceMode) {
