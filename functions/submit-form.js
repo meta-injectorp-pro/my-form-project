@@ -253,9 +253,9 @@ New Free User is now Registered.`;
         const softwareLink = "https://www.dropbox.com/scl/fi/qt611a2v2k43cg77fo5cu/Meta-Injector-Pro.zip?rlkey=5j2brhtsam79faxlqqvhcpnfv&st=s6g7bf2f&dl=1";
         
         // EMAIL NOTIFICATION (FREE TRIAL)
-        const mailOptions = { //
+        const mailOptions = {
             from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
-            to: data.Email,
+            to: data.Email,[cite: 3]
             subject: '🎉 Your Meta Injector ᴾʳᵒ Free Trial is Ready',
             html: `
             <!DOCTYPE html><html><head><style>
@@ -266,12 +266,6 @@ New Free User is now Registered.`;
                     pointer-events: none !important;
                     cursor: default !important;
                 }
-                .unselectable {
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    -ms-user-select: none;
-                    user-select: none;
-                }
             </style></head>
             <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
@@ -281,7 +275,7 @@ New Free User is now Registered.`;
                             <tr><td align="center"><span style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Free Trial Activated</span></td></tr>
                             <tr><td align="center" style="padding: 20px 40px 0;">
                                 <h2 style="color:#ffffff; margin:0 0 10px; font-size: 26px;">Free Trial Ready! 🚀</h2>
-                                <p style="color:#9ca3af; margin:0; font-size: 15px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p> <!--[cite: 3] -->
+                                <p style="color:#9ca3af; margin:0; font-size: 15px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p>
                             </td></tr>
                             <tr><td style="padding: 30px 40px;">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.03); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); table-layout: fixed;">
@@ -290,21 +284,14 @@ New Free User is now Registered.`;
                                     <tr>
                                         <td class="disable-link" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Email Address</p>
-                                            <table border="0" cellspacing="0" cellpadding="0" style="margin-top:5px; width: 100%;">
-                                                <tr>
-                                                    <td style="color:#ffffff; font-size: 14px; font-weight: 500; word-break: break-all;">
-                                                        <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Email.split('@')[0]}<!-- -->&#64;<!-- -->${data.Email.split('@')[1]}</span> <!--[cite: 3] -->
-                                                    </td>
-                                                    <td class="unselectable" width="20" align="right" style="user-select: none; -webkit-user-select: none;">
-                                                        <img src="https://img.icons8.com/material-outlined/24/A073EE/copy.png" width="16" height="16" alt="" style="display:block; border:0; pointer-events:none;" />
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500; word-break: break-all;">
+                                                <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Email.split('@')[0]}<!-- -->&#64;<!-- -->${data.Email.split('@')[1]}</span>[cite: 3]
+                                            </p>
                                         </td>
                                         <td class="disable-link" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Phone Number</p>
-                                            <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500; cursor:text;">
-                                                <span style="color:#ffffff !important; text-decoration:none !important;">${data.Phone.slice(0, 3)}<!-- -->${data.Phone.slice(3)}</span> <!--[cite: 3] -->
+                                            <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500;">
+                                                <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Phone.slice(0, 3)}<!-- -->${data.Phone.slice(3)}</span>[cite: 3]
                                             </p>
                                         </td>
                                     </tr>
@@ -313,16 +300,9 @@ New Free User is now Registered.`;
                                     <tr>
                                         <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
-                                            <table border="0" cellspacing="0" cellpadding="0" style="margin-top:5px; width: 100%;">
-                                                <tr>
-                                                    <td>
-                                                        <code style="color:#ffffff; font-family: monospace; font-size: 15px; letter-spacing: 1px; cursor:text;">${licenseKeyToUpdate}</code> <!--[cite: 3] -->
-                                                    </td>
-                                                    <td class="unselectable" width="20" align="right" style="user-select: none; -webkit-user-select: none;">
-                                                        <img src="https://img.icons8.com/material-outlined/24/A073EE/copy.png" width="16" height="16" alt="" style="display:block; border:0; pointer-events:none;" />
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            <p style="margin:5px 0 0;">
+                                                <code style="color:#ffffff; font-family: monospace; font-size: 15px; letter-spacing: 1px;">${licenseKeyToUpdate}</code>[cite: 3]
+                                            </p>
                                         </td>
                                     </tr>
 
@@ -333,11 +313,11 @@ New Free User is now Registered.`;
                                                 <tr>
                                                     <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 33.33%; text-align: center;">
                                                         <p style="color:#9ca3af; font-size: 11px; margin:0;">Duration</p>
-                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p> <!--[cite: 3] -->
+                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>[cite: 3]
                                                     </td>
                                                     <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 33.33%; text-align: center;">
                                                         <p style="color:#9ca3af; font-size: 11px; margin:0;">Credits</p>
-                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p> <!--[cite: 3] -->
+                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>[cite: 3]
                                                     </td>
                                                     <td style="padding: 15px 12px; width: 33.33%; text-align: center;">
                                                         <p style="color:#9ca3af; font-size: 11px; margin:0;">Amount</p>
@@ -352,7 +332,7 @@ New Free User is now Registered.`;
                             </td></tr>
                             
                             <tr><td align="center" style="padding: 0 0 30px;">
-                                <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE, #7C3AED); color: #ffffff; padding: 15px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);"> <!--[cite: 3] -->
+                                <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE, #7C3AED); color: #ffffff; padding: 15px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);">[cite: 3]
                                     Download Software
                                 </a>
                             </td></tr>
