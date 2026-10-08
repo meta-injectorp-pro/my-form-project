@@ -260,14 +260,16 @@ New Free User is now Registered.`;
             html: `
             <!DOCTYPE html><html><head><style>
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
-                .no-copy {
+                u + #body a { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+                a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+                .unselectable {
                     -webkit-user-select: none;
                     -moz-user-select: none;
                     -ms-user-select: none;
                     user-select: none;
                 }
             </style></head>
-            <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
+            <body id="body" style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
                     <tr><td align="center">
                         <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
@@ -280,18 +282,26 @@ New Free User is now Registered.`;
                             <tr><td style="padding: 30px 40px;">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.03); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); table-layout: fixed;">
                                     
-                                    <!-- Row 1: Email (50%) & Phone (50%) - Non-clickable -->
+                                    <!-- Row 1: Email (50%) & Phone (50%) -->
                                     <tr>
                                         <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Email Address</p>
                                             <div style="margin:5px 0 0; display: flex; align-items: center; justify-content: space-between;">
-                                                <span style="color:#ffffff; font-size: 14px; word-break: break-all; font-weight: 500;">${data.Email}</span>
-                                                <span class="no-copy" style="margin-left: 8px; width: 15px; height: 15px; display: inline-block; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' fill=\\'none\\' viewBox=\\'0 0 24 24\\' stroke=\\'%23A073EE\\' stroke-width=\\'2\\'><rect x=\\'9\\' y=\\'9\\' width=\\'13\\' height=\\'13\\' rx=\\'2\\'/><path d=\\'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\\'/></svg>'); background-repeat: no-repeat; background-size: contain; -webkit-user-select: none; user-select: none;"></span>
+                                                <span style="color:#ffffff !important; text-decoration:none !important; font-size: 14px; word-break: break-all; font-weight: 500; pointer-events: none;">
+                                                    <span style="color:#ffffff !important; text-decoration:none !important;">${data.Email}</span>
+                                                </span>
+                                                <span class="unselectable" style="user-select: none; -webkit-user-select: none; display: inline-block; margin-left: 8px; vertical-align: middle;">
+                                                    <img src="https://img.icons8.com/material-outlined/24/A073EE/copy.png" width="16" height="16" alt="" style="display:block; border:0; pointer-events:none;" />
+                                                </span>
                                             </div>
                                         </td>
                                         <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Phone Number</p>
-                                            <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500;">${data.Phone}</p>
+                                            <p style="margin:5px 0 0;">
+                                                <span style="color:#ffffff !important; text-decoration:none !important; font-size: 14px; font-weight: 500; pointer-events: none;">
+                                                    <span style="color:#ffffff !important; text-decoration:none !important;">${data.Phone}</span>
+                                                </span>
+                                            </p>
                                         </td>
                                     </tr>
 
@@ -300,8 +310,10 @@ New Free User is now Registered.`;
                                         <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
                                             <div style="margin:5px 0 0; display: flex; align-items: center; justify-content: space-between;">
-                                                <code style="color:#fff; font-family: monospace; font-size: 15px; letter-spacing: 1px;">${licenseKeyToUpdate}</code>
-                                                <span class="no-copy" style="margin-left: 8px; width: 16px; height: 16px; display: inline-block; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' fill=\\'none\\' viewBox=\\'0 0 24 24\\' stroke=\\'%23A073EE\\' stroke-width=\\'2\\'><rect x=\\'9\\' y=\\'9\\' width=\\'13\\' height=\\'13\\' rx=\\'2\\'/><path d=\\'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\\'/></svg>'); background-repeat: no-repeat; background-size: contain; -webkit-user-select: none; user-select: none;"></span>
+                                                <code style="color:#ffffff; font-family: monospace; font-size: 15px; letter-spacing: 1px;">${licenseKeyToUpdate}</code>
+                                                <span class="unselectable" style="user-select: none; -webkit-user-select: none; display: inline-block; margin-left: 8px; vertical-align: middle;">
+                                                    <img src="https://img.icons8.com/material-outlined/24/A073EE/copy.png" width="16" height="16" alt="" style="display:block; border:0; pointer-events:none;" />
+                                                </span>
                                             </div>
                                         </td>
                                     </tr>
