@@ -262,35 +262,69 @@ New Free User is now Registered.`;
             <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
                     <tr><td align="center">
-                            <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                                <tr><td align="center" style="padding: 40px 40px 20px;"><h1 style="color:#ffffff; margin:0; font-size: 24px;">Welcome to Meta Injector <span style="color:#A073EE;">Pro</span></h1></td></tr>
-                                <tr><td align="center" style="padding: 0 40px;"><h2 style="color:#ffffff; margin:0 0 10px; font-size: 28px;">Free Trial <span style="color:#A073EE;">Activated!</span> 🚀</h2><p style="color:#9ca3af; margin:0; font-size: 16px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p></td></tr>
-                                <tr><td style="padding: 30px 40px;"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #1a1625; border: 1px dashed #A073EE; border-radius: 15px;"><tr><td align="center" style="padding: 25px;"><p style="color:#9ca3af; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px;">Your License Key</p><code style="display:block; background:#0F0A1E; color:#fff; padding: 15px; border-radius: 8px; font-size: 18px; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.1); font-family: monospace;">${licenseKeyToUpdate}</code></td></tr></table></td></tr>
-                                
-                                <tr><td style="padding: 0 40px 30px;">
-                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                        <tr>
-                                            <td width="50%" style="padding-right: 10px;">
-                                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Credits</p>
-                                                    <p style="color:#ffffff; font-size: 18px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>
-                                                </div>
-                                            </td>
-                                            <td width="50%" style="padding-left: 10px;">
-                                                <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                                                    <p style="color:#9ca3af; font-size: 12px; margin:0;">Duration</p>
-                                                    <p style="color:#ffffff; font-size: 18px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td></tr>
-
-                                <tr><td align="center" style="padding: 0 40px 40px;"><a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE 0%, #6E25ED 100%); color: #ffffff; text-decoration: none; padding: 14px 30px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block;">Download Software</a></td></tr>
-                            </table>
-                            <p style="color:#6b7280; font-size: 12px; margin-top:20px;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
-                        </td></tr>
-                </table></body></html>`
+                        <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+                            <tr><td align="center" style="padding: 40px 40px 20px;"><h1 style="color:#ffffff; margin:0; font-size: 24px;">Meta Injector <span style="color:#A073EE;">Pro</span></h1></td></tr>
+                            <tr><td align="center"><span style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Free Trial Activated</span></td></tr>
+                            <tr><td align="center" style="padding: 20px 40px 0;">
+                                <h2 style="color:#ffffff; margin:0 0 10px; font-size: 26px;">Free Trial Ready! 🚀</h2>
+                                <p style="color:#9ca3af; margin:0; font-size: 15px; line-height: 1.5;">Hello <strong>${data.FullName}</strong>, your license is ready to use.</p>
+                            </td></tr>
+                            <tr><td style="padding: 30px 40px;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.03); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); table-layout: fixed;">
+                                    <!-- Row 1: Email (50%) & Phone (50%) -->
+                                    <tr>
+                                        <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
+                                            <p style="color:#9ca3af; font-size: 12px; margin:0;">Email Address</p>
+                                            <p style="margin:5px 0 0; word-break: break-all;"><a href="mailto:${data.Email}" style="color:#ffffff !important; text-decoration:none !important; border:none; font-size: 14px;">${data.Email}</a></p>
+                                        </td>
+                                        <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
+                                            <p style="color:#9ca3af; font-size: 12px; margin:0;">Phone Number</p>
+                                            <p style="margin:5px 0 0;"><a href="tel:${data.Phone}" style="color:#ffffff !important; text-decoration:none !important; border:none; font-size: 14px;">${data.Phone}</a></p>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 2: License Key (100%) -->
+                                    <tr>
+                                        <td colspan="4" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                            <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
+                                            <p style="color:#fff; font-family: monospace; font-size: 15px; margin:5px 0 0; letter-spacing: 1px;">${licenseKeyToUpdate}</p>
+                                        </td>
+                                    </tr>
+                                    <!-- Row 3: Duration (25%) | Credits (25%) | Amount (25%) | TrxID (25%) -->
+                                    <tr>
+                                        <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 25%; text-align: center;">
+                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">Duration</p>
+                                            <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>
+                                        </td>
+                                        <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 25%; text-align: center;">
+                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">Credits</p>
+                                            <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>
+                                        </td>
+                                        <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 25%; text-align: center;">
+                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">Amount</p>
+                                            <p style="color:#A073EE; font-size: 14px; font-weight: bold; margin: 5px 0 0;">FREE</p>
+                                        </td>
+                                        <td style="padding: 15px 12px; width: 25%; text-align: center;">
+                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">TrxID</p>
+                                            <p style="color:#10B981; font-size: 12px; font-weight: bold; margin: 5px 0 0;">TRIAL</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td></tr>
+                            
+                            <tr><td align="center" style="padding: 0 0 30px;">
+                                <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE, #7C3AED); color: #ffffff; padding: 15px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);">
+                                    Download Software
+                                </a>
+                            </td></tr>
+                            
+                            <tr><td align="center" style="padding: 0 40px 40px;">
+                                <p style="color:#666; font-size: 13px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display:inline-block;">✅ Your license is activated instantly.</p>
+                                <p style="color:#6b7280; font-size: 12px; margin-top:20px;">&copy; 2026 Meta Injector Pro. All rights reserved.</p>
+                            </td></tr>
+                        </table>
+                    </td></tr>
+                </table>
+            </body></html>`
         };
 
         try { await transporter.sendMail(mailOptions); } catch (e) { console.error(e); }
