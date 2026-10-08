@@ -255,17 +255,11 @@ New Free User is now Registered.`;
         // EMAIL NOTIFICATION (FREE TRIAL)
         const mailOptions = {
             from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
-            to: data.Email,[cite: 3]
+            to: data.Email,
             subject: '🎉 Your Meta Injector ᴾʳᵒ Free Trial is Ready',
             html: `
             <!DOCTYPE html><html><head><style>
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
-                a[href^="mailto:"], a[href^="tel:"], .disable-link a {
-                    color: #ffffff !important;
-                    text-decoration: none !important;
-                    pointer-events: none !important;
-                    cursor: default !important;
-                }
             </style></head>
             <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
@@ -282,16 +276,16 @@ New Free User is now Registered.`;
                                     
                                     <!-- Row 1: Email (50%) & Phone (50%) -->
                                     <tr>
-                                        <td class="disable-link" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
+                                        <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Email Address</p>
                                             <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500; word-break: break-all;">
-                                                <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Email.split('@')[0]}<!-- -->&#64;<!-- -->${data.Email.split('@')[1]}</span>[cite: 3]
+                                                <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Email.split('@')[0]}&zwnj;&#64;&zwnj;${data.Email.split('@')[1].replace(/\./g, '&zwnj;.')}</span>
                                             </p>
                                         </td>
-                                        <td class="disable-link" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
+                                        <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Phone Number</p>
                                             <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500;">
-                                                <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Phone.slice(0, 3)}<!-- -->${data.Phone.slice(3)}</span>[cite: 3]
+                                                <span style="color:#ffffff !important; text-decoration:none !important; cursor:text;">${data.Phone.slice(0, 3)}&zwnj;${data.Phone.slice(3, 7)}&zwnj;${data.Phone.slice(7)}</span>
                                             </p>
                                         </td>
                                     </tr>
@@ -301,7 +295,7 @@ New Free User is now Registered.`;
                                         <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
                                             <p style="margin:5px 0 0;">
-                                                <code style="color:#ffffff; font-family: monospace; font-size: 15px; letter-spacing: 1px;">${licenseKeyToUpdate}</code>[cite: 3]
+                                                <code style="color:#ffffff; font-family: monospace; font-size: 15px; letter-spacing: 1px;">${licenseKeyToUpdate}</code>
                                             </p>
                                         </td>
                                     </tr>
@@ -313,11 +307,11 @@ New Free User is now Registered.`;
                                                 <tr>
                                                     <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 33.33%; text-align: center;">
                                                         <p style="color:#9ca3af; font-size: 11px; margin:0;">Duration</p>
-                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>[cite: 3]
+                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>
                                                     </td>
                                                     <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 33.33%; text-align: center;">
                                                         <p style="color:#9ca3af; font-size: 11px; margin:0;">Credits</p>
-                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>[cite: 3]
+                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>
                                                     </td>
                                                     <td style="padding: 15px 12px; width: 33.33%; text-align: center;">
                                                         <p style="color:#9ca3af; font-size: 11px; margin:0;">Amount</p>
@@ -332,7 +326,7 @@ New Free User is now Registered.`;
                             </td></tr>
                             
                             <tr><td align="center" style="padding: 0 0 30px;">
-                                <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE, #7C3AED); color: #ffffff; padding: 15px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);">[cite: 3]
+                                <a href="${softwareLink}" style="background: linear-gradient(90deg, #A073EE, #7C3AED); color: #ffffff; padding: 15px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);">
                                     Download Software
                                 </a>
                             </td></tr>
