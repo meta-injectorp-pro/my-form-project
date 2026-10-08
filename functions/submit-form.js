@@ -258,12 +258,20 @@ New Free User is now Registered.`;
             to: data.Email,
             subject: '🎉 Your Meta Injector ᴾʳᵒ Free Trial is Ready',
             html: `
-            <!DOCTYPE html><html><head><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');</style></head>
+            <!DOCTYPE html><html><head><style>
+                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+                .no-copy {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                }
+            </style></head>
             <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#f3f4f6; padding: 40px 0;">
                     <tr><td align="center">
                         <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color:#0F0A1E; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
-                            <tr><td align="center" style="padding: 40px 40px 20px;"><h1 style="color:#ffffff; margin:0; font-size: 24px;">Meta Injector <span style="color:#A073EE;">Pro</span></h1></td></tr>
+                            <tr><td align="center" style="padding: 40px 40px 20px;"><h1 style="color:#ffffff; margin:0; font-size: 24px;">Welcome to Meta Injector <span style="color:#A073EE;">Pro</span></h1></td></tr>
                             <tr><td align="center"><span style="background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Free Trial Activated</span></td></tr>
                             <tr><td align="center" style="padding: 20px 40px 0;">
                                 <h2 style="color:#ffffff; margin:0 0 10px; font-size: 26px;">Free Trial Ready! 🚀</h2>
@@ -271,43 +279,55 @@ New Free User is now Registered.`;
                             </td></tr>
                             <tr><td style="padding: 30px 40px;">
                                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.03); border-radius: 15px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); table-layout: fixed;">
-                                    <!-- Row 1: Email (50%) & Phone (50%) -->
+                                    
+                                    <!-- Row 1: Email (50%) & Phone (50%) - Non-clickable -->
                                     <tr>
-                                        <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
+                                        <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Email Address</p>
-                                            <p style="margin:5px 0 0; word-break: break-all;"><a href="mailto:${data.Email}" style="color:#ffffff !important; text-decoration:none !important; border:none; font-size: 14px;">${data.Email}</a></p>
+                                            <div style="margin:5px 0 0; display: flex; align-items: center; justify-content: space-between;">
+                                                <span style="color:#ffffff; font-size: 14px; word-break: break-all; font-weight: 500;">${data.Email}</span>
+                                                <span class="no-copy" style="margin-left: 8px; width: 15px; height: 15px; display: inline-block; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' fill=\\'none\\' viewBox=\\'0 0 24 24\\' stroke=\\'%23A073EE\\' stroke-width=\\'2\\'><rect x=\\'9\\' y=\\'9\\' width=\\'13\\' height=\\'13\\' rx=\\'2\\'/><path d=\\'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\\'/></svg>'); background-repeat: no-repeat; background-size: contain; -webkit-user-select: none; user-select: none;"></span>
+                                            </div>
                                         </td>
-                                        <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
+                                        <td style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); width: 50%;">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">Phone Number</p>
-                                            <p style="margin:5px 0 0;"><a href="tel:${data.Phone}" style="color:#ffffff !important; text-decoration:none !important; border:none; font-size: 14px;">${data.Phone}</a></p>
+                                            <p style="color:#ffffff; font-size: 14px; margin:5px 0 0; font-weight: 500;">${data.Phone}</p>
                                         </td>
                                     </tr>
+
                                     <!-- Row 2: License Key (100%) -->
                                     <tr>
-                                        <td colspan="4" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                        <td colspan="2" style="padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                                             <p style="color:#9ca3af; font-size: 12px; margin:0;">License Key</p>
-                                            <p style="color:#fff; font-family: monospace; font-size: 15px; margin:5px 0 0; letter-spacing: 1px;">${licenseKeyToUpdate}</p>
+                                            <div style="margin:5px 0 0; display: flex; align-items: center; justify-content: space-between;">
+                                                <code style="color:#fff; font-family: monospace; font-size: 15px; letter-spacing: 1px;">${licenseKeyToUpdate}</code>
+                                                <span class="no-copy" style="margin-left: 8px; width: 16px; height: 16px; display: inline-block; background-image: url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' fill=\\'none\\' viewBox=\\'0 0 24 24\\' stroke=\\'%23A073EE\\' stroke-width=\\'2\\'><rect x=\\'9\\' y=\\'9\\' width=\\'13\\' height=\\'13\\' rx=\\'2\\'/><path d=\\'M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\\'/></svg>'); background-repeat: no-repeat; background-size: contain; -webkit-user-select: none; user-select: none;"></span>
+                                            </div>
                                         </td>
                                     </tr>
-                                    <!-- Row 3: Duration (25%) | Credits (25%) | Amount (25%) | TrxID (25%) -->
+
+                                    <!-- Row 3: Duration (33.33%) | Credits (33.33%) | Amount (33.33%) -->
                                     <tr>
-                                        <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 25%; text-align: center;">
-                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">Duration</p>
-                                            <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>
-                                        </td>
-                                        <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 25%; text-align: center;">
-                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">Credits</p>
-                                            <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>
-                                        </td>
-                                        <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 25%; text-align: center;">
-                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">Amount</p>
-                                            <p style="color:#A073EE; font-size: 14px; font-weight: bold; margin: 5px 0 0;">FREE</p>
-                                        </td>
-                                        <td style="padding: 15px 12px; width: 25%; text-align: center;">
-                                            <p style="color:#9ca3af; font-size: 11px; margin:0;">TrxID</p>
-                                            <p style="color:#10B981; font-size: 12px; font-weight: bold; margin: 5px 0 0;">TRIAL</p>
+                                        <td style="padding: 0;" colspan="2">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
+                                                <tr>
+                                                    <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 33.33%; text-align: center;">
+                                                        <p style="color:#9ca3af; font-size: 11px; margin:0;">Duration</p>
+                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.duration} Days</p>
+                                                    </td>
+                                                    <td style="padding: 15px 12px; border-right: 1px solid rgba(255,255,255,0.05); width: 33.33%; text-align: center;">
+                                                        <p style="color:#9ca3af; font-size: 11px; margin:0;">Credits</p>
+                                                        <p style="color:#fff; font-size: 14px; font-weight: bold; margin: 5px 0 0;">${selectedPkg.credits}</p>
+                                                    </td>
+                                                    <td style="padding: 15px 12px; width: 33.33%; text-align: center;">
+                                                        <p style="color:#9ca3af; font-size: 11px; margin:0;">Amount</p>
+                                                        <p style="color:#A073EE; font-size: 14px; font-weight: bold; margin: 5px 0 0;">FREE</p>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
+
                                 </table>
                             </td></tr>
                             
