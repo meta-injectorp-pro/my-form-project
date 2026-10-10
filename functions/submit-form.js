@@ -18,8 +18,12 @@ try {
 const db = admin.firestore();
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user: process.env.SMTP_EMAIL, pass: process.env.SMTP_PASSWORD }
+    host: 'smtp-relay.brevo.com',
+    port: 587,
+    auth: { 
+        user: process.env.BREVO_LOGIN, 
+        pass: process.env.BREVO_PASSWORD 
+    }
 });
 
 function parseMultipartForm(event) {
@@ -254,9 +258,10 @@ New Free User is now Registered.`;
         
         // EMAIL NOTIFICATION (FREE TRIAL)
         const mailOptions = {
-            from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
-            to: data.Email,
-            subject: '🎉 Your Meta Injector ᴾʳᵒ Free Trial is Ready',
+		    from: `"Meta Injector Pro" <support@metainjector.pro>`,
+		    replyTo: `support@metainjector.pro`,
+		    to: data.Email,
+            subject: '🎉 Your Meta Injector Pro Free Trial is Ready',
             html: `
             <!DOCTYPE html><html><head><style>
                 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
@@ -453,9 +458,10 @@ Check Admin Panel to Approve.`;
     const softwareLink = "https://www.dropbox.com/scl/fi/qt611a2v2k43cg77fo5cu/Meta-Injector-Pro.zip?rlkey=5j2brhtsam79faxlqqvhcpnfv&st=s6g7bf2f&dl=1"; 
 
     const mailOptions = {
-            from: `"Meta Injector ᴾʳᵒ" <${process.env.SMTP_EMAIL}>`,
-            to: data.Email,
-            subject: 'Meta Injector ᴾʳᵒ Purchase ⏳ Order Received - Pending for Approval',
+		    from: `"Meta Injector Pro" <support@metainjector.pro>`,
+		    replyTo: `support@metainjector.pro`,
+		    to: data.Email,
+            subject: 'Meta Injector Pro Purchase ⏳ Order Received - Pending for Approval',
             html: `
             <!DOCTYPE html><html><head><style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');</style></head>
             <body style="margin:0; padding:0; background-color:#f3f4f6; font-family: 'Plus Jakarta Sans', Arial, sans-serif;">
