@@ -1619,6 +1619,7 @@
 <script defer="" src="./Source_Files/bundle.js.download"></script><script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97f0b597887eded3',t:'MTc1Nzg2MTU1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;" src="./Source_Files/saved_resource.html"></iframe><script defer="" src="./Source_Files/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;9a6015d415bb4773a0bff22543062d3b&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
 
 <!-- ================= CHATBOT UI START ================= -->
+
 <style>
 /* 1. Ripple Animation */
 @keyframes rippleWave {
@@ -1653,7 +1654,7 @@ cursor:pointer;display:flex;align-items:center;justify-content:center;
 transition: bottom 0.4s ease-in-out;
 box-shadow:0 4px 15px rgba(0,0,0,1); border:2px solid rgba(0,0,0,0.8);">
     <img src="./Source_Files/chat.svg" style="width:26px;height:26px;"> 
-    <div id="chat-tooltip">Live Support (Online)</div>
+    <div id="chat-tooltip">Need help? Chat with us!</div>
 </div>
 
 <div id="chatbot-container"
@@ -1663,10 +1664,9 @@ background:#1a1625;border-radius:18px;
 box-shadow:0 10px 40px rgba(0,0,0,.6);
 border:1px solid rgba(160,115,238,.3);
 overflow:hidden;font-family:'Plus Jakarta Sans',sans-serif;
-transition: bottom 0.4s ease-in-out; 
+transition: bottom 0.4s ease-in-out; /* Smooth Scroll Movement */
 flex-direction:column;">
 
-    <!-- 🌟 Header -->
     <div style="background:linear-gradient(135deg,#A073EE,#7c3aed);
     padding:15px;display:flex;justify-content:space-between;align-items:center;">
         
@@ -1676,56 +1676,46 @@ flex-direction:column;">
                 <img src="./Source_Files/icon.svg" style="width:20px;">
             </div>
             <div>
-                <b style="color:#fff;font-size:15px;display:block;">Live Support Team</b>
-                <span id="chat-connection-status" style="font-size:11px;color:#fff;font-weight:500;">
+                <b style="color:#fff;font-size:15px;display:block;">Meta Injector Ai Assistant</b>
+                <span style="font-size:11px;color:#fff;font-weight:500;">
                     <span style="color:#4ade80;font-size:14px;">●</span> Online
                 </span>
             </div>
         </div>
 
         <div style="display:flex;align-items:center;gap:10px;">
+            
+            <a href="https://wa.me/8801729816172?text=Hi,%20I%20need%20help%20with%20Meta%20Injector%20Pro." 
+               target="_blank"
+               title="Talk to Human"
+               style="background:rgba(255,255,255,0.2);border:none;color:#fff;
+               width:32px;height:32px;border-radius:50%;cursor:pointer;
+               display:flex;align-items:center;justify-content:center;text-decoration:none;
+               transition: background 0.3s;">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 512 512">
+                    <path d="M256 64C150 64 64 150 64 256v48c0 26.5 21.5 48 48 48h48V208H96v-48c0-88.2 71.8-160 160-160s160 71.8 160 160v48h-64v144h48c26.5 0 48-21.5 48-48v-48c0-106-86-192-192-192z"/>
+                    <path d="M96 384h32c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32H96c-17.7 0-32 14.3-32 32v128c0 17.7 14.3 32 32 32zm320-192h-32c-17.7 0-32 14.3-32 32v128c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32z"/>
+                </svg>
+            </a>
+
             <button id="chat-close-btn" style="background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;">✕</button>
         </div>
     </div>
 
-    <!-- 🌟 Messages Container -->
     <div id="chat-messages" style="flex:1;padding:15px;background:#0F0A1E;overflow-y:auto;display:flex;flex-direction:column;gap:12px;">
-        
-        <!-- 📱 Step 1: Registration Form -->
-        <div id="chat-registration" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; margin-top:20px;">
-            <img src="./Source_Files/icon.svg" style="width:45px; margin-bottom:15px;">
-            <p style="color:#fff; font-size:15px; text-align:center; font-weight:bold; margin-bottom:4px;">Welcome to Live Support 👋</p>
-            <p style="color:#94A3B8; font-size:12px; text-align:center; margin-bottom:20px;">Please provide your details to connect with an agent.</p>
-            
-            <input type="text" id="chat-user-name" placeholder="Your Name" 
-            style="width:90%; padding:12px 15px; margin-bottom:12px; border-radius:8px; border:1px solid rgba(160,115,238,0.4); background:#2d243e; color:#fff; outline:none; font-size:13px;">
-            
-            <input type="tel" id="chat-user-phone" placeholder="Phone Number (e.g. 017...)" 
-            style="width:90%; padding:12px 15px; margin-bottom:20px; border-radius:8px; border:1px solid rgba(160,115,238,0.4); background:#2d243e; color:#fff; outline:none; font-size:13px;">
-            
-            <button id="chat-start-btn" 
-            style="width:90%; padding:12px; background:linear-gradient(135deg,#A073EE,#7c3aed); border:none; border-radius:8px; color:#fff; cursor:pointer; font-weight:bold; font-size:14px; box-shadow:0 4px 15px rgba(160,115,238,0.3);">
-                Start Chat
-            </button>
-        </div>
-
-        <!-- 💬 Step 2: Live Chat History (Hidden initially) -->
-        <div id="chat-history" style="display:none; flex-direction:column; gap:12px;">
-            <div style="display:flex;gap:10px;max-width:90%;">
-                <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;
-                display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <img src="./Source_Files/icon.svg" style="width:18px;height:18px;">
-                </div>
-                <div style="background:#2d243e;color:#f3f4f6;padding:10px 14px;border-radius:18px 18px 18px 4px;font-size:13px;line-height:1.4;">
-                    Hello! You are now connected to our support team. How can we help you today?
-                </div>
+        <div style="display:flex;gap:10px;max-width:90%;">
+            <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <img src="./Source_Files/chat.svg" style="width:18px;height:18px;">
+            </div>
+            <div style="background:#2d243e;color:#f3f4f6;padding:10px 14px;border-radius:18px 18px 18px 4px;font-size:13px;line-height:1.4;">
+                Hello Sir 👋 How may I assist you today?
             </div>
         </div>
     </div>
 
-    <!-- 🌟 Message Input Area (Hidden initially) -->
-    <div id="chat-input-area" style="padding:12px;background:#1a1625;border-top:1px solid rgba(160,115,238,.2);display:none;gap:8px;">
-        <input id="user-input" class="chat-input" placeholder="Type your message..."
+    <div style="padding:12px;background:#1a1625;border-top:1px solid rgba(160,115,238,.2);display:flex;gap:8px;">
+        <input id="user-input" class="chat-input" placeholder="Type here..."
         style="flex:1;background:#0F0A1E;border:1px solid rgba(160,115,238,.3);
         padding:10px 15px;border-radius:25px;color:#fff;outline:none;font-size:13px;">
         
@@ -1733,6 +1723,7 @@ flex-direction:column;">
         border:none;width:40px;height:40px;border-radius:50%;cursor:pointer;color:#fff;
         display:flex;align-items:center;justify-content:center;">➤</button>
     </div>
+	
 </div>
 
 <script>
@@ -1740,30 +1731,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById("chat-toggle-btn");
     const chatBox = document.getElementById("chatbot-container");
     const closeBtn = document.getElementById("chat-close-btn");
-    
-    // UI Elements
-    const chatReg = document.getElementById("chat-registration");
-    const chatHist = document.getElementById("chat-history");
-    const chatInputArea = document.getElementById("chat-input-area");
-    const msgsContainer = document.getElementById("chat-messages");
-    
-    // Inputs & Buttons
-    const startBtn = document.getElementById("chat-start-btn");
-    const nameInput = document.getElementById("chat-user-name");
-    const phoneInput = document.getElementById("chat-user-phone");
     const sendBtn = document.getElementById("chat-send-btn");
     const inputField = document.getElementById("user-input");
-    const statusText = document.getElementById("chat-connection-status");
+    const messages = document.getElementById("chat-messages");
 
-    // 🌟 WebSocket Variables
-    let ws = null;
-    let customerName = "";
-    let customerPhone = "";
-    const SOCKET_URL = "wss://live-chat-server.app-metainjectorpro.workers.dev/";
-
-    // Scroll Logic for Toggle Button
     window.addEventListener('scroll', function() {
         if (window.scrollY > 100) { 
+
             toggleBtn.style.bottom = '110px'; 
             chatBox.style.bottom = '170px';
         } else {
@@ -1772,100 +1746,82 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Open/Close Chat
     function toggleChat(e) {
         if(e) e.stopPropagation();
-        chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
+        if (chatBox.style.display === "flex") {
+            chatBox.style.display = "none";
+        } else {
+            chatBox.style.display = "flex";
+            setTimeout(() => inputField.focus(), 100);
+        }
     }
 
     toggleBtn.onclick = toggleChat;
     closeBtn.onclick = () => chatBox.style.display = "none";
     chatBox.onclick = (e) => e.stopPropagation();
 
-    // 🌟 Step 1: Handle Registration Submission
-    startBtn.onclick = () => {
-        customerName = nameInput.value.trim();
-        customerPhone = phoneInput.value.trim();
-
-        if (!customerName || !customerPhone) {
-            alert("Please enter both Name and Phone Number to start the chat.");
-            return;
+    document.onclick = (e) => {
+        if (!chatBox.contains(e.target) && !toggleBtn.contains(e.target)) {
+            chatBox.style.display = "none";
         }
-
-        // Hide Registration Form, Show Chat History & Input
-        chatReg.style.display = "none";
-        chatHist.style.display = "flex";
-        chatInputArea.style.display = "flex";
-
-        // Start WebSocket Connection
-        connectWebSocket();
     };
 
-    // 🌟 Step 2: WebSocket Connection Logic
-    function connectWebSocket() {
-        ws = new WebSocket(SOCKET_URL);
-
-        ws.onopen = () => {
-            statusText.innerHTML = `<span style="color:#4ade80;font-size:14px;">●</span> Connected`;
-        };
-
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                
-                // শুধুমাত্র অ্যাডমিন যদি মেসেজ পাঠায় তবেই কাস্টমার স্ক্রিনে দেখাবে
-                if (data.sender === "Admin") {
-                    chatHist.innerHTML += `
-                        <div style="display:flex;gap:10px;max-width:90%;margin-bottom:12px;">
-                            <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;
-                            display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                                <img src="./Source_Files/icon.svg" style="width:18px;height:18px;">
-                            </div>
-                            <div style="background:#2d243e;color:#f3f4f6;padding:10px 14px;border-radius:18px 18px 18px 4px;font-size:13px;line-height:1.4;border:1px solid rgba(160,115,238,0.2);">
-                                ${data.message.replace(/\n/g, '<br>')}
-                            </div>
-                        </div>`;
-                    msgsContainer.scrollTop = msgsContainer.scrollHeight;
-                }
-            } catch (e) {
-                console.error("Plain text received:", event.data);
-            }
-        };
-
-        ws.onclose = () => {
-            statusText.innerHTML = `<span style="color:#EF4444;font-size:14px;">●</span> Disconnected`;
-            // ৫ সেকেন্ড পর আবার কানেক্ট করার চেষ্টা করবে
-            setTimeout(connectWebSocket, 5000);
-        };
-    }
-
-    // 🌟 Step 3: Send Message to Server
-    function sendMessage() {
+    async function sendMessage() {
         const text = inputField.value.trim();
-        if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+        if (!text) return;
 
         inputField.value = "";
 
-        // UI তে ইউজারের মেসেজ অ্যাড করা
-        chatHist.innerHTML += `
+        messages.innerHTML += `
             <div style="align-self:flex-end;background:linear-gradient(135deg,#A073EE,#7c3aed);color:#fff;
-            padding:10px 14px;border-radius:18px 18px 4px 18px;max-width:80%;font-size:13px;margin-bottom:12px;box-shadow:0 4px 10px rgba(160,115,238,0.2);">
-                ${text.replace(/\n/g, '<br>')}
+            padding:10px 14px;border-radius:18px 18px 4px 18px;max-width:80%;font-size:13px;">
+                ${text}
             </div>`;
-        msgsContainer.scrollTop = msgsContainer.scrollHeight;
+        messages.scrollTop = messages.scrollHeight;
 
-        // 🌟 সার্ভারে JSON পাঠানো (Sender এর জায়গায় Name + Phone Number পাঠানো হচ্ছে)
-        const payload = {
-            sender: customerName + " (" + customerPhone + ")",
-            message: text
-        };
-        ws.send(JSON.stringify(payload));
+        const loadingId = "typing-" + Date.now();
+        messages.innerHTML += `
+            <div id="${loadingId}" style="display:flex;gap:10px;max-width:90%;">
+                <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <img src="./Source_Files/icon.svg" style="width:18px;">
+                </div>
+                <div style="background:#2d243e;padding:10px 14px;border-radius:18px 18px 18px 4px;border:1px solid rgba(255,255,255,0.1);">
+                    <span style="font-size:12px;color:#aaa;">Typing...</span>
+                </div>
+            </div>`;
+        messages.scrollTop = messages.scrollHeight;
+
+        try {
+            const res = await fetch('/.netlify/functions/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text })
+            });
+            const data = await res.json();
+            
+            document.getElementById(loadingId).remove();
+
+            messages.innerHTML += `
+                <div style="display:flex;gap:10px;max-width:90%;">
+                    <div style="width:28px;height:28px;min-width:28px;background:#fff;border-radius:50%;
+                    display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <img src="./Source_Files/icon.svg" style="width:18px;height:18px;">
+                    </div>
+                    <div style="background:#2d243e;color:#f3f4f6;padding:10px 14px;border-radius:18px 18px 18px 4px;font-size:13px;line-height:1.4;">
+                        ${data.reply.replace(/\n/g, '<br>')}
+                    </div>
+                </div>`;
+            messages.scrollTop = messages.scrollHeight;
+
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            messages.innerHTML += `<div style="color:red;font-size:12px;margin-left:40px;">Connection Error.</div>`;
+        }
     }
 
     sendBtn.onclick = sendMessage;
     inputField.onkeypress = (e) => { if (e.key === "Enter") sendMessage(); };
 });
-</script>
 <!-- ================= CHATBOT UI END ================= -->
 
 <!-- ================= CURRENCY CONVERT START ================= -->
